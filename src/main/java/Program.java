@@ -1,5 +1,7 @@
+import connection.twoWayConnection.Client;
+
 class Program {
     public static void main(String[] args) {
-        System.out.println("OK!");
+         Client serverConnection = new Client();
     }
 }

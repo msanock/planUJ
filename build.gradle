@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 sourceCompatibility = 17
@@ -18,4 +19,9 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+javafx {
+    version = "17.0.6"
+    modules = [ 'javafx.controls' ]
 }
