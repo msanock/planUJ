@@ -1,27 +1,31 @@
 package Server;
 
-import Server.sql.Notifiable;
+import Server.database.Engine;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerHandler implements Notifiable {
-    private final ArrayList<Session> sessions;
-    private final SessionFactory sessionFactory;
-
-    public ServerHandler (SessionFactory sessionFactory){
-        sessions = new ArrayList<Session>();
-        this.sessionFactory = sessionFactory;
+    private final IServer server;
+    private final Engine engine;
+    private ArrayList<Client> clients = new ArrayList<Client>();
+    private ExecutorService executorService;
+    public ServerHandler (IServer server, Engine engine){
+        this.server = server;
+        this.engine = engine;
+        executorService = Executors.newCachedThreadPool();
     }
 
-    public void notify(String message, IConnector sender) {
-        if(message == "login"){
-            addSession("login", sender);
+    public void notify(Packet packet) {
+        if(packet instanceof LoginPacket) {
+            LoginPacket loginPacket = (LoginPacket) packet;
+            String username = loginPacket.getUsername();
+
+            executorService.execute(() -> engine.addUser(username));
+
+            Client client = new Client(username, loginPacket.getIp());
+            clients.add(client);
         }
-    }
-
-    public void addSession(String username, IConnector sender){
-        Session session = sessionFactory.session(username);
-        sessions.add(session);
-        sender.send(session.getAdress());
     }
 }

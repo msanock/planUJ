@@ -1,6 +1,6 @@
 package Server.database;
 
-public interface Engine {
+public interface Engine{
     int addUser(String name);
     int addTask(int team_id, String name, String info, String status, String priority, String deadline);
     int addTeam(String name);

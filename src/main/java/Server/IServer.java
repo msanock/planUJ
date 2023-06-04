@@ -1,7 +1,7 @@
 package Server;
 
-public interface IConnector {
-    //placeholer
+public interface IServer {
+    //placeholder
 
     public void send(String message);
 }

@@ -1,5 +1,7 @@
+import Server.ServerFactory;
+
 class Program {
     public static void main(String[] args) {
-        System.out.println("OK!");
+        ServerFactory.startServer();
     }
 }

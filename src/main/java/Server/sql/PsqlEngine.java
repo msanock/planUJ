@@ -1,5 +1,4 @@
 package Server.sql;
-
 import Server.database.Engine;
 
 import java.io.IOException;
@@ -15,12 +14,13 @@ public class PsqlEngine implements Engine {
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url);
+        String username = "postgres";
+        return DriverManager.getConnection(url, username, null);
     }
 
-    void createDatabase(){
+    public void createDatabase(){
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream("database.sql");
+        InputStream is = classloader.getResourceAsStream("database/database.sql");
 
         String createQuery;
         try {
@@ -28,7 +28,7 @@ public class PsqlEngine implements Engine {
         } catch (IOException | NullPointerException e) {
             throw new PsqlException(e);
         }
-
+        System.out.println(createQuery);
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(createQuery)) {
             sql.executeUpdate();
@@ -41,7 +41,7 @@ public class PsqlEngine implements Engine {
     public int addUser(String name){
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
-                     "INSERT INTO users (name) VALUES (?) RETURNING id")) {
+                     "INSERT INTO projektuj.users (name) VALUES (?) RETURNING id")) {
             sql.setString(1, name);
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
