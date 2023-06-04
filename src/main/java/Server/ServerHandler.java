@@ -28,4 +28,8 @@ public class ServerHandler implements Notifiable {
             clients.add(client);
         }
     }
+
+    public void Dispose() {
+        executorService.shutdown();
+    }
 }
