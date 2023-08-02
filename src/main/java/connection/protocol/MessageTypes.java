@@ -1,5 +1,7 @@
 package connection.protocol;
 
+
+// USELESS
 public enum MessageTypes {
     /***** CLIENT *****/
     CONNECTION_REQUEST,

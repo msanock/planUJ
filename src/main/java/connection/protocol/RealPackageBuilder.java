@@ -10,7 +10,7 @@ public class RealPackageBuilder implements PackageBuilder {
     }
 
     @Override
-    public AbstractPackage build() {
+    public Package build() {
         return null;
     }
 }
