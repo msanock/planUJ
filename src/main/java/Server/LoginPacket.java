@@ -1,6 +1,8 @@
 package Server;
 
+import Utils.UserInfo;
+
 public interface LoginPacket extends Packet{
     //placeholder
-    public String getUsername();
+    public UserInfo getAsUserInfo();
 }

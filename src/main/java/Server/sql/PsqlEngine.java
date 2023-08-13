@@ -1,16 +1,26 @@
 package Server.sql;
-import Server.database.Engine;
+import Server.database.Database;
+import Utils.UserInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Objects;
 
-public class PsqlEngine implements Engine {
-    private final String url;
+public class PsqlEngine implements Database {
+    private final String url = "jdbc:postgresql://localhost:5432/ProjektUJ";
 
-    public PsqlEngine(String url) {
-        this.url = url;
+    static PsqlEngine instance;
+
+    private PsqlEngine() {
+    }
+
+    public static PsqlEngine getInstance() {
+        if (instance == null) {
+            instance = new PsqlEngine();
+            instance.createDatabase();
+        }
+        return instance;
     }
 
     private Connection getConnection() throws SQLException {
@@ -18,7 +28,7 @@ public class PsqlEngine implements Engine {
         return DriverManager.getConnection(url, username, null);
     }
 
-    public void createDatabase(){
+    private void createDatabase(){
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream is = classloader.getResourceAsStream("database/database.sql");
 
@@ -38,11 +48,11 @@ public class PsqlEngine implements Engine {
     }
 
     @Override
-    public int addUser(String name){
+    public int addUser(UserInfo userInfo){
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
                      "INSERT INTO projektuj.users (name) VALUES (?) RETURNING id")) {
-            sql.setString(1, name);
+            sql.setString(1, userInfo.name());
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
                 return rs.getInt("id");

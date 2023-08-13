@@ -1,6 +1,7 @@
 package Server;
 
-import Server.database.Engine;
+import Server.database.Database;
+import Utils.UserInfo;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -11,7 +12,7 @@ class ServerHandlerTest {
     void testGetServer() {
         assertDoesNotThrow(() -> {
             IServer server = Mockito.mock(IServer.class);
-            Engine engine = Mockito.mock(Engine.class);
+            Database engine = Mockito.mock(Database.class);
             ServerHandler serverHandler = new ServerHandler(server, engine);
             serverHandler.Dispose();
         });
@@ -19,15 +20,15 @@ class ServerHandlerTest {
     @Test
     void testNotifyLoginPacket() {
         IServer server = Mockito.mock(IServer.class);
-        Engine engine = Mockito.mock(Engine.class);
+        Database engine = Mockito.mock(Database.class);
         LoginPacket packet = Mockito.mock(LoginPacket.class);
-        Mockito.when(packet.getUsername()).thenReturn("username");
+        Mockito.when(packet.getAsUserInfo().name()).thenReturn("username");
         Mockito.when(packet.getIp()).thenReturn(null);
 
         ServerHandler serverHandler = new ServerHandler(server, engine);
         serverHandler.notify(packet);
 
-        Mockito.verify(engine, Mockito.times(1)).addUser("username");
+        Mockito.verify(engine, Mockito.times(1)).addUser(new UserInfo("username"));
         serverHandler.Dispose();
     }
 

@@ -1,6 +1,6 @@
 package Server;
 
-import Server.database.Engine;
+import Server.database.Database;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -8,25 +8,19 @@ import java.util.concurrent.Executors;
 
 public class ServerHandler implements Notifiable {
     private final IServer server;
-    private final Engine engine;
+    private final Database engine;
     private ArrayList<Client> clients = new ArrayList<Client>();
     private ExecutorService executorService;
-    public ServerHandler (IServer server, Engine engine){
+    public ServerHandler (IServer server, Database engine){
         this.server = server;
         this.engine = engine;
         executorService = Executors.newCachedThreadPool();
     }
 
     public void notify(Packet packet) {
-        if(packet instanceof LoginPacket) {
-            LoginPacket loginPacket = (LoginPacket) packet;
-            String username = loginPacket.getUsername();
-
-            executorService.execute(() -> engine.addUser(username));
-
-            Client client = new Client(username, loginPacket.getIp());
-            clients.add(client);
-        }
+        executorService.execute(() -> {
+            packet.execute(engine);
+        });
     }
 
     public void Dispose() {
