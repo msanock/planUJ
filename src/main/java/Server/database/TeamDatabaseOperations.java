@@ -1,6 +1,9 @@
 package Server.database;
 
+import Utils.TeamInfo;
+import Utils.TeamUser;
+
 public interface TeamDatabaseOperations {
-    int addTeam(String name);
-    int addTeamUser(int team_id, int user_id, String role, String position);
+    void addTeam(TeamInfo teamInfo);
+    void addTeamUser(TeamUser teamUser, int team_id);
 }
