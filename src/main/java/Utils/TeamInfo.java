@@ -2,12 +2,22 @@ package Utils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TeamInfo{
     private String name;
     private int id;
-    private ArrayList<TeamUser> users;
+    private List<TeamUser> users;
 
+    public TeamInfo(String name, int id, List<TeamUser> users){
+        this.name = name;
+        this.id = id;
+        if(users == null){
+            users = new ArrayList<>();
+        }else {
+            this.users = users;
+        }
+    }
     public String getName() {
         return name;
     }
@@ -24,7 +34,7 @@ public class TeamInfo{
         this.id = id;
     }
 
-    public ArrayList<TeamUser> getUsers() {
+    public List<TeamUser> getUsers() {
         return users;
     }
 
