@@ -1,7 +1,10 @@
 package Server.database;
 
+import Utils.OperationResults.GetUsersResult;
+import Utils.OperationResults.IdResult;
 import Utils.UserInfo;
 
 public interface UserDatabaseOperations {
-    void addUser(UserInfo userInfo);
+    IdResult addUser(UserInfo userInfo);
+    GetUsersResult getUsers();
 }
