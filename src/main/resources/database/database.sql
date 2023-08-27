@@ -19,11 +19,10 @@ CREATE  TABLE IF NOT EXISTS projektuj.teams_users (
 	CONSTRAINT fk_teams_users_users FOREIGN KEY ( user_id ) REFERENCES projektuj.users( id )   
  );
 
-CREATE  TABLE IF NOT EXISTS projektuj.team (
+CREATE  TABLE IF NOT EXISTS projektuj.teams (
 	id                   serial  NOT NULL  ,
 	name                 varchar  NOT NULL  ,
-	CONSTRAINT pk_team PRIMARY KEY ( id ),
-	CONSTRAINT fk_team_teams_users FOREIGN KEY ( id ) REFERENCES projektuj.teams_users( team_id )   
+	CONSTRAINT pk_teams PRIMARY KEY ( id )
  );
 
 CREATE  TABLE IF NOT EXISTS projektuj.tasks (
@@ -34,7 +33,7 @@ CREATE  TABLE IF NOT EXISTS projektuj.tasks (
 	priority            varchar    ,
 	deadline             date    ,
 	CONSTRAINT unq_tasks_id UNIQUE ( id ) ,
-	CONSTRAINT fk_tasks_team FOREIGN KEY ( team_id ) REFERENCES projektuj.team( id )   
+	CONSTRAINT fk_tasks_teams FOREIGN KEY ( team_id ) REFERENCES projektuj.teams( id )
  );
 
 CREATE  TABLE IF NOT EXISTS projektuj.users_tasks (
