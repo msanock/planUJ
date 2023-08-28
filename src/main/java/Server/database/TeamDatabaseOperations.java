@@ -1,6 +1,15 @@
 package Server.database;
 
+import Utils.OperationResults.GetTeamsResult;
+import Utils.OperationResults.GetUsersResult;
+import Utils.OperationResults.IdResult;
+import Utils.OperationResults.OperationResult;
+import Utils.TeamInfo;
+import Utils.TeamUser;
+
 public interface TeamDatabaseOperations {
-    int addTeam(String name);
-    int addTeamUser(int team_id, int user_id, String role, String position);
+    IdResult addTeam(TeamInfo teamInfo);
+    void addTeamUser(TeamUser teamUser, int team_id);
+    GetTeamsResult getTeams();
+    GetUsersResult getTeamUsers(int team_id);
 }

@@ -1,32 +1,60 @@
 package Connection;
 
 import Server.database.Database;
+import Utils.OperationResults.*;
+import Utils.TaskInfo;
+import Utils.TeamInfo;
+import Utils.TeamUser;
 import Utils.UserInfo;
 
 public class ServerDatabase implements Database {
     @Override
-    public int addTask(int team_id, String name, String info, String status, String priority, String deadline) {
-        return 0;
+    public IdResult addTask(TaskInfo taskInfo) {
+        return null;
     }
 
     @Override
-    public int addUserTask(int user_id, int task_id) {
-        return 0;
+    public void addUserTask(int user_id, int task_id) {
+
     }
 
     @Override
-    public int addTeam(String name) {
-        return 0;
+    public GetTasksResult getTeamTasks(int team_id) {
+        return null;
     }
 
     @Override
-    public int addTeamUser(int team_id, int user_id, String role, String position) {
-        return 0;
+    public GetTasksResult getUserTasks(int user_id) {
+        return null;
     }
 
     @Override
-    public int addUser(UserInfo userInfo) {
-        return 0;
+    public IdResult addTeam(TeamInfo teamInfo) {
+        return null;
+    }
+
+    @Override
+    public void addTeamUser(TeamUser teamUser, int team_id) {
+    }
+
+    @Override
+    public GetTeamsResult getTeams() {
+        return null;
+    }
+
+    @Override
+    public GetUsersResult getTeamUsers(int team_id) {
+        return null;
+    }
+
+    @Override
+    public IdResult addUser(UserInfo userInfo) {
+        return null;
+    }
+
+    @Override
+    public GetUsersResult getUsers() {
+        return null;
     }
     //placeholder
 }
