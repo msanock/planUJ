@@ -1,5 +1,6 @@
 package Server.sql;
 import Server.database.Database;
+import Utils.OperationResults.*;
 import Utils.TaskInfo;
 import Utils.TeamInfo;
 import Utils.TeamUser;
@@ -17,7 +18,15 @@ public class PsqlEngine implements Database {
     private static final String ADD_USER_TASK_QUERY = "INSERT INTO projektuj.users_tasks (user_id, task_id) VALUES (?, ?);";
     private static final String ADD_TASK_QUERY = "INSERT INTO projektuj.tasks (info, deadline, status, team_id, priority) VALUES (?, ?, ?, ?, ?) RETURNING id;";
     private static final String ADD_TEAM_MEMBER_QUERY = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position) VALUES (?, ?, ?, ?);";
+    private static final String GET_USERS_QUERY = "SELECT * FROM projektuj.users;";
 
+    private static final String GET_TEAM_TASKS_QUERY = "SELECT * FROM projektuj.tasks WHERE team_id = ?;";
+    private static final String GET_USER_TASKS_QUERY = "SELECT * FROM projektuj.tasks WHERE id IN (SELECT task_id FROM projektuj.users_tasks WHERE user_id = ?);";
+    private static final String GET_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name " +
+            "FROM projektuj.teams as \"t\" " +
+            "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id " +
+            "JOIN projektuj.users as \"u\" ON tu.user_id = u.id";
+    private static final String GET_TEAM_USERS_QUERY = "SELECT * FROM projektuj.users WHERE id IN (SELECT user_id FROM projektuj.teams_users WHERE team_id = ?);";
     static PsqlEngine instance;
 
     private PsqlEngine() {
@@ -55,13 +64,14 @@ public class PsqlEngine implements Database {
     }
 
     @Override
-    public void addUser(UserInfo userInfo){
+    public IdResult addUser(UserInfo userInfo){
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(ADD_USER_QUERY)) {
             sql.setString(1, userInfo.getUsername());
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
                 userInfo.setId(rs.getInt("id"));
+                return new IdResult(userInfo.getId());
             }
         } catch (SQLException exception) {
             throw new PsqlException(exception);
@@ -69,7 +79,19 @@ public class PsqlEngine implements Database {
     }
 
     @Override
-    public void addTask(TaskInfo taskInfo) {
+    public GetUsersResult getUsers() {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(GET_USERS_QUERY)) {
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetUsersResult(rs);
+            }
+        } catch (SQLException exception) {
+            throw new PsqlException(exception);
+        }
+    }
+
+    @Override
+    public IdResult addTask(TaskInfo taskInfo) {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
                      ADD_TASK_QUERY)) {
@@ -81,6 +103,7 @@ public class PsqlEngine implements Database {
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
                 taskInfo.setId(rs.getInt("id"));
+                return new IdResult(taskInfo.getId());
             }
         } catch (SQLException exception) {
             throw new PsqlException(exception);
@@ -88,13 +111,14 @@ public class PsqlEngine implements Database {
     }
 
     @Override
-    public void addTeam(TeamInfo teamInfo) {
+    public IdResult addTeam(TeamInfo teamInfo) {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(ADD_TEAM_QUERY)) {
             sql.setString(1, teamInfo.getName());
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
                 teamInfo.setId(rs.getInt("id"));
+                return new IdResult(teamInfo.getId());
             }
         } catch (SQLException exception) {
             throw new PsqlException(exception);
@@ -117,6 +141,33 @@ public class PsqlEngine implements Database {
     }
 
     @Override
+    public GetTeamsResult getTeams() {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     GET_TEAMS_QUERY)) {
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetTeamsResult(rs);
+            }
+        } catch (SQLException exception) {
+            throw new PsqlException(exception);
+        }
+    }
+
+    @Override
+    public GetUsersResult getTeamUsers(int team_id) {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     GET_TEAM_USERS_QUERY)) {
+            sql.setInt(1, team_id);
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetUsersResult(rs);
+            }
+        } catch (SQLException exception) {
+            throw new PsqlException(exception);
+        }
+    }
+
+    @Override
     public void addUserTask(int user_id, int task_id) {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
@@ -124,6 +175,34 @@ public class PsqlEngine implements Database {
             sql.setInt(1, user_id);
             sql.setInt(2, task_id);
             sql.executeUpdate();
+        } catch (SQLException exception) {
+            throw new PsqlException(exception);
+        }
+    }
+
+    @Override
+    public GetTasksResult getTeamTasks(int team_id) {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                 GET_TEAM_TASKS_QUERY)) {
+            sql.setInt(1, team_id);
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetTasksResult(rs);
+            }
+        } catch (SQLException exception) {
+            throw new PsqlException(exception);
+        }
+    }
+
+    @Override
+    public GetTasksResult getUserTasks(int user_id) {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     GET_USER_TASKS_QUERY)) {
+            sql.setInt(1, user_id);
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetTasksResult(rs);
+            }
         } catch (SQLException exception) {
             throw new PsqlException(exception);
         }

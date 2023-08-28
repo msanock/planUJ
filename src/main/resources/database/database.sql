@@ -15,7 +15,7 @@ CREATE  TABLE IF NOT EXISTS projektuj.teams_users (
 	team_id              integer  NOT NULL  ,
 	"role"               varchar    ,
 	"position"           varchar    ,
-	CONSTRAINT unq_teams_users_team_id UNIQUE ( team_id ) ,
+	CONSTRAINT unq_teams_users_team_id UNIQUE ( team_id , user_id),
 	CONSTRAINT fk_teams_users_users FOREIGN KEY ( user_id ) REFERENCES projektuj.users( id )   
  );
 
