@@ -1,23 +1,25 @@
 package Connection.connector.download;
 
 import Connection.protocol.Packable;
+import clientConnection.ClientReceiveHandler;
 
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.ref.Cleaner;
 import java.net.Socket;
 
-public class SocketStreamReader extends Thread {
+public class ClientSocketStreamReader extends Thread {
     private final Socket socket;
-    private final ReceiveHandler handler;
+    private final ClientReceiveHandler handler;
     private boolean isActive;
 
-    public SocketStreamReader(Socket socket, ReceiveHandler handler) {
+    public ClientSocketStreamReader(Socket socket, ClientReceiveHandler handler) {
         this.socket = socket;
         this.handler = handler;
         isActive = false;
 
-        handler.onNewConnection();
+
         this.setDaemon(true);
     }
 
@@ -32,7 +34,7 @@ public class SocketStreamReader extends Thread {
                 if (newPackage == null)
                     break;
 
-                handler.onNewPackage(newPackage, socket); // onNewPackage, może coś bez socketa?
+                handler.onNewPackage(newPackage); // onNewPackage, może coś bez socketa?
             }
         } catch (Exception e) {
             try {

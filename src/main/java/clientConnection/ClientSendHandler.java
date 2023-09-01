@@ -12,7 +12,7 @@ public class ClientSendHandler extends SendHandler {
     }
 
     @Override
-    public void send(Packable pack) {
+    public void send(Packable pack, Socket socket) {
 
     }
 

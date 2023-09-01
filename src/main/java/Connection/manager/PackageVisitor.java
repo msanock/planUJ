@@ -1,11 +1,17 @@
 package Connection.manager;
 
-import Connection.protocol.EmptyPack;
+import Connection.protocol.packs.EmptyPack;
+import Connection.protocol.Packable;
+import Connection.protocol.packs.UserInfoRequestPack;
 
 
 public interface PackageVisitor {
 
-    void handleEmptyPack(EmptyPack emptyPack);
+    Packable handleEmptyPack(EmptyPack emptyPack);
+
+    Packable handleUserInfoRequestPack(UserInfoRequestPack userInfoRequestPack);
+
+
 
     /// ...
 }

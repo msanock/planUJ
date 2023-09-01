@@ -11,26 +11,26 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class ClientReceiveHandler extends ReceiveHandler {
+public class ClientReceiveHandler /*extends ReceiveHandler*/ {
     private Socket serversSocket;
 
 
-    @Override
-    public void onNewConnection() {
+//    @Override
+//    public void onNewConnection(Socket socket) {
+//
+//    }
+
+    //@Override
+    public void onNewPackage(Packable pack) {
 
     }
 
-    @Override
-    public void onNewPackage(Packable pack, Socket socket) {
+//    @Override
+//    public void onReconnection() {
+//
+//    }
 
-    }
-
-    @Override
-    public void onReconnection() {
-
-    }
-
-    @Override
+   // @Override
     public void onLostConnection(Socket socket) {
 
     }

@@ -1,6 +1,7 @@
 package clientConnection;
 
-import Connection.connector.download.SocketStreamReader;
+import Connection.connector.download.ClientSocketStreamReader;
+import Connection.connector.download.ClientSocketStreamReader;
 import Connection.manager.ConnectionManager;
 
 import java.io.IOException;
@@ -11,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class ClientConnectionManager extends ConnectionManager {
-    private Socket serverSocket = null;
-    private SocketStreamReader socketStreamReader;
+    private Socket serverSocket;
+    private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
 
     ClientConnectionManager() {
@@ -69,7 +70,7 @@ public class ClientConnectionManager extends ConnectionManager {
     }
 
     public void startReceiver() {
-        socketStreamReader = new SocketStreamReader(serverSocket, new ClientReceiveHandler());
+        socketStreamReader = new ClientSocketStreamReader(serverSocket, new ClientReceiveHandler());
         socketStreamReader.start();
     }
 
