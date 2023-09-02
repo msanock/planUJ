@@ -1,8 +1,10 @@
 package Connection.protocol;
 
 import Connection.manager.PackageVisitor;
+import serverConnection.ServerClient;
+import serverConnection.SocketSelector;
 
 public interface Packable {
-     Packable accept(PackageVisitor v);
+     RespondInformation accept(PackageVisitor v, ServerClient sender);
 
 }

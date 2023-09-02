@@ -1,11 +1,14 @@
 package Connection;
 
 import Server.database.Database;
+import Server.sql.DatabaseException;
 import Utils.OperationResults.*;
 import Utils.TaskInfo;
 import Utils.TeamInfo;
 import Utils.TeamUser;
 import Utils.UserInfo;
+
+import java.util.concurrent.Future;
 
 public class ServerDatabase implements Database {
     @Override
@@ -29,6 +32,11 @@ public class ServerDatabase implements Database {
     }
 
     @Override
+    public void updateTask(TaskInfo taskInfo) throws DatabaseException {
+
+    }
+
+    @Override
     public IdResult addTeam(TeamInfo teamInfo) {
         return null;
     }
@@ -44,6 +52,11 @@ public class ServerDatabase implements Database {
 
     @Override
     public GetUsersResult getTeamUsers(int team_id) {
+        return null;
+    }
+
+    @Override
+    public GetTeamsResult getUserTeams(int user_id) throws DatabaseException {
         return null;
     }
 

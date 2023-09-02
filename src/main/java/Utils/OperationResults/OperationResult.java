@@ -1,11 +1,6 @@
 package Utils.OperationResults;
 
-import Server.Packet;
-
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import Connection.protocol.Packable;
 
 public abstract class OperationResult {
     protected boolean success;
@@ -16,7 +11,7 @@ public abstract class OperationResult {
         exception = null;
     }
 
-    public Packet toPacket() {
+    public Packable toResponsePackage() {
         throw new UnsupportedOperationException();
     }
 
