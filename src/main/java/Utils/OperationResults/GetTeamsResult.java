@@ -1,5 +1,7 @@
 package Utils.OperationResults;
 
+import Connection.protocol.Packable;
+import Connection.protocol.packages.ResponsePackage;
 import Utils.TeamInfo;
 import Utils.TeamUser;
 
@@ -34,6 +36,14 @@ public class GetTeamsResult extends OperationResult{
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting teams: ", e);
         }
+    }
+
+    @Override
+    public Packable toResponsePackage() {
+        ResponsePackage.Builder builder = new ResponsePackage.Builder();
+        builder.addData(ResponsePackage.Dictionary.TEAMS_LIST, teams);
+        builder.setSuccess(success);
+        return builder.build();
     }
 
     public List<TeamInfo> getTeams() {

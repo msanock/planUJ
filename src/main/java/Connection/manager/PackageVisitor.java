@@ -1,16 +1,17 @@
 package Connection.manager;
 
+import Connection.protocol.RespondInformation;
 import Connection.protocol.packs.EmptyPack;
 import Connection.protocol.Packable;
 import Connection.protocol.packs.UserInfoRequestPack;
+import serverConnection.ServerClient;
 
 
-public interface PackageVisitor {
+public interface PackageVisitor extends UserOperationsPackageVisitor, TeamOperationsPackageVisitor, TaskOperationsPackageVisitor{
 
-    Packable handleEmptyPack(EmptyPack emptyPack);
+    RespondInformation handleEmptyPack(EmptyPack emptyPack, ServerClient sender);
 
-    Packable handleUserInfoRequestPack(UserInfoRequestPack userInfoRequestPack);
-
+    RespondInformation handleUserInfoRequestPack(UserInfoRequestPack userInfoRequestPack, ServerClient sender
 
 
     /// ...

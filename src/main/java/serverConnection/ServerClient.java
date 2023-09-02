@@ -28,6 +28,14 @@ public class ServerClient {
         return socket.getInputStream();
     }
 
+    public void setClientID(Long clientID) {
+        ClientID = clientID;
+    }
+
+    public Long getClientID() {
+        return ClientID;
+    }
+
     public ObjectOutputStream getObjectOutputStream() {
         return objectOutputStream;
     }

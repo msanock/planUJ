@@ -1,16 +1,13 @@
-package Connection.protocol.packs;
+package Connection.protocol.packages.userOperations;
 
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import serverConnection.ServerClient;
 
-import java.io.Serializable;
-
-
-/// VISITOR DESIGN PATTERN
-public class EmptyPack implements Serializable, Packable {
+public class GetUsersPackage implements Packable {
+    @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
-        return v.handleEmptyPack(this, sender);
+        return v.handleGetUsersPackage(this, sender);
     }
 }

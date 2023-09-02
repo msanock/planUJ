@@ -3,6 +3,7 @@ package serverConnection;
 import Connection.connector.download.ReceiveHandler;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
+import Connection.protocol.RespondInformation;
 
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -20,18 +21,15 @@ public class ServerReceiveHandler extends ReceiveHandler {
     }
 
     @Override
-    public void onNewPackage(Packable pack, ServerClient socket) {
-
+    public void onNewPackage(Packable pack, ServerClient serverClient) {
         executorService.submit(() -> {
-
-            Packable response = pack.accept(packageVisitor); // maybe something which would also specify other receivers and different responses
-
-
-
-
+            RespondInformation respondInformation = pack.accept(packageVisitor, serverClient);
+            sendOutResponses(respondInformation, socketSelector);
         });
+    }
 
-
+    private void sendOutResponses(RespondInformation respondInformation,SocketSelector socketSelector){
+        //TODO
     }
 
     @Override
