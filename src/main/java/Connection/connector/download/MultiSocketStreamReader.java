@@ -2,13 +2,9 @@ package Connection.connector.download;
 
 
 
-import serverConnection.Client;
+import serverConnection.ServerClient;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiSocketStreamReader {
     //private HashMap<Socket, SocketStreamReader> socketsReaders; //maybe in socket selector ?
@@ -20,7 +16,7 @@ public class MultiSocketStreamReader {
 
     }
 
-    public ServerSocketStreamReader addNewReader(Client client) throws IOException {
+    public ServerSocketStreamReader addNewReader(ServerClient client) throws IOException {
         ServerSocketStreamReader socketStreamReader = new ServerSocketStreamReader(client, handler);
         //socketsReaders.put(socket, socketStreamReader); // maybe in socket selector ?
 

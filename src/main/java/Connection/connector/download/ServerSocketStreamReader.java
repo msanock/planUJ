@@ -1,22 +1,21 @@
 package Connection.connector.download;
 
 import Connection.protocol.Packable;
-import serverConnection.Client;
+import serverConnection.ServerClient;
 
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 
 public class ServerSocketStreamReader extends Thread {
     private final InputStream stream;
     private final ReceiveHandler handler;
     private boolean isActive;
 
-    private final Client client;
+    private final ServerClient client;
 
-    public ServerSocketStreamReader(Client client, ReceiveHandler handler) throws IOException {
+    public ServerSocketStreamReader(ServerClient client, ReceiveHandler handler) throws IOException {
         this.client = client;
         this.stream = client.getInputStream();
         this.handler = handler;

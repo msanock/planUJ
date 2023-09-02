@@ -5,17 +5,18 @@ import clientConnection.ClientReceiveHandler;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.lang.ref.Cleaner;
-import java.net.Socket;
+import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 
 public class ClientSocketStreamReader extends Thread {
-    private final Socket socket;
+    private final ObjectInputStream stream;
     private final ClientReceiveHandler handler;
     private boolean isActive;
 
-    public ClientSocketStreamReader(Socket socket, ClientReceiveHandler handler) {
-        this.socket = socket;
+    public ClientSocketStreamReader(InputStream stream, ClientReceiveHandler handler) throws IOException {
+        this.stream = new ObjectInputStream(stream);;
         this.handler = handler;
         isActive = false;
 
@@ -27,24 +28,20 @@ public class ClientSocketStreamReader extends Thread {
     @Override
     public void run() {
         try {
-            ObjectInputStream stream = new ObjectInputStream(socket.getInputStream());
+
             isActive = true;
             while(true) {
                 Packable newPackage = (Packable) stream.readObject();
                 if (newPackage == null)
                     break;
 
-                handler.onNewPackage(newPackage); // onNewPackage, może coś bez socketa?
+                handler.onNewPackage(newPackage);
             }
         } catch (Exception e) {
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            handler.onLostConnection();
             // ???
             isActive = false;
-            handler.onLostConnection(socket);
+
         }
     }
 

@@ -63,14 +63,18 @@ public class ClientConnectionManager extends ConnectionManager {
         if (!isOnline)
             throw new ConnectException();
 
-        startReceiver();
-        sendHandler = new ClientSendHandler(serverSocket);
+        try {
+            startReceiver();
+            sendHandler = new ClientSendHandler(serverSocket);
 
+        } catch (IOException e) {
+            throw new ConnectException();
+        }
 
     }
 
-    public void startReceiver() {
-        socketStreamReader = new ClientSocketStreamReader(serverSocket, new ClientReceiveHandler());
+    public void startReceiver() throws IOException {
+        socketStreamReader = new ClientSocketStreamReader(serverSocket.getInputStream(), new ClientReceiveHandler());
         socketStreamReader.start();
     }
 

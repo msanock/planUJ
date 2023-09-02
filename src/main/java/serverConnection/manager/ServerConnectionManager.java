@@ -5,14 +5,12 @@ import Connection.protocol.packs.UserInfoRequestPack;
 import clientConnection.ConnectionSettings;
 import Connection.connector.download.MultiSocketStreamReader;
 import Connection.manager.ConnectionManager;
-import serverConnection.Client;
+import serverConnection.ServerClient;
 import serverConnection.ServerReceiveHandler;
 import serverConnection.ServerSendHandler;
 import serverConnection.SocketSelector;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -31,15 +29,7 @@ public class ServerConnectionManager extends ConnectionManager {
 
     }
 
-    private void acceptNewConnection(ServerSocket serverSocket) throws IOException {
-        Socket clientSocket = serverSocket.accept();
-        Logger.getAnonymousLogger().info("New Connection");
-        Client newClient = new Client(clientSocket);
-        sendHandler.send(new UserInfoRequestPack(), newClient);
-        newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
-        socketSelector.AddNewClient(newClient);
 
-    }
 
     @Override
     public void restartService() throws ConnectException {
@@ -66,4 +56,14 @@ public class ServerConnectionManager extends ConnectionManager {
         }).start();
     }
 
+    private void acceptNewConnection(ServerSocket serverSocket) throws IOException {
+        Socket clientSocket = serverSocket.accept();
+        Logger.getAnonymousLogger().info("New Connection");
+        ServerClient newClient = new ServerClient(clientSocket);
+        sendHandler.send(new UserInfoRequestPack(), newClient);
+        newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
+        socketSelector.AddNewClient(newClient);
+    }
+
+    public void acceptNewLogIn() {}
 }

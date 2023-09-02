@@ -1,14 +1,14 @@
 package serverConnection;
 
-import java.net.Socket;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 // Not the best name for it, generally it should store information about all connected users and their sockets
+
+//zrób interface chuju
 public class SocketSelector {
-    private final ConcurrentHashMap<Long, Client> loggedClients;
-    private final Set<Client>  unspecifiedClients;
+    private final ConcurrentHashMap<Long, ServerClient> loggedClients;
+    private final Set<ServerClient>  unspecifiedClients;
 
     public SocketSelector() {
         unspecifiedClients = ConcurrentHashMap.newKeySet();
@@ -16,7 +16,10 @@ public class SocketSelector {
     }
 
 
-    public void AddNewClient(Client newClient) {
+    public void AddNewClient(ServerClient newClient) {
         unspecifiedClients.add(newClient);
     }
+
+
+
 }

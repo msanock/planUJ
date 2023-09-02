@@ -20,7 +20,7 @@ public class ServerReceiveHandler extends ReceiveHandler {
     }
 
     @Override
-    public void onNewPackage(Packable pack, Client socket) {
+    public void onNewPackage(Packable pack, ServerClient socket) {
 
         executorService.submit(() -> {
 
