@@ -1,8 +1,10 @@
 package serverConnection;
 
 import Connection.manager.PackageVisitor;
+import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.ResponsePackage;
+import Connection.protocol.packages.UUIDHolder;
 import Connection.protocol.packages.taskOperations.*;
 import Connection.protocol.packages.teamOperations.*;
 import Connection.protocol.packages.userOperations.GetUsersPackage;
@@ -11,21 +13,16 @@ import Connection.protocol.packages.EmptyPack;
 import Connection.protocol.packages.UserInfoRequestPackage;
 import Server.database.Database;
 import Server.sql.DatabaseException;
-import Utils.OperationResults.GetTasksResult;
-import Utils.OperationResults.GetTeamsResult;
-import Utils.OperationResults.GetUsersResult;
-import Utils.OperationResults.IdResult;
+import Utils.OperationResults.*;
 import serverConnection.abstraction.ServerClient;
 import serverConnection.abstraction.SocketSelector;
 
 public class ServerPackageVisitorImplementation implements PackageVisitor {
     Database database;
     SocketSelector socketSelector;
-    ServerClient client;
-    public ServerPackageVisitorImplementation(Database database, SocketSelector socketSelector, ServerClient client) {
+    public ServerPackageVisitorImplementation(Database database, SocketSelector socketSelector) {
         this.database = database;
         this.socketSelector = socketSelector;
-        this.client = client;
     }
 
     @Override
@@ -36,6 +33,10 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
     @Override
     public RespondInformation handleUserInfoRequestPack(UserInfoRequestPackage userInfoRequestPack, ServerClient sender){
         return null;
+    }
+
+    public RespondInformation prepareBasicRespond(ServerClient sender, OperationResult result, UUIDHolder UUIDpackage){
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage(UUIDpackage.getUuid())).build();
     }
 
 
@@ -52,7 +53,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         loginPackage.getUserInfo().setId(result.getId());
         sender.setClientID((long) result.getId());
         socketSelector.setClientID((long) result.getId(), sender);
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage()).build();
+        return prepareBasicRespond(sender, result, loginPackage);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage()).build();
+        return prepareBasicRespond(sender, result, getUsersPackage);
     }
 
 
@@ -80,7 +81,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             ).build();
         }
         addTeamPackage.getTeamInfo().setId(result.getId());
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage()).build();
+        return prepareBasicRespond(sender, result, addTeamPackage);
     }
 
     @Override
@@ -92,6 +93,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
+        //TODO: should it really by empty?
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new EmptyPack()).build();
     }
 
@@ -105,7 +107,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), getUsersResult.toResponsePackage()).build();
+        return prepareBasicRespond(sender, getUsersResult, getTeamUsersPackage);
     }
 
     @Override
@@ -118,7 +120,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), getTeamsResult.toResponsePackage()).build();
+        return prepareBasicRespond(sender, getTeamsResult, getTeamsPackage);
     }
 
     @Override
@@ -131,7 +133,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), getTeamsResult.toResponsePackage()).build();
+        return prepareBasicRespond(sender, getTeamsResult, getUserTeamsPackage);
     }
 
     @Override
@@ -145,7 +147,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             ).build();
         }
         addTaskPackage.getTaskInfo().setId(result.getId());
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage()).build();
+        return prepareBasicRespond(sender, result, addTaskPackage);
     }
 
     @Override
@@ -158,7 +160,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage()).build();
+        return prepareBasicRespond(sender, result, getTasksPackage);
     }
 
     @Override
@@ -171,7 +173,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage()).build();
+        return prepareBasicRespond(sender, result, getUserTasksPackage);
     }
 
     @Override
@@ -183,6 +185,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
                     new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
             ).build();
         }
+        //TODO: should it really be an empty pack?
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new EmptyPack()).build();
     }
 

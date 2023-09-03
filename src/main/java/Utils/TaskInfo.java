@@ -27,7 +27,7 @@ public class TaskInfo {
         this.id = id;
     }
 
-    public int getTeam_id() {
+    public int getTeamID() {
         return team_id;
     }
 

@@ -41,6 +41,10 @@ public class ResponsePackage extends UUIDHolder implements Packable {
         private boolean success;
         private Map<String, Object> data;
 
+        public Builder() {
+            data = new java.util.HashMap<>();
+        }
+
         public Builder addData(String key, Object value) {
             this.data.put(key, value);
             return this;

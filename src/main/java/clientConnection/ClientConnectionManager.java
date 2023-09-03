@@ -10,16 +10,17 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 public class ClientConnectionManager implements ConnectionManager {
     private Socket serverSocket;
     private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
-    private boolean isOnline;
+    private AtomicBoolean isOnline;
 
-    ClientConnectionManager(ClientSendHandler sendHandler) {
-        isOnline = false;
+    public ClientConnectionManager(ClientSendHandler sendHandler) {
+        isOnline = new AtomicBoolean(false);
         this.sendHandler = sendHandler;
     }
 
@@ -28,10 +29,10 @@ public class ClientConnectionManager implements ConnectionManager {
         try {
             serverSocket = new Socket(ConnectionSettings.HOST, ConnectionSettings.PORT);
         } catch (ConnectException e) {
-            Logger.getAnonymousLogger().info("Connection problem " + e.getMessage());
+            Logger.getAnonymousLogger().info("Connection problem " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info("IO problem " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
         }
         return true;
@@ -44,40 +45,41 @@ public class ClientConnectionManager implements ConnectionManager {
 
     }
 
+    public boolean isOnline() {
+        return isOnline.get();
+    }
+
+
     @Override
     public void startService() throws ConnectException {
-        new Thread(() -> {
-            int numberOfTries = 0;
-            while (numberOfTries < ConnectionSettings.NUMBER_OF_CONNECTION_TRIES) {
-                numberOfTries++;
-                if (openNewSocket()) {
-                    isOnline = true;
-                    Logger.getAnonymousLogger().info("Connected to Server");
-                    break;
-                }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(ConnectionSettings.RECONNECTION_PAUSE);
-                } catch (InterruptedException ignored) {
-                }
+        int numberOfTries = 0;
+        while (numberOfTries < ConnectionSettings.NUMBER_OF_CONNECTION_TRIES) {
+            numberOfTries++;
+            if (openNewSocket()) {
+                isOnline.set(true);
+                Logger.getAnonymousLogger().info("Connected to Server");
+                break;
             }
+            try {
+                TimeUnit.MILLISECONDS.sleep(ConnectionSettings.RECONNECTION_PAUSE);
+            } catch (InterruptedException ignored) {
+            }
+        }
 
-        }).start();
-
-        if (!isOnline)
-            throw new ConnectException();
+        if (!isOnline.get()) {
+            return;
+        }
 
         try {
             startReceiver();
             sendHandler.trySetOutputStream(serverSocket.getOutputStream());
-
         } catch (IOException e) {
-            throw new ConnectException();
+                Logger.getAnonymousLogger("Unable to start : " + e.getMessage() + " " + e.getStackTrace());
         }
-
     }
 
     public void getResponse() throws ConnectException {
-        if (!isOnline)
+        if (!isOnline.get())
             throw new ConnectException();
         socketStreamReader.suspendReading();
 

@@ -21,16 +21,17 @@ public class GetTeamsResult extends OperationResult{
             int prevTeamId = -1;
             TeamInfo currTeamInfo = null;
             while (resultSet.next()) {
-                if(prevTeamId != resultSet.getInt("tid")) {
+                int tid = resultSet.getInt("tid");
+                if(prevTeamId != tid) {
                     if(prevTeamId != -1){
                         this.teams.add(currTeamInfo);
                     }
-                    prevTeamId = resultSet.getInt("tid");
-                    currTeamInfo = new TeamInfo(resultSet.getString("tname"), resultSet.getInt("tid"), new ArrayList<>());
+                    prevTeamId = tid;
+                    currTeamInfo = new TeamInfo(resultSet.getString("tname"), tid, new ArrayList<>());
                 }
                 currTeamInfo.getUsers().add(new TeamUser(resultSet.getString("name"), resultSet.getInt("user_id"), resultSet.getString("role"), resultSet.getString("position")));
             }
-            this.teams.add(currTeamInfo);
+            if(currTeamInfo!= null) this.teams.add(currTeamInfo);
             this.success = true;
         } catch (Exception e) {
             this.success = false;

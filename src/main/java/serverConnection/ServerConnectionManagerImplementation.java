@@ -15,7 +15,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-// make singleton
 public class ServerConnectionManagerImplementation implements ServerConnectionManger {
 
     private MultiSocketStreamReader multiSocketStreamReader;
@@ -48,13 +47,11 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
                 while (true) {
                     Logger.getAnonymousLogger().info("Ready for connection");
                     acceptNewConnection(serverSocket);
-
                 }
             } catch (Exception exception) {
                 Logger.getAnonymousLogger().warning("Server exception: " + exception.getMessage());
             } finally {
                 isOnline = false;
-
             }
         }).start();
     }
@@ -63,8 +60,8 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
         Socket clientSocket = serverSocket.accept();
         Logger.getAnonymousLogger().info("New Connection");
         ServerClient newClient = new ServerClientImplementation(clientSocket);
-        sendHandler.send(new UserInfoRequestPackage(), newClient);
         newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
+        sendHandler.send(new UserInfoRequestPackage(), newClient);
         socketSelector.AddNewClient(newClient);
     }
 

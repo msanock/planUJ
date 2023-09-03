@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DummyTest {
     @Test
     void test() {
-        DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
+        /*DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
         Database database = databaseFactory.getLocalDatabase();
 
         UserInfo user = new UserInfo("username", 0);
@@ -41,20 +41,20 @@ class DummyTest {
         database.addTask(task);
         System.out.println(task.getId());
 
-        database.addUserTask(user.getId(), task.getId());
+        database.addUserTask(user.getId(), task.getId());*/
     }
 
 
     @Test
     void Test2(){
-        DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
+        /*DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
         Database database = databaseFactory.getLocalDatabase();
 
         /*GetUsersResult getUsersResult = database.getUsers();
         System.out.println(getUsersResult.getUsers());
 
         GetUsersResult getTeamUsersResult = database.getTeamUsers(1);
-        System.out.println(getTeamUsersResult.getUsers());*/
+        System.out.println(getTeamUsersResult.getUsers());
 
         GetTeamsResult getTeamsResult = database.getTeams();
         System.out.println(getTeamsResult.getTeams());

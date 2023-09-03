@@ -29,7 +29,6 @@ public class ClientSocketStreamReader extends Thread {
     @Override
     public void run() {
         try {
-
             active = true;
             while(true) {
                 if (continueReading.get()) {

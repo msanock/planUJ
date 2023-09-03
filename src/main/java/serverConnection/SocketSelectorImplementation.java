@@ -12,7 +12,16 @@ public class SocketSelectorImplementation implements SocketSelector {
     private final ConcurrentHashMap<Long, ServerClient> loggedClients;
     private final Set<ServerClient>  unspecifiedClients;
 
-    public SocketSelectorImplementation() {
+    public static SocketSelectorImplementation instance;
+
+    public static SocketSelectorImplementation getInstance() {
+        if (instance == null) {
+            instance = new SocketSelectorImplementation();
+        }
+        return instance;
+    }
+
+    private SocketSelectorImplementation() {
         unspecifiedClients = ConcurrentHashMap.newKeySet();
         loggedClients = new ConcurrentHashMap<>();
     }

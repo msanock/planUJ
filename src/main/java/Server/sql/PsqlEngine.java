@@ -108,7 +108,7 @@ public class PsqlEngine implements Database {
             sql.setString(1, taskInfo.getInfo());
             sql.setDate(2, Date.valueOf(taskInfo.getDeadline().toLocalDate()));
             sql.setString(3, taskInfo.getStatus());
-            sql.setInt(4, taskInfo.getTeam_id());
+            sql.setInt(4, taskInfo.getTeamID());
             sql.setString(5, taskInfo.getPriority());
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();

@@ -1,5 +1,7 @@
 package Connection;
 
+import Connection.protocol.Packable;
+import Connection.protocol.packages.taskOperations.AddTaskPackage;
 import Server.database.Database;
 import Server.sql.DatabaseException;
 import Utils.OperationResults.*;
