@@ -8,12 +8,14 @@ import Connection.protocol.packages.taskOperations.*;
 import Connection.protocol.packages.teamOperations.*;
 import Connection.protocol.packages.userOperations.GetUsersPackage;
 import Connection.protocol.packages.userOperations.LoginPackage;
-import Connection.protocol.packs.EmptyPack;
+import Connection.protocol.packages.EmptyPack;
 import Connection.protocol.Packable;
-import Connection.protocol.packs.UserInfoRequestPack;
+import Connection.protocol.packages.UserInfoRequestPackage;
 import Server.database.Database;
 import Server.sql.DatabaseException;
 import Utils.OperationResults.*;
+import serverConnection.abstraction.ServerClient;
+import serverConnection.abstraction.SocketSelector;
 
 public class ServerPackageVisitor implements PackageVisitor {
     Database database;
@@ -33,7 +35,7 @@ public class ServerPackageVisitor implements PackageVisitor {
     }
 
     @Override
-    public RespondInformation handleUserInfoRequestPack(UserInfoRequestPack userInfoRequestPack, ServerClient sender){
+    public RespondInformation handleUserInfoRequestPack(UserInfoRequestPackage userInfoRequestPack, ServerClient sender){
         return null;
     }
 
