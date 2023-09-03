@@ -17,6 +17,11 @@ public class RespondInformation {
     public static class RespondInformationBuilder {
         Map<Long, Packable> responses;
 
+        public RespondInformationBuilder() {
+            responses = new java.util.HashMap<>();
+        }
+
+
         public RespondInformationBuilder addRespond(long clientID, Packable respond) {
             responses.put(clientID, respond);
             return this;

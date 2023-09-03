@@ -8,7 +8,7 @@ class ResponsePackageTest {
 
 
     public ResponsePackage getResponsePackage() {
-        return new ResponsePackage.Builder().addData("test", "test").addData("test2", "test2").build();
+        return new ResponsePackage.Builder().addData("test", "test").addData("test2", "test2").setSuccess(true).build();
     }
 
     @Test
