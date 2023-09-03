@@ -14,6 +14,10 @@ public class AddTaskPackage extends UUIDHolder implements Packable{
         return v.handleAddTaskPackage(this, sender);
     }
 
+    public AddTaskPackage(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
     public TaskInfo getTaskInfo() {
         return taskInfo;
     }

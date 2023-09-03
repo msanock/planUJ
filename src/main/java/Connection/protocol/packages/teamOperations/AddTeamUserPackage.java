@@ -11,6 +11,11 @@ public class AddTeamUserPackage extends UUIDHolder implements Packable {
     private TeamUser teamUser;
     private int TeamID;
 
+    public AddTeamUserPackage(TeamUser teamUser, int TeamID) {
+        this.teamUser = teamUser;
+        this.TeamID = TeamID;
+    }
+
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleAddTeamUserPackage(this, sender);

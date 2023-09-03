@@ -8,6 +8,10 @@ import serverConnection.abstraction.ServerClient;
 
 public class GetTeamTasksPackage extends UUIDHolder implements Packable {
     private int teamID;
+
+    public GetTeamTasksPackage(int teamID) {
+        this.teamID = teamID;
+    }
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleGetTeamTasksPackage(this, sender);

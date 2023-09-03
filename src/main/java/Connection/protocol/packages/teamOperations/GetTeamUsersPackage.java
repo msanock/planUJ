@@ -9,6 +9,10 @@ import serverConnection.abstraction.ServerClient;
 
 public class GetTeamUsersPackage extends UUIDHolder implements Packable {
     int teamID;
+
+    public GetTeamUsersPackage(int teamID) {
+        this.teamID = teamID;
+    }
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleGetTeamUsersPackage(this, sender);

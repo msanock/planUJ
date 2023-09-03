@@ -9,6 +9,10 @@ import serverConnection.abstraction.ServerClient;
 
 public class LoginPackage extends UUIDHolder implements Packable {
     UserInfo userInfo;
+
+    public LoginPackage(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleLoginPackage(this, sender);

@@ -9,6 +9,10 @@ import serverConnection.abstraction.ServerClient;
 
 public class UpdateTaskPackage extends UUIDHolder implements Packable {
     private TaskInfo taskInfo;
+
+    public UpdateTaskPackage(TaskInfo taskInfo) {
+        this.taskInfo = taskInfo;
+    }
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleUpdateTaskPackage(this, sender);

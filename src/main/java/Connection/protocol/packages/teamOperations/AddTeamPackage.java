@@ -10,6 +10,10 @@ import serverConnection.abstraction.ServerClient;
 public class AddTeamPackage extends UUIDHolder implements Packable {
     private TeamInfo teamInfo;
 
+    public AddTeamPackage(TeamInfo teamInfo) {
+        this.teamInfo = teamInfo;
+    }
+
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleAddTeamPackage(this, sender);

@@ -9,6 +9,11 @@ import serverConnection.abstraction.ServerClient;
 public class AddUserTaskPackage extends UUIDHolder implements Packable {
     private int userID;
     private int taskID;
+
+    public AddUserTaskPackage(int userID, int taskID) {
+        this.userID = userID;
+        this.taskID = taskID;
+    }
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleAddUserTaskPackage(this, sender);
