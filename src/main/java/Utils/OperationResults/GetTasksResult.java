@@ -7,6 +7,7 @@ import Utils.TaskInfo;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class GetTasksResult extends OperationResult{
@@ -30,9 +31,10 @@ public class GetTasksResult extends OperationResult{
     }
 
     @Override
-    public Packable toResponsePackage() {
+    public Packable toResponsePackage(UUID uuid ) {
         ResponsePackage.Builder builder = new ResponsePackage.Builder();
         builder.addData(ResponsePackage.Dictionary.TASKS_LIST, tasks);
+        builder.setUuid(uuid);
         builder.setSuccess(success);
         return builder.build();
     }

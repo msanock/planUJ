@@ -3,9 +3,10 @@ package Connection.protocol.packages.taskOperations;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
+import Connection.protocol.packages.UUIDHolder;
 import serverConnection.ServerClient;
 
-public class AddUserTaskPackage implements Packable {
+public class AddUserTaskPackage extends UUIDHolder implements Packable {
     private int userID;
     private int taskID;
     @Override

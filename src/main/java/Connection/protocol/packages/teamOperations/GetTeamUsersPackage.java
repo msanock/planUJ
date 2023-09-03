@@ -3,9 +3,10 @@ package Connection.protocol.packages.teamOperations;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
+import Connection.protocol.packages.UUIDHolder;
 import serverConnection.ServerClient;
 
-public class GetTeamUsersPackage implements Packable {
+public class GetTeamUsersPackage extends UUIDHolder implements Packable {
     int teamID;
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {

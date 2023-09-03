@@ -7,6 +7,7 @@ import Utils.UserInfo;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class GetUsersResult extends  OperationResult{
@@ -28,10 +29,11 @@ public class GetUsersResult extends  OperationResult{
     }
 
     @Override
-    public Packable toResponsePackage() {
+    public Packable toResponsePackage(UUID uuid){
         ResponsePackage.Builder builder = new ResponsePackage.Builder();
         builder.addData(ResponsePackage.Dictionary.USERS_LIST, users);
         builder.setSuccess(success);
+        builder.setUuid(uuid);
         return builder.build();
     }
 

@@ -3,10 +3,11 @@ package Connection.protocol.packages.teamOperations;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
+import Connection.protocol.packages.UUIDHolder;
 import Utils.TeamInfo;
 import serverConnection.ServerClient;
 
-public class AddTeamPackage implements Packable {
+public class AddTeamPackage extends UUIDHolder implements Packable {
     private TeamInfo teamInfo;
 
     @Override

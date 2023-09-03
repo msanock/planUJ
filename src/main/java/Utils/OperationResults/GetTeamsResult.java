@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class GetTeamsResult extends OperationResult{
@@ -39,9 +40,10 @@ public class GetTeamsResult extends OperationResult{
     }
 
     @Override
-    public Packable toResponsePackage() {
+    public Packable toResponsePackage(UUID uuid) {
         ResponsePackage.Builder builder = new ResponsePackage.Builder();
         builder.addData(ResponsePackage.Dictionary.TEAMS_LIST, teams);
+        builder.setUuid(uuid);
         builder.setSuccess(success);
         return builder.build();
     }

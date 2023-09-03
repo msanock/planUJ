@@ -3,11 +3,11 @@ package Connection.protocol.packages.userOperations;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
+import Connection.protocol.packages.UUIDHolder;
 import Utils.UserInfo;
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.Pack;
 import serverConnection.ServerClient;
 
-public class LoginPackage implements Packable {
+public class LoginPackage extends UUIDHolder implements Packable {
     UserInfo userInfo;
     @Override
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {

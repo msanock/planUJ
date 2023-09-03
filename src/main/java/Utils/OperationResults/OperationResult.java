@@ -2,6 +2,8 @@ package Utils.OperationResults;
 
 import Connection.protocol.Packable;
 
+import java.util.UUID;
+
 public abstract class OperationResult {
     protected boolean success;
     protected Exception exception;
@@ -11,7 +13,7 @@ public abstract class OperationResult {
         exception = null;
     }
 
-    public Packable toResponsePackage() {
+    public Packable toResponsePackage(UUID uuid) {
         throw new UnsupportedOperationException();
     }
 

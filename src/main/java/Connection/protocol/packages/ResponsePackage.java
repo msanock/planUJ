@@ -7,9 +7,10 @@ import serverConnection.ServerClient;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 
-public class ResponsePackage implements Packable {
+public class ResponsePackage extends UUIDHolder implements Packable {
     private boolean success;
     private Map<String, Object> data;
 
@@ -20,6 +21,8 @@ public class ResponsePackage implements Packable {
 
     private ResponsePackage(Builder builder) {
         this.data = builder.data;
+        this.success = builder.success;
+        setUuid(builder.uuid);
     }
 
     public boolean isSuccess() {
@@ -35,6 +38,7 @@ public class ResponsePackage implements Packable {
     }
 
     public static class Builder {
+        private UUID uuid;
         private boolean success;
         private Map<String, Object> data;
 
@@ -49,6 +53,11 @@ public class ResponsePackage implements Packable {
 
         public Builder setSuccess(boolean success) {
             this.success = success;
+            return this;
+        }
+
+        public Builder setUuid(UUID uuid) {
+            this.uuid = uuid;
             return this;
         }
     }
