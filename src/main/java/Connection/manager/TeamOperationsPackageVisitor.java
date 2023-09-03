@@ -2,7 +2,7 @@ package Connection.manager;
 
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.teamOperations.*;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 public interface TeamOperationsPackageVisitor {
 

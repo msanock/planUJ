@@ -4,7 +4,7 @@ import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.UUIDHolder;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 public class GetUserTasksPackage extends UUIDHolder implements Packable {
     private int userID;

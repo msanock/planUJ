@@ -1,14 +1,13 @@
-package serverConnection.manager;
+package serverConnection;
 
 import Connection.manager.PackageVisitor;
-import Connection.protocol.packs.UserInfoRequestPack;
+import Connection.protocol.packages.UserInfoRequestPackage;
 import clientConnection.ConnectionSettings;
 import Connection.connector.download.MultiSocketStreamReader;
-import Connection.manager.ConnectionManager;
-import serverConnection.ServerClient;
-import serverConnection.ServerReceiveHandler;
-import serverConnection.ServerSendHandler;
-import serverConnection.SocketSelector;
+import serverConnection.abstraction.ServerClient;
+import serverConnection.abstraction.ServerConnectionManger;
+import serverConnection.abstraction.SocketSelector;
+import serverConnection.abstraction.ServerSendHandler;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -16,17 +15,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
-public class ServerConnectionManager extends ConnectionManager {
+// make singleton
+public class ServerConnectionManagerImplementation implements ServerConnectionManger {
 
     private MultiSocketStreamReader multiSocketStreamReader;
     private ServerSendHandler sendHandler;
     private PackageVisitor packageVisitor;
     private SocketSelector socketSelector;
+    private boolean isOnline;
 
-    public ServerConnectionManager(ServerSendHandler sendHandler) {
+
+    public ServerConnectionManagerImplementation(ServerSendHandler sendHandler, PackageVisitor packageVisitor, SocketSelector socketSelector) {
         isOnline = false;
         this.sendHandler = sendHandler;
-
+        this.packageVisitor = packageVisitor;
+        this.socketSelector = socketSelector;
     }
 
 
@@ -41,7 +44,7 @@ public class ServerConnectionManager extends ConnectionManager {
         isOnline = true;
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(ConnectionSettings.PORT)) {
-                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandler(sendHandler, packageVisitor));
+                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandlerImplementation(sendHandler, packageVisitor));
                 while (true) {
                     Logger.getAnonymousLogger().info("Ready for connection");
                     acceptNewConnection(serverSocket);
@@ -59,11 +62,19 @@ public class ServerConnectionManager extends ConnectionManager {
     private void acceptNewConnection(ServerSocket serverSocket) throws IOException {
         Socket clientSocket = serverSocket.accept();
         Logger.getAnonymousLogger().info("New Connection");
-        ServerClient newClient = new ServerClient(clientSocket);
-        sendHandler.send(new UserInfoRequestPack(), newClient);
+        ServerClient newClient = new ServerClientImplementation(clientSocket);
+        sendHandler.send(new UserInfoRequestPackage(), newClient);
         newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
         socketSelector.AddNewClient(newClient);
     }
 
-    public void acceptNewLogIn() {}
+    @Override
+    public void acceptLogOut() {
+        //should it be here ?
+    }
+
+    @Override
+    public void FinishConnection() {
+        // like one above
+    }
 }

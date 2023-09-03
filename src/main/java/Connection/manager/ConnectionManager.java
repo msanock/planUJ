@@ -8,16 +8,11 @@ import java.net.Socket;
 
 
 // ConnectionEvents interface is probably useless now
-public abstract class ConnectionManager {
-    protected SendHandler sendHandler;
-    protected ReceiveHandler receiveHandler;
+public interface ConnectionManager {
 
-    protected static boolean isOnline;
+   void restartService() throws ConnectException;
 
-
-    public abstract void restartService() throws ConnectException;
-
-    public abstract void startService() throws ConnectException;
+    void startService() throws ConnectException;
 
     // some getters
 

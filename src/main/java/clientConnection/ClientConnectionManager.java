@@ -2,6 +2,7 @@ package clientConnection;
 
 import Connection.connector.download.ClientSocketStreamReader;
 import Connection.connector.download.ClientSocketStreamReader;
+import Connection.connector.upload.SendHandler;
 import Connection.manager.ConnectionManager;
 
 import java.io.IOException;
@@ -11,13 +12,15 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class ClientConnectionManager extends ConnectionManager {
+public class ClientConnectionManager implements ConnectionManager {
     private Socket serverSocket;
     private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
+    private boolean isOnline;
 
-    ClientConnectionManager() {
+    ClientConnectionManager(ClientSendHandler sendHandler) {
         isOnline = false;
+        this.sendHandler = sendHandler;
     }
 
 
@@ -65,11 +68,18 @@ public class ClientConnectionManager extends ConnectionManager {
 
         try {
             startReceiver();
-            sendHandler = new ClientSendHandler(serverSocket);
+            sendHandler.trySetOutputStream(serverSocket.getOutputStream());
 
         } catch (IOException e) {
             throw new ConnectException();
         }
+
+    }
+
+    public void getResponse() throws ConnectException {
+        if (!isOnline)
+            throw new ConnectException();
+        socketStreamReader.suspendReading();
 
     }
 

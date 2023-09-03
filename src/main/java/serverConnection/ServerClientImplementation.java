@@ -1,21 +1,21 @@
 package serverConnection;
 
 import Connection.connector.download.ServerSocketStreamReader;
+import serverConnection.abstraction.ServerClient;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-//dodaj interface głupi huju
-//
-public class ServerClient {
+
+public class ServerClientImplementation implements ServerClient {
     private final Socket socket;
     private ObjectOutputStream objectOutputStream;
     private ServerSocketStreamReader socketStreamReader;
     private Long ClientID;
 
-    public ServerClient(Socket socket) {
+    public ServerClientImplementation(Socket socket) {
         this.socket = socket;
     }
 

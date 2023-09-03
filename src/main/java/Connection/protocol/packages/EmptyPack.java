@@ -1,9 +1,9 @@
-package Connection.protocol.packs;
+package Connection.protocol.packages;
 
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 import java.io.Serializable;
 

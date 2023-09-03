@@ -4,7 +4,8 @@ import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.UUIDHolder;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
+
 
 public class GetTeamUsersPackage extends UUIDHolder implements Packable {
     int teamID;

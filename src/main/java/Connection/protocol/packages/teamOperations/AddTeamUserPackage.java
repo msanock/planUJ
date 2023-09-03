@@ -5,7 +5,7 @@ import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.UUIDHolder;
 import Utils.TeamUser;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 public class AddTeamUserPackage extends UUIDHolder implements Packable {
     private TeamUser teamUser;

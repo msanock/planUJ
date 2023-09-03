@@ -2,10 +2,11 @@ package Connection.connector.download;
 
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 import java.net.Socket;
 
+// delete
 public abstract class ReceiveHandler {
     protected PackageVisitor packageVisitor;
 

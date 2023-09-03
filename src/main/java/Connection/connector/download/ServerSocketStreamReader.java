@@ -1,7 +1,8 @@
 package Connection.connector.download;
 
 import Connection.protocol.Packable;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
+import serverConnection.abstraction.ServerReceiveHandler;
 
 
 import java.io.IOException;
@@ -10,12 +11,12 @@ import java.io.ObjectInputStream;
 
 public class ServerSocketStreamReader extends Thread {
     private final InputStream stream;
-    private final ReceiveHandler handler;
+    private final ServerReceiveHandler handler;
     private boolean isActive;
 
     private final ServerClient client;
 
-    public ServerSocketStreamReader(ServerClient client, ReceiveHandler handler) throws IOException {
+    public ServerSocketStreamReader(ServerClient client, ServerReceiveHandler handler) throws IOException {
         this.client = client;
         this.stream = client.getInputStream();
         this.handler = handler;

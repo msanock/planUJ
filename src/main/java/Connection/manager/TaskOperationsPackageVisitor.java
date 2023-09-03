@@ -2,7 +2,7 @@ package Connection.manager;
 
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.taskOperations.*;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 public interface TaskOperationsPackageVisitor {
     RespondInformation handleAddTaskPackage(AddTaskPackage addTaskPackage, ServerClient sender);

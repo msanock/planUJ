@@ -5,7 +5,7 @@ import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.UUIDHolder;
 import Utils.UserInfo;
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 public class LoginPackage extends UUIDHolder implements Packable {
     UserInfo userInfo;

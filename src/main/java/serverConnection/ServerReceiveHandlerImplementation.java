@@ -1,20 +1,24 @@
 package serverConnection;
 
-import Connection.connector.download.ReceiveHandler;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
+import serverConnection.abstraction.ServerClient;
+import serverConnection.abstraction.ServerReceiveHandler;
+import serverConnection.abstraction.ServerSendHandler;
+import serverConnection.abstraction.SocketSelector;
 
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ServerReceiveHandler extends ReceiveHandler {
+public class ServerReceiveHandlerImplementation implements ServerReceiveHandler {
     ExecutorService executorService;
     ServerSendHandler sendHandler;
     SocketSelector socketSelector;
+    PackageVisitor packageVisitor;
 
-    public ServerReceiveHandler(ServerSendHandler sendHandler, PackageVisitor packageVisitor) {
+    public ServerReceiveHandlerImplementation(ServerSendHandler sendHandler, PackageVisitor packageVisitor) {
         executorService = Executors.newCachedThreadPool();
         this.sendHandler = sendHandler;
         this.packageVisitor = packageVisitor;
@@ -28,12 +32,14 @@ public class ServerReceiveHandler extends ReceiveHandler {
         });
     }
 
+    @Override
+    public void onLostConnection(ServerClient client) {
+
+    }
+
     private void sendOutResponses(RespondInformation respondInformation,SocketSelector socketSelector){
         //TODO
+        // shouldn't it be in ServerSendHandler ?
     }
 
-    @Override
-    public void onLostConnection(Socket socket) {
-
-    }
 }

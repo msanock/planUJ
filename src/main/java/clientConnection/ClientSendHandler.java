@@ -1,19 +1,26 @@
 package clientConnection;
 
-import Connection.connector.upload.SendHandler;
 import Connection.protocol.Packable;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
-public class ClientSendHandler extends SendHandler {
+public class ClientSendHandler {
+    ObjectOutputStream outputStream;
 
-    ClientSendHandler(Socket socket) {
 
+    public void send(Packable pack) throws IOException {
+        outputStream.writeObject(pack);
     }
 
-    @Override
-    public void send(Packable pack, Socket socket) {
-
+    public boolean trySetOutputStream(OutputStream outputStream) {
+        try {
+            this.outputStream = new ObjectOutputStream(outputStream);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
-
 }

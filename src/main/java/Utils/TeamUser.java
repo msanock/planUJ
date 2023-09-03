@@ -1,6 +1,6 @@
 package Utils;
 
-public class TeamUser extends UserInfo{
+public class TeamUser extends UserInfo {
     private String role;
     private String position;
 

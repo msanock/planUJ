@@ -1,6 +1,6 @@
 package Connection.protocol;
 
-import serverConnection.ServerClient;
+import serverConnection.abstraction.ServerClient;
 
 import java.util.Map;
 
