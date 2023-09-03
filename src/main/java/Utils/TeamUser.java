@@ -1,20 +1,26 @@
 package Utils;
 
 public class TeamUser extends UserInfo {
-    private String role;
+
+    public static enum Role{
+        ADMIN,
+        MEMBER
+    }
+
+    private Role role;
     private String position;
 
-    public TeamUser(String username, int id, String role, String position){
+    public TeamUser(String username, int id, Role role, String position){
         super(username, id);
         this.role = role;
         this.position = position;
     }
 
-    public String getRole(){
+    public Role getRole(){
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

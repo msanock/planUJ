@@ -142,7 +142,7 @@ public class PsqlEngine implements Database {
                      ADD_TEAM_MEMBER_QUERY)) {
             sql.setInt(1, teamUser.getId());
             sql.setInt(2, team_id);
-            sql.setString(3, teamUser.getRole());
+            sql.setString(3, teamUser.getRole().name());
             sql.setString(4, teamUser.getPosition());
             sql.executeUpdate();
         } catch (SQLException exception) {

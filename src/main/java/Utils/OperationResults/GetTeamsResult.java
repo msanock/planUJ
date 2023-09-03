@@ -29,7 +29,7 @@ public class GetTeamsResult extends OperationResult{
                     prevTeamId = tid;
                     currTeamInfo = new TeamInfo(resultSet.getString("tname"), tid, new ArrayList<>());
                 }
-                currTeamInfo.getUsers().add(new TeamUser(resultSet.getString("name"), resultSet.getInt("user_id"), resultSet.getString("role"), resultSet.getString("position")));
+                currTeamInfo.getUsers().add(new TeamUser(resultSet.getString("name"), resultSet.getInt("user_id"), TeamUser.Role.valueOf(resultSet.getString("role")), resultSet.getString("position")));
             }
             if(currTeamInfo!= null) this.teams.add(currTeamInfo);
             this.success = true;
