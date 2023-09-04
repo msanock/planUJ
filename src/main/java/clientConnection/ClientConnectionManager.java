@@ -4,6 +4,8 @@ import Connection.connector.download.ClientSocketStreamReader;
 import Connection.connector.download.ClientSocketStreamReader;
 import Connection.connector.upload.SendHandler;
 import Connection.manager.ConnectionManager;
+import Server.sql.DatabaseException;
+import Server.sql.PsqlEngine;
 
 import java.io.IOException;
 
@@ -11,13 +13,25 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientConnectionManager implements ConnectionManager {
+
+    static private ClientConnectionManager instance;
     private Socket serverSocket;
     private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
     private AtomicBoolean isOnline;
+
+    public static ClientConnectionManager getInstance() {
+        if (instance == null) {
+            instance = new ClientConnectionManager(new ClientSendHandler());
+
+        }
+        return instance;
+    }
 
     public ClientConnectionManager(ClientSendHandler sendHandler) {
         isOnline = new AtomicBoolean(false);
@@ -78,16 +92,11 @@ public class ClientConnectionManager implements ConnectionManager {
         }
     }
 
-    public void getResponse() throws ConnectException {
-        if (!isOnline.get())
-            throw new ConnectException();
-        socketStreamReader.suspendReading();
-
-    }
 
     public void startReceiver() throws IOException {
         socketStreamReader = new ClientSocketStreamReader(serverSocket.getInputStream(), new ClientReceiveHandler());
         socketStreamReader.start();
+
     }
 
 

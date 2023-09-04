@@ -20,6 +20,7 @@ import serverConnection.abstraction.SocketSelector;
 public class ServerPackageVisitorImplementation implements PackageVisitor {
     Database database;
     SocketSelector socketSelector;
+
     public ServerPackageVisitorImplementation(Database database, SocketSelector socketSelector) {
         this.database = database;
         this.socketSelector = socketSelector;
@@ -32,6 +33,11 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
 
     @Override
     public RespondInformation handleUserInfoRequestPack(UserInfoRequestPackage userInfoRequestPack, ServerClient sender){
+        return null;
+    }
+
+    @Override
+    public RespondInformation handleResponseInformation(ResponsePackage responsePackage, ServerClient sender) {
         return null;
     }
 

@@ -39,6 +39,11 @@ public class ServerPackageVisitor implements PackageVisitor {
         return null;
     }
 
+    @Override
+    public RespondInformation handleResponseInformation(ResponsePackage responsePackage, ServerClient sender) {
+        return null;
+    }
+
 
     @Override
     public RespondInformation handleLoginPackage(LoginPackage loginPackage, ServerClient sender) {

@@ -1,5 +1,6 @@
 package Connection.connector.download;
 
+import Connection.protocol.ClientPackable;
 import Connection.protocol.Packable;
 import clientConnection.ClientReceiveHandler;
 
@@ -25,7 +26,7 @@ public class ClientSocketStreamReader extends Thread {
         this.setDaemon(true);
     }
 
-
+    // TODO wrong implementation
     @Override
     public void run() {
         try {
@@ -35,8 +36,12 @@ public class ClientSocketStreamReader extends Thread {
                     Packable newPackage = (Packable) stream.readObject();
                     if (newPackage == null)
                         break;
-
-                    handler.onNewPackage(newPackage);
+                    if (newPackage instanceof ClientPackable)
+                        handler.onNewPackage((ClientPackable) newPackage);
+                    /**
+                     * else
+                     *      subscriber.notify() czy coś takiego
+                     */
                 }
                 else {
                     synchronized (active) {

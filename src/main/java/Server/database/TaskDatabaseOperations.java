@@ -5,6 +5,8 @@ import Utils.OperationResults.GetTasksResult;
 import Utils.OperationResults.IdResult;
 import Utils.TaskInfo;
 
+import java.io.IOException;
+
 public interface TaskDatabaseOperations {
     IdResult addTask(TaskInfo taskInfo) throws DatabaseException;
     void addUserTask(int user_id, int task_id) throws DatabaseException;

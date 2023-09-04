@@ -1,5 +1,7 @@
 package clientConnection;
 
+import Connection.manager.PackageVisitor;
+import Connection.protocol.ClientPackable;
 import Connection.protocol.Packable;
 
 
@@ -8,6 +10,7 @@ import java.net.Socket;
 
 public class ClientReceiveHandler /*extends ReceiveHandler*/ {
     private Socket serversSocket;
+    private PackageVisitor packageVisitor;
 
 
 //    @Override
@@ -16,8 +19,8 @@ public class ClientReceiveHandler /*extends ReceiveHandler*/ {
 //    }
 
     //@Override
-    public void onNewPackage(Packable pack) {
-
+    public void onNewPackage(ClientPackable pack) {
+        pack.accept(packageVisitor);
     }
 
 //    @Override
