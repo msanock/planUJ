@@ -43,10 +43,10 @@ public class ClientConnectionManager implements ConnectionManager {
         try {
             serverSocket = new Socket(ConnectionSettings.HOST, ConnectionSettings.PORT);
         } catch (ConnectException e) {
-            Logger.getAnonymousLogger().info("Connection problem " + e.getMessage() + '\n' + e.getStackTrace());
+            Logger.getAnonymousLogger().info("Connection problem - " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
         } catch (IOException e) {
-            Logger.getAnonymousLogger().info("IO problem " + e.getMessage() + '\n' + e.getStackTrace());
+            Logger.getAnonymousLogger().info("IO problem - " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
         }
         return true;

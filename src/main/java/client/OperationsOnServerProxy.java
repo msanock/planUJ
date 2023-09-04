@@ -23,14 +23,20 @@ public class OperationsOnServerProxy implements Database {
     final ClientRequestHandler requestHandler;
 
 
-    OperationsOnServerProxy(ClientRequestHandler requestHandler) {
+    public OperationsOnServerProxy(ClientRequestHandler requestHandler) {
         this.requestHandler = requestHandler;
     }
 
     @Override
     public IdResult addTask(TaskInfo taskInfo) throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new AddTaskPackage(taskInfo));
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new AddTaskPackage(taskInfo));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
+        //
         return null; // TODO return what it has to return
     }
 
@@ -45,14 +51,23 @@ public class OperationsOnServerProxy implements Database {
 
     @Override
     public GetTasksResult getTeamTasks(int team_id) throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new GetTeamTasksPackage(team_id));
-
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new GetTeamTasksPackage(team_id));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
         return null; // TODO return what it has to return
     }
 
     @Override
     public GetTasksResult getUserTasks(int user_id) throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new GetUserTasksPackage(user_id));
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new GetUserTasksPackage(user_id));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
         return null; // TODO return what it has to return
     }
@@ -68,7 +83,12 @@ public class OperationsOnServerProxy implements Database {
 
     @Override
     public IdResult addTeam(TeamInfo teamInfo) throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new AddTeamPackage(teamInfo));
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new AddTeamPackage(teamInfo));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
         return null; // TODO return what it has to return
     }
@@ -84,21 +104,36 @@ public class OperationsOnServerProxy implements Database {
 
     @Override
     public GetTeamsResult getTeams() throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new GetTeamsPackage());
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new GetTeamsPackage());
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
         return null; // TODO return what it has to return
     }
 
     @Override
     public GetUsersResult getTeamUsers(int team_id) throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new GetTeamUsersPackage(team_id));
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new GetTeamUsersPackage(team_id));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
         return null; // TODO return what it has to return
     }
 
     @Override
     public GetTeamsResult getUserTeams(int user_id) throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new GetUserTeamsPackage(user_id));
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new GetUserTeamsPackage(user_id));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
         return null; // TODO return what it has to return
     }
@@ -106,13 +141,19 @@ public class OperationsOnServerProxy implements Database {
     @Override
     public IdResult addUser(UserInfo userInfo) throws DatabaseException {
         // ResponsePackage response = requestHandler.sendAndGetResponse(new );
+        // Does AddUserPackage even exist ??
 
         return null; // TODO return what it has to return
     }
 
     @Override
     public GetUsersResult getUsers() throws DatabaseException {
-        ResponsePackage response = requestHandler.sendAndGetResponse(new GetUsersPackage());
+        ResponsePackage response;
+        try {
+           response = requestHandler.sendAndGetResponse(new GetUsersPackage());
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
         return null; // TODO return what it has to return
     }

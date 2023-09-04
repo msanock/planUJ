@@ -25,7 +25,8 @@ public class ClientApplication extends Application {
             //Platform.exit();
             throw new RuntimeException(e);
         }
-        database = new OperationsOnServerProxy(new ClientRequestHandlerImplementation()); // maybe TODO: it should probably also be a singleton or come from Factory, I'm sure debug team will handle this
+        database = new OperationsOnServerProxy(new ClientRequestHandlerImplementation());
+        //(maybe) TODO: it should probably also be a singleton or come from Factory, I'm sure debug team will handle this
 
     }
 }
