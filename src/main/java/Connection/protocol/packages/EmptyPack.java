@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 
 /// VISITOR DESIGN PATTERN
-public class EmptyPack implements Serializable, Packable {
+public class EmptyPack implements Packable {
     public RespondInformation accept(PackageVisitor v, ServerClient sender) {
         return v.handleEmptyPack(this, sender);
     }

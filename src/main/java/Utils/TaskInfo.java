@@ -2,7 +2,7 @@ package Utils;
 
 import java.time.LocalDateTime;
 
-public class TaskInfo {
+public class TaskInfo implements java.io.Serializable {
     private int id;
     private int team_id;
     private String info;

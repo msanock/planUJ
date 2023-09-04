@@ -4,6 +4,7 @@ import Connection.protocol.packages.ResponsePackage;
 import Connection.protocol.packages.taskOperations.*;
 import Connection.protocol.packages.teamOperations.*;
 import Connection.protocol.packages.userOperations.GetUsersPackage;
+import Connection.protocol.packages.userOperations.LoginPackage;
 import Server.database.Database;
 import Server.sql.DatabaseException;
 import Utils.OperationResults.GetTasksResult;
@@ -19,11 +20,11 @@ import clientConnection.ClientRequestHandler;
 import java.io.IOException;
 
 // what a stunning name, truly delightful
-public class OperationsOnServerProxy implements Database {
+public class ServerDatabase implements Database {
     final ClientRequestHandler requestHandler;
 
 
-    public OperationsOnServerProxy(ClientRequestHandler requestHandler) {
+    public ServerDatabase(ClientRequestHandler requestHandler) {
         this.requestHandler = requestHandler;
     }
 
@@ -36,8 +37,7 @@ public class OperationsOnServerProxy implements Database {
             throw new DatabaseException(e);
         }
 
-        //
-        return null; // TODO return what it has to return
+        return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class OperationsOnServerProxy implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-        return null; // TODO return what it has to return
+        return new GetTasksResult(response);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class OperationsOnServerProxy implements Database {
             throw new DatabaseException(e);
         }
 
-        return null; // TODO return what it has to return
+        return new GetTasksResult(response);
     }
 
     @Override
@@ -89,8 +89,7 @@ public class OperationsOnServerProxy implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
-        return null; // TODO return what it has to return
+        return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
     }
 
     @Override
@@ -111,7 +110,7 @@ public class OperationsOnServerProxy implements Database {
             throw new DatabaseException(e);
         }
 
-        return null; // TODO return what it has to return
+        return new GetTeamsResult(response);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class OperationsOnServerProxy implements Database {
             throw new DatabaseException(e);
         }
 
-        return null; // TODO return what it has to return
+        return new GetUsersResult(response);
     }
 
     @Override
@@ -135,15 +134,19 @@ public class OperationsOnServerProxy implements Database {
             throw new DatabaseException(e);
         }
 
-        return null; // TODO return what it has to return
+        return new GetTeamsResult(response);
     }
 
     @Override
     public IdResult addUser(UserInfo userInfo) throws DatabaseException {
-        // ResponsePackage response = requestHandler.sendAndGetResponse(new );
-        // Does AddUserPackage even exist ??
+        ResponsePackage response;
+        try {
+            response = requestHandler.sendAndGetResponse(new LoginPackage(userInfo));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
 
-        return null; // TODO return what it has to return
+        return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
     }
 
     @Override
@@ -155,6 +158,6 @@ public class OperationsOnServerProxy implements Database {
             throw new DatabaseException(e);
         }
 
-        return null; // TODO return what it has to return
+        return new GetUsersResult(response);
     }
 }

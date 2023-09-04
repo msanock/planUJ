@@ -2,6 +2,7 @@ package serverConnection;
 
 import Connection.manager.PackageVisitor;
 import Connection.protocol.packages.UserInfoRequestPackage;
+import clientConnection.ClientSendHandler;
 import clientConnection.ConnectionSettings;
 import Connection.connector.download.MultiSocketStreamReader;
 import serverConnection.abstraction.ServerClient;

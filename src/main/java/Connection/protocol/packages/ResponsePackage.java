@@ -1,6 +1,8 @@
 package Connection.protocol.packages;
 
 import Connection.manager.PackageVisitor;
+import Connection.protocol.ClientPackable;
+import Connection.protocol.Notification;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import serverConnection.abstraction.ServerClient;
@@ -9,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class ResponsePackage extends UUIDHolder implements Packable {
+public class ResponsePackage extends UUIDHolder implements Packable, ClientPackable {
     private boolean success;
     private Map<String, Object> data;
 
@@ -34,6 +36,11 @@ public class ResponsePackage extends UUIDHolder implements Packable {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    @Override
+    public Notification accept(PackageVisitor v) {
+        return null;
     }
 
     public static class Builder {

@@ -1,6 +1,6 @@
 package Utils;
 
-public class UserInfo{
+public class UserInfo implements java.io.Serializable{
     String username;
     int id;
 

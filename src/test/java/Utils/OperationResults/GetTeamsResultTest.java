@@ -3,6 +3,7 @@ package Utils.OperationResults;
 import Connection.protocol.Packable;
 import Connection.protocol.packages.ResponsePackage;
 import Utils.TeamInfo;
+import Utils.TeamUser;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,7 +26,7 @@ class GetTeamsResultTest {
            Mockito.when(rs.getString("tname")).thenReturn("tname1").thenReturn("tname2").thenReturn("tname2");
            Mockito.when(rs.getString("name")).thenReturn("name1").thenReturn("name2").thenReturn("name3");
            Mockito.when(rs.getInt("user_id")).thenReturn(1).thenReturn(2).thenReturn(3);
-           Mockito.when(rs.getString("role")).thenReturn("role1").thenReturn("role2").thenReturn("role3");
+           Mockito.when(rs.getString("role")).thenReturn("ADMIN").thenReturn("ADMIN").thenReturn("MEMBER");
            Mockito.when(rs.getString("position")).thenReturn("position1").thenReturn("position2").thenReturn("position3");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -66,7 +67,7 @@ class GetTeamsResultTest {
         assertEquals(2, ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().size());
         assertEquals(2, ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().get(0).getId());
         assertEquals("name2", ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().get(0).getUsername());
-        assertEquals("role2", ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().get(0).getRole());
+        assertEquals(TeamUser.Role.ADMIN, ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().get(0).getRole());
         assertEquals("position2", ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().get(0).getPosition());
         assertEquals(3, ((List<TeamInfo>)((ResponsePackage) result).getData(ResponsePackage.Dictionary.TEAMS_LIST)).get(1).getUsers().get(1).getId());
     }
@@ -82,7 +83,7 @@ class GetTeamsResultTest {
         assertEquals(2, getTeamsResult.getTeams().get(1).getUsers().size(), 2);
         assertEquals(2, getTeamsResult.getTeams().get(1).getUsers().get(0).getId(), 2);
         assertEquals("name2", getTeamsResult.getTeams().get(1).getUsers().get(0).getUsername(), "name2");
-        assertEquals("role2", getTeamsResult.getTeams().get(1).getUsers().get(0).getRole(), "role2");
+        assertEquals(TeamUser.Role.ADMIN, getTeamsResult.getTeams().get(1).getUsers().get(0).getRole(), "role2");
         assertEquals("position2", getTeamsResult.getTeams().get(1).getUsers().get(0).getPosition(), "position2");
         assertEquals(3, getTeamsResult.getTeams().get(1).getUsers().get(1).getId());
     }

@@ -14,6 +14,11 @@ public class ClientRequestHandlerImplementation implements ClientRequestHandler 
 
     ResponsePackage response;
 
+    public ClientRequestHandlerImplementation(ClientReceiveHandler clientReceiveHandler, ClientSendHandler sendHandler){
+        this.sendHandler = sendHandler;
+        receiveHandler = clientReceiveHandler;
+    }
+
     @Override
     public void sendUnrespondablePackage(Packable pack) throws IOException {
         sendHandler.send(pack);

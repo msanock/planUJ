@@ -40,6 +40,14 @@ public class GetTeamsResult extends OperationResult{
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public GetTeamsResult(ResponsePackage responsePackage){
+        Object teamList= responsePackage.getData(ResponsePackage.Dictionary.TEAMS_LIST);
+        if(teamList instanceof List) {
+            this.teams = (List<TeamInfo>) teamList;
+        }
+    }
+
     @Override
     public Packable toResponsePackage(UUID uuid) {
         ResponsePackage.Builder builder = new ResponsePackage.Builder();

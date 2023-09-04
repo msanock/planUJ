@@ -4,7 +4,9 @@ import Connection.manager.PackageVisitor;
 import serverConnection.abstraction.ServerClient;
 import serverConnection.abstraction.SocketSelector;
 
-public interface Packable {
+import java.io.Serializable;
+
+public interface Packable extends Serializable {
      RespondInformation accept(PackageVisitor v, ServerClient sender);
 
 }

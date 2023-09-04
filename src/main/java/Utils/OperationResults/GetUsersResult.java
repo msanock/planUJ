@@ -28,6 +28,14 @@ public class GetUsersResult extends  OperationResult{
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public GetUsersResult(ResponsePackage responsePackage){
+        Object userList =  responsePackage.getData(ResponsePackage.Dictionary.USERS_LIST);
+        if(userList instanceof List) {
+            this.users = (List<UserInfo>) userList;
+        }
+    }
+
     @Override
     public Packable toResponsePackage(UUID uuid){
         ResponsePackage.Builder builder = new ResponsePackage.Builder();

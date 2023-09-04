@@ -1,6 +1,6 @@
 package Utils;
 
-public class TeamUser extends UserInfo {
+public class TeamUser extends UserInfo implements java.io.Serializable{
 
     public static enum Role{
         ADMIN,

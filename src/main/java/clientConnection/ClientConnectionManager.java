@@ -19,19 +19,11 @@ import java.util.logging.Logger;
 
 public class ClientConnectionManager implements ConnectionManager {
 
-    static private ClientConnectionManager instance;
     private Socket serverSocket;
     private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
     private AtomicBoolean isOnline;
 
-    public static ClientConnectionManager getInstance() {
-        if (instance == null) {
-            instance = new ClientConnectionManager(new ClientSendHandler());
-
-        }
-        return instance;
-    }
 
     public ClientConnectionManager(ClientSendHandler sendHandler) {
         isOnline = new AtomicBoolean(false);
@@ -90,6 +82,10 @@ public class ClientConnectionManager implements ConnectionManager {
         } catch (IOException e) {
                 Logger.getAnonymousLogger("Unable to start : " + e.getMessage() + " " + e.getStackTrace());
         }
+    }
+
+    public ClientSendHandler getSendHandler() {
+        return sendHandler;
     }
 
 

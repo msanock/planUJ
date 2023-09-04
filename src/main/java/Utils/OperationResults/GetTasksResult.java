@@ -30,6 +30,15 @@ public class GetTasksResult extends OperationResult{
         }
     }
 
+
+    @SuppressWarnings("unchecked")
+    public GetTasksResult(ResponsePackage responsePackage){
+        Object taskList =  responsePackage.getData(ResponsePackage.Dictionary.TASKS_LIST);
+        if(taskList instanceof List) {
+            this.tasks = (List<TaskInfo>) taskList;
+        }
+    }
+
     @Override
     public Packable toResponsePackage(UUID uuid ) {
         ResponsePackage.Builder builder = new ResponsePackage.Builder();
