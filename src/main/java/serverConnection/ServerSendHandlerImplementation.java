@@ -1,22 +1,20 @@
 package serverConnection;
 
 import Connection.protocol.Packable;
+import Connection.protocol.RespondInformation;
 import serverConnection.abstraction.ServerClient;
 import serverConnection.abstraction.ServerSendHandler;
+import serverConnection.abstraction.SocketSelector;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.util.Map;
 
 public class ServerSendHandlerImplementation implements ServerSendHandler {
 
     public ServerSendHandlerImplementation() {
 
     }
-
-//    public void send(Packable pack, Socket socket) {
-//
-//    }
 
 
     public void send(Packable pack, ServerClient client) throws IOException {
@@ -26,5 +24,21 @@ public class ServerSendHandlerImplementation implements ServerSendHandler {
         }
 
     }
+
+    public void sendResponses(RespondInformation respondInformation, SocketSelector socketSelector){
+        Map<Long, Packable> responses = respondInformation.getResponses();
+
+        socketSelector.getExistingClientsFromId(responses.keySet().stream().toList())
+                .forEach(pair -> {
+                    try {
+                        send(responses.get(pair.getKey()), pair.getValue());
+                    } catch (IOException ignore) {
+
+                    }
+                });
+
+    }
+
+
 
 }

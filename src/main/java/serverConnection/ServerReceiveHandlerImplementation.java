@@ -28,7 +28,7 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
     public void onNewPackage(Packable pack, ServerClient serverClient) {
         executorService.submit(() -> {
             RespondInformation respondInformation = pack.accept(packageVisitor, serverClient);
-            sendOutResponses(respondInformation, socketSelector);
+            sendHandler.sendResponses(respondInformation, socketSelector);
         });
     }
 
@@ -37,9 +37,10 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
 
     }
 
-    private void sendOutResponses(RespondInformation respondInformation,SocketSelector socketSelector){
+    private void sendResponses(RespondInformation respondInformation,SocketSelector socketSelector){
         //TODO
         // shouldn't it be in ServerSendHandler ?
+
     }
 
 }
