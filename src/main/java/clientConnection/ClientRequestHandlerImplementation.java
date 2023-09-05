@@ -1,12 +1,10 @@
 package clientConnection;
 
-import Connection.connector.upload.SendHandler;
-import Connection.protocol.ClientPackable;
 import Connection.protocol.Packable;
 import Connection.protocol.packages.ResponsePackage;
+import clientConnection.abstraction.ClientRequestHandler;
 
 import java.io.IOException;
-import java.util.Timer;
 
 public class ClientRequestHandlerImplementation implements ClientRequestHandler {
     ClientSendHandler sendHandler;

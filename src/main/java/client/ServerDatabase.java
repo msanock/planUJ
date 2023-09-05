@@ -15,11 +15,11 @@ import Utils.TaskInfo;
 import Utils.TeamInfo;
 import Utils.TeamUser;
 import Utils.UserInfo;
-import clientConnection.ClientRequestHandler;
+import clientConnection.abstraction.ClientRequestHandler;
 
 import java.io.IOException;
 
-// what a stunning name, truly delightful
+// what a dull name, truly hideous
 public class ServerDatabase implements Database {
     final ClientRequestHandler requestHandler;
 

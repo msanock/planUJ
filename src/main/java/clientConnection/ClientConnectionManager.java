@@ -1,11 +1,8 @@
 package clientConnection;
 
 import Connection.connector.download.ClientSocketStreamReader;
-import Connection.connector.download.ClientSocketStreamReader;
-import Connection.connector.upload.SendHandler;
 import Connection.manager.ConnectionManager;
-import Server.sql.DatabaseException;
-import Server.sql.PsqlEngine;
+import Utils.UserInfo;
 
 import java.io.IOException;
 
@@ -14,15 +11,17 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientConnectionManager implements ConnectionManager {
 
+    private static UserInfo userInfo = new UserInfo("admin", 123);
     private Socket serverSocket;
     private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
     private AtomicBoolean isOnline;
+
+
 
 
     public ClientConnectionManager(ClientSendHandler sendHandler) {
@@ -30,15 +29,21 @@ public class ClientConnectionManager implements ConnectionManager {
         this.sendHandler = sendHandler;
     }
 
+    public static UserInfo getUserInfo() {
+        // TODO halo debugu czy tak to robimy?
+        // czy użycie tutaj statica jest okay?
+        return userInfo;
+    }
+
 
     private boolean openNewSocket() {
         try {
             serverSocket = new Socket(ConnectionSettings.HOST, ConnectionSettings.PORT);
         } catch (ConnectException e) {
-            Logger.getAnonymousLogger().info("Connection problem - " + e.getMessage() + '\n' + e.getStackTrace());
+            Logger.getAnonymousLogger().info("Connection problem: " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
         } catch (IOException e) {
-            Logger.getAnonymousLogger().info("IO problem - " + e.getMessage() + '\n' + e.getStackTrace());
+            Logger.getAnonymousLogger().info("IO problem: " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
         }
         return true;
@@ -73,7 +78,7 @@ public class ClientConnectionManager implements ConnectionManager {
         }
 
         if (!isOnline.get()) {
-            return;
+            throw new ConnectException();
         }
 
         try {

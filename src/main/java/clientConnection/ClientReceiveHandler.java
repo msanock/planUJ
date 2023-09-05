@@ -1,10 +1,14 @@
 package clientConnection;
 
+import Connection.connector.upload.SendHandler;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.ClientPackable;
+import Connection.protocol.Packable;
 import Connection.protocol.packages.ResponsePackage;
+import clientConnection.abstraction.ConnectionReceiver;
 
 
+import java.io.IOException;
 import java.net.Socket;
 
 
@@ -12,7 +16,10 @@ public class ClientReceiveHandler /*extends ReceiveHandler*/ {
     private Socket serversSocket;
     private PackageVisitor packageVisitor;
     private ConnectionReceiver receiver;
+    private ClientSendHandler sendHandler;
+
     public void setReceiver(ConnectionReceiver receiver) {
+        // TODO receiver should probably also be able to take different packs,
         // Is this synchronization even useful ???
         //this is a question to debug team
         synchronized (this) {
@@ -37,9 +44,16 @@ public class ClientReceiveHandler /*extends ReceiveHandler*/ {
     public void onNewPackage(ClientPackable pack) {
         if (pack instanceof ResponsePackage)
             receiver.update((ResponsePackage) pack);
-        else
-            pack.accept(packageVisitor);
-
+        else {
+            Packable response = pack.accept(packageVisitor);
+            if (response != null) {
+                try {
+                    sendHandler.send(response);
+                } catch (IOException e) {
+                    onLostConnection(); // maybe with handling this unsent package
+                }
+            }
+        }
         // I do not like this implementation
     }
 

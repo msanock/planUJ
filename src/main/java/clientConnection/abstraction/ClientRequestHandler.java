@@ -1,4 +1,4 @@
-package clientConnection;
+package clientConnection.abstraction;
 
 import Connection.protocol.Packable;
 import Connection.protocol.packages.ResponsePackage;

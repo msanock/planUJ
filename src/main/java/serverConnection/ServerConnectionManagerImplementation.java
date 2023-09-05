@@ -2,7 +2,6 @@ package serverConnection;
 
 import Connection.manager.PackageVisitor;
 import Connection.protocol.packages.UserInfoRequestPackage;
-import clientConnection.ClientSendHandler;
 import clientConnection.ConnectionSettings;
 import Connection.connector.download.MultiSocketStreamReader;
 import serverConnection.abstraction.ServerClient;
@@ -19,9 +18,9 @@ import java.util.logging.Logger;
 public class ServerConnectionManagerImplementation implements ServerConnectionManger {
 
     private MultiSocketStreamReader multiSocketStreamReader;
-    private ServerSendHandler sendHandler;
-    private PackageVisitor packageVisitor;
-    private SocketSelector socketSelector;
+    private final ServerSendHandler sendHandler;
+    private final PackageVisitor packageVisitor;
+    private final SocketSelector socketSelector;
     private boolean isOnline;
 
 
@@ -60,15 +59,20 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
     private void acceptNewConnection(ServerSocket serverSocket) throws IOException {
         Socket clientSocket = serverSocket.accept();
         Logger.getAnonymousLogger().info("New Connection");
+
         ServerClient newClient = new ServerClientImplementation(clientSocket);
         newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
-        sendHandler.send(new UserInfoRequestPackage(), newClient);
+        newClient.startSocketStreamReader();
+
         socketSelector.AddNewClient(newClient);
+
+        sendHandler.send(new UserInfoRequestPackage(), newClient);
     }
 
     @Override
     public void acceptLogOut() {
         //should it be here ?
+        // probably SocketSelector
     }
 
     @Override

@@ -2,7 +2,6 @@ package Connection.protocol.packages;
 
 import Connection.manager.PackageVisitor;
 import Connection.protocol.ClientPackable;
-import Connection.protocol.Notification;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import serverConnection.abstraction.ServerClient;
@@ -39,7 +38,8 @@ public class ResponsePackage extends UUIDHolder implements Packable, ClientPacka
     }
 
     @Override
-    public Notification accept(PackageVisitor v) {
+    public Packable accept(PackageVisitor v) {
+        // TODO DELETE
         return null;
     }
 
@@ -73,6 +73,7 @@ public class ResponsePackage extends UUIDHolder implements Packable, ClientPacka
     }
 
     public static class Dictionary {
+        // enums?
         public static final String ID = "id";
         public static final String USERS_LIST = "users";
         public static final String TEAMS_LIST = "teams";

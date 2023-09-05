@@ -10,4 +10,6 @@ public interface ServerClient extends ServerClientInfo {
     InputStream getInputStream() throws IOException;
     void setSocketStreamReader(ServerSocketStreamReader socketStreamReader) throws IOException;
     void setClientID(Long id);
+
+    void startSocketStreamReader();
 }

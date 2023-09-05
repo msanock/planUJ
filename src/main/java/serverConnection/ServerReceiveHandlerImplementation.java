@@ -8,7 +8,6 @@ import serverConnection.abstraction.ServerReceiveHandler;
 import serverConnection.abstraction.ServerSendHandler;
 import serverConnection.abstraction.SocketSelector;
 
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,7 +37,7 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
     }
 
     private void sendResponses(RespondInformation respondInformation,SocketSelector socketSelector){
-        //TODO
+        // TODO
         // shouldn't it be in ServerSendHandler ?
 
     }

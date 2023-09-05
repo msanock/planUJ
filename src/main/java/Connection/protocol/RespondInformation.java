@@ -5,6 +5,9 @@ import serverConnection.abstraction.ServerClient;
 import java.util.Map;
 
 public class RespondInformation {
+    // TODO shouldn't it handle sender response differently just so sendResponses could focus on this response in particular
+    // however there is no connection's exception handling anyway
+
     private Map<Long, Packable> responses;
 
     public RespondInformation(RespondInformationBuilder builder) {
