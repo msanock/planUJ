@@ -15,6 +15,4 @@ public interface PackageVisitor extends UserOperationsPackageVisitor, TeamOperat
 
     RespondInformation handleResponseInformation(ResponsePackage responsePackage, ServerClient sender); // TODO: move to more suitable place
 
-
-    /// ...
 }

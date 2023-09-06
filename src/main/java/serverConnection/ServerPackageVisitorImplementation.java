@@ -53,7 +53,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             result = database.addUser(loginPackage.getUserInfo());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         loginPackage.getUserInfo().setId(result.getId());
@@ -69,7 +69,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             result = database.getUsers();
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         return prepareBasicRespond(sender, result, getUsersPackage);
@@ -83,7 +83,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             result = database.addTeam(addTeamPackage.getTeamInfo());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         addTeamPackage.getTeamInfo().setId(result.getId());
@@ -96,11 +96,10 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             database.addTeamUser(addTeamUserPackage.getTeamUser(), addTeamUserPackage.getTeamID());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
-        //TODO: should it really by empty?
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new EmptyPack()).build();
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
 
     @Override
@@ -110,7 +109,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             getUsersResult = database.getTeamUsers(getTeamUsersPackage.getTeamID());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         return prepareBasicRespond(sender, getUsersResult, getTeamUsersPackage);
@@ -123,7 +122,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             getTeamsResult = database.getTeams();
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         return prepareBasicRespond(sender, getTeamsResult, getTeamsPackage);
@@ -136,7 +135,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             getTeamsResult = database.getUserTeams(getUserTeamsPackage.getUserID());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         return prepareBasicRespond(sender, getTeamsResult, getUserTeamsPackage);
@@ -149,7 +148,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             result = database.addTask(addTaskPackage.getTaskInfo());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         addTaskPackage.getTaskInfo().setId(result.getId());
@@ -163,7 +162,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             result = database.getTeamTasks(getTasksPackage.getTeamID());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         return prepareBasicRespond(sender, result, getTasksPackage);
@@ -176,7 +175,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             result = database.getUserTasks(getUserTasksPackage.getUserID());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
         return prepareBasicRespond(sender, result, getUserTasksPackage);
@@ -188,11 +187,10 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
             database.addUserTask(updateTaskPackage.getUserID(), updateTaskPackage.getTaskID());
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e.getMessage()).setSuccess(false).build()
+                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
             ).build();
         }
-        //TODO: should it really be an empty pack?
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new EmptyPack()).build();
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
 
     @Override
@@ -202,12 +200,11 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         } catch (DatabaseException e) {
             return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
                     new ResponsePackage.Builder()
-                            .addData(ResponsePackage.Dictionary.ERROR, e.getMessage())
+                            .addData(ResponsePackage.Dictionary.ERROR, e)
                             .setSuccess(false)
                             .build()
             ).build();
         }
-        //TODO: should it really be an empty pack?
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new EmptyPack()).build();
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
 }

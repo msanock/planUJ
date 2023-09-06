@@ -18,7 +18,7 @@ public class GetTasksResult extends OperationResult{
         try {
             while (resultSet.next()) {
                 TaskInfo taskInfo = new TaskInfo(resultSet.getInt("id"), resultSet.getInt("team_id"),
-                        resultSet.getString("info"), resultSet.getString("status"), resultSet.getString("priority"),
+                        resultSet.getString("info"), TaskInfo.Status.valueOf(resultSet.getString("status")), resultSet.getInt("priority"),
                         resultSet.getTimestamp("deadline").toLocalDateTime());
                 this.tasks.add(taskInfo);
             }

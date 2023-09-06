@@ -1,10 +1,12 @@
 package Connection.protocol.packages;
 
+import Connection.manager.ClientPackageVisitor;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.ClientPackable;
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.userOperations.LoginPackage;
+import client.ClientInformation;
 import clientConnection.ClientConnectionManager;
 import serverConnection.abstraction.ServerClient;
 
@@ -17,7 +19,7 @@ public class UserInfoRequestPackage implements Packable, Serializable, ClientPac
     }
 
     @Override
-    public Packable accept(PackageVisitor v) {
-        return new LoginPackage(ClientConnectionManager.getUserInfo());
+    public void accept(ClientPackageVisitor v) {
+        v.handleUserInfoRequestPack(this);
     }
 }

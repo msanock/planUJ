@@ -18,7 +18,6 @@ public class MultiSocketStreamReader {
 
     public ServerSocketStreamReader addNewReader(ServerClient client) throws IOException {
         ServerSocketStreamReader socketStreamReader = new ServerSocketStreamReader(client, handler);
-
         socketStreamReader.start();
         return socketStreamReader;
     }

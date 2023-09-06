@@ -6,11 +6,21 @@ public class TaskInfo implements java.io.Serializable {
     private int id;
     private int team_id;
     private String info;
-    private String status;
-    private String priority;
+    private Status status;
+    private int priority;
     private LocalDateTime deadline;
 
-    public TaskInfo(int id, int team_id, String info, String status, String priority, LocalDateTime deadline){
+    public static enum Status{
+        TODO,
+        IN_PROGRESS,
+        PEER_REVIEW,
+        PENDING,
+        PENDING_MERGE,
+        TRIAGE,
+        DONE
+    }
+
+    public TaskInfo(int id, int team_id, String info, Status status, int priority, LocalDateTime deadline){
         this.id = id;
         this.team_id = team_id;
         this.info = info;
@@ -43,19 +53,19 @@ public class TaskInfo implements java.io.Serializable {
         this.info = info;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public String getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 

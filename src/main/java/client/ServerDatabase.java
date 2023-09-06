@@ -36,14 +36,17 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
-        return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
+        if(response.isSuccess()){
+            return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
+        }else{
+            throw new DatabaseException((Exception)response.getData(ResponsePackage.Dictionary.ERROR));
+        }
     }
 
     @Override
     public void addUserTask(int user_id, int task_id) throws DatabaseException {
         try {
-            requestHandler.sendUnrespondablePackage(new AddUserTaskPackage(user_id, task_id));
+            requestHandler.sendAndGetResponse(new AddUserTaskPackage(user_id, task_id));
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
@@ -75,7 +78,7 @@ public class ServerDatabase implements Database {
     @Override
     public void updateTask(TaskInfo taskInfo) throws DatabaseException {
         try {
-            requestHandler.sendUnrespondablePackage(new UpdateTaskPackage(taskInfo));
+            requestHandler.sendAndGetResponse(new UpdateTaskPackage(taskInfo));
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
@@ -95,7 +98,7 @@ public class ServerDatabase implements Database {
     @Override
     public void addTeamUser(TeamUser teamUser, int team_id) throws DatabaseException {
         try {
-            requestHandler.sendUnrespondablePackage(new AddTeamUserPackage(teamUser, team_id));
+            requestHandler.sendAndGetResponse(new AddTeamUserPackage(teamUser, team_id));
         } catch (IOException e) {
             throw new DatabaseException(e);
         }

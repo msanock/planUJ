@@ -21,7 +21,7 @@ CREATE  TABLE IF NOT EXISTS projektuj.teams_users (
 
 CREATE  TABLE IF NOT EXISTS projektuj.teams (
 	id                   serial  NOT NULL  ,
-	name                 varchar  NOT NULL  ,
+	name                 varchar  NOT NULL  UNIQUE,
 	CONSTRAINT pk_teams PRIMARY KEY ( id )
  );
 
@@ -39,6 +39,7 @@ CREATE  TABLE IF NOT EXISTS projektuj.tasks (
 CREATE  TABLE IF NOT EXISTS projektuj.users_tasks (
 	user_id              integer  NOT NULL  ,
 	task_id              integer  NOT NULL  ,
+	CONSTRAINT unq_users_tasks_team_id UNIQUE ( team_id , user_id),
 	CONSTRAINT fk_users_tasks_users FOREIGN KEY ( user_id ) REFERENCES projektuj.users( id )   ,
 	CONSTRAINT fk_users_tasks_tasks FOREIGN KEY ( task_id ) REFERENCES projektuj.tasks( id )   
  );

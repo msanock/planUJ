@@ -5,16 +5,18 @@ import Connection.protocol.packages.ResponsePackage;
 import clientConnection.abstraction.ClientRequestHandler;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientRequestHandlerImplementation implements ClientRequestHandler {
     ClientSendHandler sendHandler;
     ClientReceiveHandler receiveHandler;
 
-    ResponsePackage response;
+    AtomicReference<ResponsePackage> response;
 
-    public ClientRequestHandlerImplementation(ClientReceiveHandler clientReceiveHandler, ClientSendHandler sendHandler){
-        this.sendHandler = sendHandler;
+    public ClientRequestHandlerImplementation(ClientReceiveHandler clientReceiveHandler){
+        this.sendHandler = clientReceiveHandler.getSendHandler();
         receiveHandler = clientReceiveHandler;
+        response = new AtomicReference<>(null);
     }
 
     @Override
@@ -26,10 +28,10 @@ public class ClientRequestHandlerImplementation implements ClientRequestHandler 
     public ResponsePackage sendAndGetResponse(Packable pack) throws IOException {
         receiveHandler.setReceiver(this);
         sendHandler.send(pack);
-        response = null;
+        response = new AtomicReference<>(null);
         synchronized (this){
             long timeTillTimeout = ConnectionSettings.REQUEST_TIMEOUT;
-            while (response == null) {
+            while (response.get() == null) {
                 try {
                     this.wait(timeTillTimeout);
                     // TODO update timeTillTimeout!
@@ -39,7 +41,7 @@ public class ClientRequestHandlerImplementation implements ClientRequestHandler 
             }
         }
         receiveHandler.deleteReceiver(this);
-        return response;
+        return response.get();
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ClientRequestHandlerImplementation implements ClientRequestHandler 
     @Override
     public void update(ResponsePackage pack) {
         synchronized (this) {
-            response = pack;
+            response.set(pack);
             this.notify();
         }
     }

@@ -11,15 +11,16 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClientConnectionManager implements ConnectionManager {
 
-    private static UserInfo userInfo = new UserInfo("admin", 123);
     private Socket serverSocket;
     private ClientSocketStreamReader socketStreamReader;
     private ClientSendHandler sendHandler;
     private AtomicBoolean isOnline;
+    private ClientReceiveHandler receiveHandler;
 
 
 
@@ -27,12 +28,7 @@ public class ClientConnectionManager implements ConnectionManager {
     public ClientConnectionManager(ClientSendHandler sendHandler) {
         isOnline = new AtomicBoolean(false);
         this.sendHandler = sendHandler;
-    }
-
-    public static UserInfo getUserInfo() {
-        // TODO halo debugu czy tak to robimy?
-        // czy użycie tutaj statica jest okay?
-        return userInfo;
+        receiveHandler = new ClientReceiveHandler(sendHandler);
     }
 
 
@@ -47,7 +43,6 @@ public class ClientConnectionManager implements ConnectionManager {
             return false;
         }
         return true;
-
     }
 
 
@@ -85,7 +80,7 @@ public class ClientConnectionManager implements ConnectionManager {
             startReceiver();
             sendHandler.trySetOutputStream(serverSocket.getOutputStream());
         } catch (IOException e) {
-                Logger.getAnonymousLogger("Unable to start : " + e.getMessage() + " " + e.getStackTrace());
+                Logger.getAnonymousLogger().log(Level.SEVERE,"Unable to start : " + e.getMessage() + " " + e.getStackTrace());
         }
     }
 
@@ -93,9 +88,13 @@ public class ClientConnectionManager implements ConnectionManager {
         return sendHandler;
     }
 
+    public ClientReceiveHandler getReceiveHandler() {
+        return receiveHandler;
+    }
+
 
     public void startReceiver() throws IOException {
-        socketStreamReader = new ClientSocketStreamReader(serverSocket.getInputStream(), new ClientReceiveHandler());
+        socketStreamReader = new ClientSocketStreamReader(serverSocket, receiveHandler);
         socketStreamReader.start();
 
     }

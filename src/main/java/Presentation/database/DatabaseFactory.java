@@ -27,18 +27,13 @@ public class DatabaseFactory {
         return PsqlEngine.getInstance();
     }
 
-    public Database getServerDatabase(ClientSendHandler sendHandler) throws DatabaseFactoryException {
-        if(sendHandler.isOnline()) {
+
+    public Database getServerDatabase(ClientReceiveHandler receiveHandler) throws DatabaseFactoryException {
             return new SecureDatabase(new ServerDatabase(
                     new ClientRequestHandlerImplementation(
-                            new ClientReceiveHandler(),
-                            sendHandler
+                            receiveHandler
                     )
             ));
-        }else{
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Exception while connecting to server, sender not online: ");
-            throw new DatabaseFactoryException("Exception while connecting to server, sender not online");
-        }
     }
 
 

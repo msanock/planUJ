@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class ServerConnectionManagerImplementation implements ServerConnectionManger {
@@ -62,7 +63,7 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
 
         ServerClient newClient = new ServerClientImplementation(clientSocket);
         newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
-        newClient.startSocketStreamReader();
+        //newClient.startSocketStreamReader();
 
         socketSelector.AddNewClient(newClient);
 

@@ -16,6 +16,12 @@ public class TeamUser extends UserInfo implements java.io.Serializable{
         this.position = position;
     }
 
+    public TeamUser(UserInfo userInfo, Role role, String position){
+        super(userInfo.getUsername(), userInfo.getId());
+        this.role = role;
+        this.position = position;
+    }
+
     public Role getRole(){
         return role;
     }

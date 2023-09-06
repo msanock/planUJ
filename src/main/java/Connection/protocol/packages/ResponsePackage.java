@@ -1,5 +1,6 @@
 package Connection.protocol.packages;
 
+import Connection.manager.ClientPackageVisitor;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.ClientPackable;
 import Connection.protocol.Packable;
@@ -7,6 +8,7 @@ import Connection.protocol.RespondInformation;
 import serverConnection.abstraction.ServerClient;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -38,9 +40,8 @@ public class ResponsePackage extends UUIDHolder implements Packable, ClientPacka
     }
 
     @Override
-    public Packable accept(PackageVisitor v) {
-        // TODO DELETE
-        return null;
+    public void accept(ClientPackageVisitor v) {
+        return;
     }
 
     public static class Builder {

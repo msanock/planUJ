@@ -26,5 +26,4 @@ public class ServerApplication {
             Logger.getAnonymousLogger().warning("Server is not available " + e.getMessage());
         }
     }
-
 }

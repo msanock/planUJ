@@ -27,4 +27,8 @@ public class UserInfo implements java.io.Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
+    protected void setName(String name) {
+        this.username = name;
+    }
 }

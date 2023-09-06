@@ -8,11 +8,13 @@ import serverConnection.abstraction.ServerReceiveHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 public class ServerSocketStreamReader extends Thread {
     private final InputStream stream;
     private final ServerReceiveHandler handler;
-    private boolean isActive;
+    private AtomicBoolean isActive;
 
     private final ServerClient client;
 
@@ -20,7 +22,7 @@ public class ServerSocketStreamReader extends Thread {
         this.client = client;
         this.stream = client.getInputStream();
         this.handler = handler;
-        isActive = false;
+        isActive = new AtomicBoolean(false);
 
         this.setDaemon(true);
     }
@@ -32,24 +34,25 @@ public class ServerSocketStreamReader extends Thread {
 
         try {
             ObjectInputStream objectStream = new ObjectInputStream(stream);
-            isActive = true;
+            isActive.set(true);
             while(true) {
                 Packable newPackage = (Packable) objectStream.readObject();
                 if (newPackage == null)
                     break;
 
+                Logger.getAnonymousLogger().info("Received package: " + newPackage.getClass().getSimpleName());
                 handler.onNewPackage(newPackage, client); // onNewPackage, może coś bez socketa?
             }
         } catch (Exception e) {
 //
             // ???
-            isActive = false;
+            isActive.set(false);
             //handler.onLostConnection(socket);
         }
     }
 
 
     public boolean isActive() {
-        return isActive;
+        return isActive.get();
     }
 }

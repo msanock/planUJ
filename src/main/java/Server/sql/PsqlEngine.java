@@ -15,9 +15,10 @@ import java.util.logging.Logger;
 
 public class PsqlEngine implements Database {
     private final String url = "jdbc:postgresql://localhost:5432/ProjektUJ";
-    private static final String ADD_USER_QUERY = "INSERT INTO projektuj.users (name) VALUES (?) ON CONFLICT (id)\n" +
-            "DO NOTHING RETURNING id;";
-    private static final String ADD_TEAM_QUERY = "INSERT INTO projektuj.teams (name) VALUES (?) RETURNING id;";
+    private static final String ADD_USER_QUERY = "INSERT INTO projektuj.users (name) VALUES (?) ON CONFLICT (name)\n" +
+            "DO UPDATE SET name=EXCLUDED.name RETURNING id;";
+    private static final String ADD_TEAM_QUERY = "INSERT INTO projektuj.teams (name) VALUES (?) ON CONFLICT (name)\n" +
+            "DO UPDATE SET name=EXCLUDED.name RETURNING id;";
     private static final String ADD_USER_TASK_QUERY = "INSERT INTO projektuj.users_tasks (user_id, task_id) VALUES (?, ?);";
     private static final String ADD_TASK_QUERY = "INSERT INTO projektuj.tasks (info, deadline, status, team_id, priority) VALUES (?, ?, ?, ?, ?) RETURNING id;";
     private static final String ADD_TEAM_MEMBER_QUERY = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position) VALUES (?, ?, ?, ?);";
@@ -107,9 +108,9 @@ public class PsqlEngine implements Database {
                      ADD_TASK_QUERY)) {
             sql.setString(1, taskInfo.getInfo());
             sql.setDate(2, Date.valueOf(taskInfo.getDeadline().toLocalDate()));
-            sql.setString(3, taskInfo.getStatus());
+            sql.setString(3, taskInfo.getStatus().toString());
             sql.setInt(4, taskInfo.getTeamID());
-            sql.setString(5, taskInfo.getPriority());
+            sql.setInt(5, taskInfo.getPriority());
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
                 taskInfo.setId(rs.getInt("id"));
@@ -239,8 +240,8 @@ public class PsqlEngine implements Database {
                      UPDATE_TASK_QUERY)) {
             sql.setString(1, taskInfo.getInfo());
             sql.setDate(2, Date.valueOf(taskInfo.getDeadline().toLocalDate()));
-            sql.setString(3, taskInfo.getStatus());
-            sql.setString(4, taskInfo.getPriority());
+            sql.setString(3, taskInfo.getStatus().toString());
+            sql.setInt(4, taskInfo.getPriority());
             sql.setInt(5, taskInfo.getId());
             sql.executeUpdate();
         } catch (SQLException exception) {

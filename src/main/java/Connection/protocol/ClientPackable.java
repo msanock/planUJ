@@ -1,8 +1,9 @@
 package Connection.protocol;
 
+import Connection.manager.ClientPackageVisitor;
 import Connection.manager.PackageVisitor;
 
 public interface ClientPackable {
-    Packable accept(PackageVisitor v);
+    void accept(ClientPackageVisitor v);
 
 }
