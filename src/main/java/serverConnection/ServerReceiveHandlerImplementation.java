@@ -34,7 +34,8 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
 
     @Override
     public void onLostConnection(ServerClient client) {
-
+        //Temporary solution
+        System.exit(1);
     }
 
 }

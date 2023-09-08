@@ -30,7 +30,7 @@ CREATE  TABLE IF NOT EXISTS projektuj.tasks (
 	team_id              integer  NOT NULL  ,
 	info                 varchar    ,
 	status              varchar    ,
-	priority            varchar    ,
+	priority            integer    ,
 	deadline             date    ,
 	CONSTRAINT unq_tasks_id UNIQUE ( id ) ,
 	CONSTRAINT fk_tasks_teams FOREIGN KEY ( team_id ) REFERENCES projektuj.teams( id )

@@ -9,11 +9,12 @@ import serverConnection.abstraction.SocketSelector;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerSendHandlerImplementation implements ServerSendHandler {
 
     public ServerSendHandlerImplementation() {
-
     }
 
 
@@ -22,7 +23,6 @@ public class ServerSendHandlerImplementation implements ServerSendHandler {
         synchronized(outputStream){
             outputStream.writeObject(pack);
         }
-
     }
 
     public void sendResponses(RespondInformation respondInformation, SocketSelector socketSelector){
@@ -32,11 +32,10 @@ public class ServerSendHandlerImplementation implements ServerSendHandler {
                 .forEach(pair -> {
                     try {
                         send(responses.get(pair.getKey()), pair.getValue());
-                    } catch (IOException ignore) {
-
+                    } catch (IOException e) {
+                        Logger.getAnonymousLogger().log(Level.SEVERE, "Error sending response to client", e);
                     }
                 });
-
     }
 
 

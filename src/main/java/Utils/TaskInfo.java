@@ -1,6 +1,7 @@
 package Utils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TaskInfo implements java.io.Serializable {
     private int id;
@@ -9,6 +10,7 @@ public class TaskInfo implements java.io.Serializable {
     private Status status;
     private int priority;
     private LocalDateTime deadline;
+    private List<UserInfo> assignedUsers;
 
     public static enum Status{
         TODO,
@@ -20,13 +22,14 @@ public class TaskInfo implements java.io.Serializable {
         DONE
     }
 
-    public TaskInfo(int id, int team_id, String info, Status status, int priority, LocalDateTime deadline){
+    public TaskInfo(int id, int team_id, String info, Status status, int priority, LocalDateTime deadline, List<UserInfo> assignedUsers){
         this.id = id;
         this.team_id = team_id;
         this.info = info;
         this.status = status;
         this.priority = priority;
         this.deadline = deadline;
+        this.assignedUsers = assignedUsers;
     }
 
     public int getId() {
@@ -75,5 +78,13 @@ public class TaskInfo implements java.io.Serializable {
 
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
+    }
+
+    public List<UserInfo> getAssignedUsers() {
+        return assignedUsers;
+    }
+
+    public void setAssignedUsers(List<UserInfo> assignedUsers) {
+        this.assignedUsers = assignedUsers;
     }
 }

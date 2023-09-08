@@ -12,19 +12,18 @@ import javax.xml.crypto.Data;
 import java.util.logging.Logger;
 
 public class ClientPackageVisitorImplementation implements ClientPackageVisitor {
-    Database database;
 
-    public ClientPackageVisitorImplementation(Database database) {
-        this.database = database;
+    public ClientPackageVisitorImplementation() {
     }
 
     @Override
     public void handleUserInfoRequestPack(UserInfoRequestPackage userInfoRequestPackage) {
-        try {
+
+        /*try {
             IdResult result = database.addUser(ClientInformation.getInstance());
             ClientInformation.getInstance().LogInWithId(result.getId());
         } catch (DatabaseException e) {
             Logger.getAnonymousLogger().severe("Exception while adding user to database: " + e.getMessage());
-        }
+        }*/
     }
 }

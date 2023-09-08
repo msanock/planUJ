@@ -10,4 +10,6 @@ public interface TaskOperationsPackageVisitor {
     RespondInformation handleGetUserTasksPackage(GetUserTasksPackage getUserTasksPackage, ServerClient sender);
     RespondInformation handleAddUserTaskPackage(AddUserTaskPackage updateTaskPackage, ServerClient sender);
     RespondInformation handleUpdateTaskPackage(UpdateTaskPackage updateTaskPackage, ServerClient sender);
+
+    RespondInformation handleRemoveUserFromTaskPackage(RemoveUserFromTaskPackage removeUserFromTaskPackage, ServerClient sender);
 }

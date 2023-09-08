@@ -163,4 +163,13 @@ public class ServerDatabase implements Database {
 
         return new GetUsersResult(response);
     }
+
+    @Override
+    public void removeUserFromTask(int user_id, int task_id) throws DatabaseException {
+        try {
+            requestHandler.sendAndGetResponse(new RemoveUserFromTaskPackage(user_id, task_id));
+        } catch (IOException e) {
+            throw new DatabaseException(e);
+        }
+    }
 }

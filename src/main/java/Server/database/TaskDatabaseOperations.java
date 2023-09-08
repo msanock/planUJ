@@ -13,4 +13,5 @@ public interface TaskDatabaseOperations {
     GetTasksResult getTeamTasks(int team_id) throws DatabaseException;
     GetTasksResult getUserTasks(int user_id) throws DatabaseException;
     void updateTask(TaskInfo taskInfo) throws DatabaseException;
+    void removeUserFromTask(int user_id, int task_id) throws DatabaseException;
 }

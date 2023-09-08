@@ -8,6 +8,7 @@ import Presentation.database.DatabaseFactory;
 import Server.database.Database;
 import clientConnection.ClientPackageVisitorImplementation;
 import clientConnection.ClientReceiveHandler;
+import clientConnection.abstraction.ClientRequestHandler;
 import oracle.ons.Cli;
 
 
@@ -39,27 +40,17 @@ public class ClientSocketStreamReader extends Thread {
     }
 
     private ClientPackageVisitor getClientPackageVisitor() {
-        try {
-            Database database = DatabaseFactory.getInstance().getServerDatabase(handler);
-            return new ClientPackageVisitorImplementation(database);
-        } catch (DatabaseFactory.DatabaseFactoryException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Exception while connecting to server, sender not online: ", e);
-            return null;
-        }
+        return new ClientPackageVisitorImplementation();
     }
 
 
     @Override
     public void run() {
         ClientPackageVisitor packageVisitor = getClientPackageVisitor();
-        if(packageVisitor == null) {
-            return;
-        }
 
         try {
             active = true;
             while(true) {
-                if (continueReading.get()) {
                     Packable newPackage = (Packable) stream.readObject();
                     if (newPackage == null)
                         break;
@@ -69,24 +60,20 @@ public class ClientSocketStreamReader extends Thread {
                      * else
                      *      subscriber.notify() czy coś takiego
                      */
-                }
-                else {
-                    synchronized (active) {
-                        active = false;
-                        active.notify();
-                    }
-                    try {
-                        continueReading.wait();
-                    } catch (InterruptedException ignore) { }
-                    if (continueReading.get())
-                        active = true;
-                }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             handler.onLostConnection();
             Logger.getAnonymousLogger().log(Level.SEVERE, "Exception in ClientSocketStreamReader", e);
             active = false;
-
+        } catch (ClassNotFoundException e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Exception in ClientSocketStreamReader", e);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException ignore) { }
+            try {
+                socket.close();
+            } catch (IOException ignore) { }
         }
     }
 

@@ -45,7 +45,7 @@ public class ClientApplication{
             throw new RuntimeException(e);
         }
 
-        database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getReceiveHandler());
+        database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getRequestHandler());
 
         ClientInformation.getInstance().waitForLogin();
 
@@ -65,7 +65,7 @@ public class ClientApplication{
             database.addTeamUser(teamUser, team1.getId());
         }catch (Exception ignore){}
 
-        TaskInfo taskInfo = new TaskInfo(0,1, "task1", TaskInfo.Status.TODO, 10, LocalDateTime.now());
+        TaskInfo taskInfo = new TaskInfo(0,1, "task1", TaskInfo.Status.TODO, 10, LocalDateTime.now(), null);
 
         try{
         idResult = database.addTask(taskInfo);

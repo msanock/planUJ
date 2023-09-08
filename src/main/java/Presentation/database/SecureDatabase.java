@@ -78,4 +78,9 @@ public class SecureDatabase implements Database {
     public GetUsersResult getUsers() throws DatabaseException {
         return delegate.getUsers();
     }
+
+    @Override
+    public void removeUserFromTask(int user_id, int task_id) throws DatabaseException {
+        delegate.removeUserFromTask(user_id, task_id);
+    }
 }

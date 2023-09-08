@@ -7,15 +7,14 @@ import serverConnection.abstraction.SocketSelector;
 
 public class ServerConnectionFactory {
 
-    private static ServerConnectionFactory instance;
+    private static class Holder{
+        private static final ServerConnectionFactory INSTANCE = new ServerConnectionFactory();
+    }
 
     private ServerConnectionFactory() {}
 
     public static ServerConnectionFactory getInstance() {
-        if (instance == null) {
-            instance = new ServerConnectionFactory();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public ServerConnectionManger createServerConnection() {

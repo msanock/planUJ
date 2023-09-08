@@ -3,6 +3,7 @@ package clientConnection;
 import Connection.connector.download.ClientSocketStreamReader;
 import Connection.manager.ConnectionManager;
 import Utils.UserInfo;
+import clientConnection.abstraction.ClientRequestHandler;
 
 import java.io.IOException;
 
@@ -21,6 +22,7 @@ public class ClientConnectionManager implements ConnectionManager {
     private ClientSendHandler sendHandler;
     private AtomicBoolean isOnline;
     private ClientReceiveHandler receiveHandler;
+    private ClientRequestHandler requestHandler;
 
 
 
@@ -29,6 +31,7 @@ public class ClientConnectionManager implements ConnectionManager {
         isOnline = new AtomicBoolean(false);
         this.sendHandler = sendHandler;
         receiveHandler = new ClientReceiveHandler(sendHandler);
+        requestHandler = new ClientRequestHandlerImplementation(receiveHandler);
     }
 
 
@@ -84,13 +87,6 @@ public class ClientConnectionManager implements ConnectionManager {
         }
     }
 
-    public ClientSendHandler getSendHandler() {
-        return sendHandler;
-    }
-
-    public ClientReceiveHandler getReceiveHandler() {
-        return receiveHandler;
-    }
 
 
     public void startReceiver() throws IOException {
@@ -100,4 +96,7 @@ public class ClientConnectionManager implements ConnectionManager {
     }
 
 
+    public ClientRequestHandler getRequestHandler() {
+        return requestHandler;
+    }
 }

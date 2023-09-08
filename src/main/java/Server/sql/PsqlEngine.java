@@ -24,8 +24,19 @@ public class PsqlEngine implements Database {
     private static final String ADD_TEAM_MEMBER_QUERY = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position) VALUES (?, ?, ?, ?);";
     private static final String GET_USERS_QUERY = "SELECT * FROM projektuj.users;";
 
-    private static final String GET_TEAM_TASKS_QUERY = "SELECT * FROM projektuj.tasks WHERE team_id = ?;";
-    private static final String GET_USER_TASKS_QUERY = "SELECT * FROM projektuj.tasks WHERE id IN (SELECT task_id FROM projektuj.users_tasks WHERE user_id = ?);";
+    private static final String GET_TEAM_TASKS_QUERY = "SELECT t.*, array_agg(u.name) as \"names\" , array_agg(u.id) as \"ids\" \n" +
+            "FROM projektuj.tasks as t\n" +
+            "JOIN projektuj.users_tasks as ut ON t.id = ut.task_id\n" +
+            "JOIN projektuj.users as u ON ut.user_id = u.id\n" +
+            "WHERE t.team_id = ?\n" +
+            "GROUP BY t.id, t.team_id, t.info, t.status, t.priority, t.deadline;";
+    private static final String GET_USER_TASKS_QUERY = "SELECT(h.*) FROM (\n" +
+            "SELECT t.*, array_agg(u.name) as \"names\" , array_agg(u.id) as \"ids\"\n" +
+            "FROM projektuj.tasks as t\n" +
+            "JOIN projektuj.users_tasks as ut ON t.id = ut.task_id\n" +
+            "JOIN projektuj.users as u ON ut.user_id = u.id\n" +
+            "GROUP BY t.id, t.team_id, t.info, t.status, t.priority, t.deadline\n" +
+            ") as \"h\" WHERE ? = ANY(h.ids)";
     private static final String GET_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name " +
             "FROM projektuj.teams as \"t\" " +
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id " +
@@ -33,22 +44,24 @@ public class PsqlEngine implements Database {
     private static final String GET_TEAM_USERS_QUERY = "SELECT * FROM projektuj.users WHERE id IN (SELECT user_id FROM projektuj.teams_users WHERE team_id = ?);";
     private static final String UPDATE_TASK_QUERY = "UPDATE projektuj.tasks SET info = ?, deadline = ?, status = ?, priority = ? WHERE id = ?;";
     private static final String GET_USER_TEAMS_QUERY = "SELECT * FROM projektuj.teams WHERE id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?);";
-    static PsqlEngine instance;
+    private static final String REMOVE_USER_FROM_TASK_QUERY = "DELETE FROM projektuj.users_tasks WHERE user_id = ? AND task_id = ?;";
 
-    private PsqlEngine() {
+    private static class Holder {
+        private static final PsqlEngine INSTANCE = new PsqlEngine();
     }
 
-    public static PsqlEngine getInstance() {
-        if (instance == null) {
-            instance = new PsqlEngine();
-            try {
-                instance.createDatabase();
-            } catch (DatabaseException e) {
-                Logger.getAnonymousLogger().log(Level.SEVERE, "Unable to create a Database");
-                throw new RuntimeException(e);
-            }
+    private PsqlEngine() {
+        try {
+            createDatabase();
+        } catch (DatabaseException e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Unable to create a Database");
+            throw new RuntimeException(e);
         }
-        return instance;
+    }
+
+
+    public static PsqlEngine getInstance() {
+        return Holder.INSTANCE;
     }
 
     private Connection getConnection() throws SQLException {
@@ -243,6 +256,19 @@ public class PsqlEngine implements Database {
             sql.setString(3, taskInfo.getStatus().toString());
             sql.setInt(4, taskInfo.getPriority());
             sql.setInt(5, taskInfo.getId());
+            sql.executeUpdate();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
+    @Override
+    public void removeUserFromTask(int user_id, int task_id) throws DatabaseException {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     REMOVE_USER_FROM_TASK_QUERY)) {
+            sql.setInt(1, user_id);
+            sql.setInt(2, task_id);
             sql.executeUpdate();
         } catch (SQLException exception) {
             throw new DatabaseException(exception);

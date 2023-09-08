@@ -15,13 +15,12 @@ public class SocketSelectorImplementation implements SocketSelector {
     private final ConcurrentHashMap<Long, ServerClient> loggedClients;
     private final Set<ServerClient>  unspecifiedClients;
 
-    public static SocketSelectorImplementation instance;
+    public static class Holder {
+        public static final SocketSelectorImplementation INSTANCE = new SocketSelectorImplementation();
+    }
 
     public static SocketSelectorImplementation getInstance() {
-        if (instance == null) {
-            instance = new SocketSelectorImplementation();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     private SocketSelectorImplementation() {

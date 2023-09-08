@@ -207,4 +207,19 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         }
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
+
+    @Override
+    public RespondInformation handleRemoveUserFromTaskPackage(RemoveUserFromTaskPackage removeUserFromTaskPackage, ServerClient sender) {
+        try {
+            database.removeUserFromTask(removeUserFromTaskPackage.getUserID(), removeUserFromTaskPackage.getTaskID());
+        } catch (DatabaseException e) {
+            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
+                    new ResponsePackage.Builder()
+                            .addData(ResponsePackage.Dictionary.ERROR, e)
+                            .setSuccess(false)
+                            .build()
+            ).build();
+        }
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
+    }
 }

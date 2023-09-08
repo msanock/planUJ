@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 
-public class ClientReceiveHandler /*extends ReceiveHandler*/ {
+public class ClientReceiveHandler {
     private AtomicReference<ConnectionReceiver> receiver;
     private final ClientSendHandler sendHandler;
     private final ExecutorService executorService;

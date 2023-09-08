@@ -1,15 +1,14 @@
 package clientConnection;
 
 public class ClientConnectionFactory {
-    private static ClientConnectionFactory instance;
+    private static class Holder{
+        private static final ClientConnectionFactory INSTANCE = new ClientConnectionFactory();
+    }
 
     private ClientConnectionFactory() {}
 
     public static ClientConnectionFactory getInstance() {
-        if (instance == null) {
-            instance = new ClientConnectionFactory();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public ClientConnectionManager getClientConnection() {

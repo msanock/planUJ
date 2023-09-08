@@ -13,13 +13,12 @@ public class ClientInformation extends UserInfo {
         isLoggedIn = new AtomicBoolean(false);
     }
 
-    private static ClientInformation instance;
+    private static class Holder{
+        private static final ClientInformation INSTANCE = new ClientInformation();
+    }
 
     public static ClientInformation getInstance(){
-        if(instance == null){
-            instance = new ClientInformation();
-        }
-        return instance;
+        return Holder.INSTANCE;
     }
 
     public void setClientName(String name){
