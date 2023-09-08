@@ -1,22 +1,35 @@
 package Utils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class TaskInfo {
+public class TaskInfo implements java.io.Serializable {
     private int id;
     private int team_id;
     private String info;
-    private String status;
-    private String priority;
+    private Status status;
+    private int priority;
     private LocalDateTime deadline;
+    private List<UserInfo> assignedUsers;
 
-    public TaskInfo(int id, int team_id, String info, String status, String priority, LocalDateTime deadline){
+    public static enum Status{
+        TODO,
+        IN_PROGRESS,
+        PEER_REVIEW,
+        PENDING,
+        PENDING_MERGE,
+        TRIAGE,
+        DONE
+    }
+
+    public TaskInfo(int id, int team_id, String info, Status status, int priority, LocalDateTime deadline, List<UserInfo> assignedUsers){
         this.id = id;
         this.team_id = team_id;
         this.info = info;
         this.status = status;
         this.priority = priority;
         this.deadline = deadline;
+        this.assignedUsers = assignedUsers;
     }
 
     public int getId() {
@@ -27,7 +40,7 @@ public class TaskInfo {
         this.id = id;
     }
 
-    public int getTeam_id() {
+    public int getTeamID() {
         return team_id;
     }
 
@@ -43,19 +56,19 @@ public class TaskInfo {
         this.info = info;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public String getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
@@ -65,5 +78,13 @@ public class TaskInfo {
 
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
+    }
+
+    public List<UserInfo> getAssignedUsers() {
+        return assignedUsers;
+    }
+
+    public void setAssignedUsers(List<UserInfo> assignedUsers) {
+        this.assignedUsers = assignedUsers;
     }
 }

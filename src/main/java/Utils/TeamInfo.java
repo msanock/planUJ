@@ -1,10 +1,11 @@
 package Utils;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamInfo{
+public class TeamInfo implements Serializable {
     private String name;
     private int id;
     private List<TeamUser> users;

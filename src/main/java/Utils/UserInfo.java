@@ -1,6 +1,9 @@
 package Utils;
 
-public class UserInfo{
+public class UserInfo implements java.io.Serializable {
+    //  TODO refactor it!
+    //   UserInfo should only hold information that is being sent during login, id is kept only on server and isn't a part of a logic imo
+    //   also information stored should
     String username;
     int id;
 
@@ -23,5 +26,9 @@ public class UserInfo{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    protected void setName(String name) {
+        this.username = name;
     }
 }
