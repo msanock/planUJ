@@ -9,7 +9,7 @@ public class UUIDHolder {
         uuid = UUID.randomUUID();
     }
 
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 

@@ -44,7 +44,7 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
         isOnline = true;
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(ConnectionSettings.PORT)) {
-                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandlerImplementation(sendHandler, packageVisitor));
+                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandlerImplementation(sendHandler, packageVisitor, SocketSelectorImplementation.getInstance()));
                 while (true) {
                     Logger.getAnonymousLogger().info("Ready for connection");
                     acceptNewConnection(serverSocket);

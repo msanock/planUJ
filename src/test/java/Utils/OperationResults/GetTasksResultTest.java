@@ -3,6 +3,7 @@ package Utils.OperationResults;
 import Connection.protocol.Packable;
 import Connection.protocol.packages.ResponsePackage;
 import Utils.TaskInfo;
+import Utils.UserInfo;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -82,6 +83,21 @@ class GetTasksResultTest {
         assertEquals("info2", ((Utils.TaskInfo) ((java.util.List) ((ResponsePackage) result).getData(ResponsePackage.Dictionary.TASKS_LIST)).get(1)).getInfo());
         assertEquals(TaskInfo.Status.TODO, ((Utils.TaskInfo) ((java.util.List) ((ResponsePackage) result).getData(ResponsePackage.Dictionary.TASKS_LIST)).get(1)).getStatus());
         assertEquals(20, ((Utils.TaskInfo) ((java.util.List) ((ResponsePackage) result).getData(ResponsePackage.Dictionary.TASKS_LIST)).get(1)).getPriority());
+        assertEquals(Timestamp.valueOf("2020-01-01 00:00:00").toLocalDateTime(), ((Utils.TaskInfo) ((java.util.List) ((ResponsePackage) result).getData(ResponsePackage.Dictionary.TASKS_LIST)).get(1)).getDeadline());
+        List<UserInfo> list1 = ((Utils.TaskInfo) ((java.util.List) ((ResponsePackage) result).getData(ResponsePackage.Dictionary.TASKS_LIST)).get(1)).getAssignedUsers();
+        List<UserInfo> list2 = ((Utils.TaskInfo) ((java.util.List) ((ResponsePackage) result).getData(ResponsePackage.Dictionary.TASKS_LIST)).get(0)).getAssignedUsers();
+
+        assertEquals(2, list1.size());
+        assertEquals(2, list2.size());
+        assertEquals(1, list1.get(0).getId());
+        assertEquals(2, list1.get(1).getId());
+        assertEquals(1, list2.get(0).getId());
+        assertEquals(2, list2.get(1).getId());
+        assertEquals("name1", list1.get(0).getUsername());
+        assertEquals("name2", list1.get(1).getUsername());
+        assertEquals("name1", list2.get(0).getUsername());
+        assertEquals("name2", list2.get(1).getUsername());
+
     }
 
     @Test

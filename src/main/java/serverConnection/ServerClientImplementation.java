@@ -5,6 +5,7 @@ import serverConnection.abstraction.ServerClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
@@ -46,7 +47,7 @@ public class ServerClientImplementation implements ServerClient {
     }
 
     @Override
-    public ObjectOutputStream getObjectOutputStream() {
+    public ObjectOutput getObjectOutput() {
         return objectOutputStream;
     }
 }

@@ -17,11 +17,11 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
     SocketSelector socketSelector;
     PackageVisitor packageVisitor;
 
-    public ServerReceiveHandlerImplementation(ServerSendHandler sendHandler, PackageVisitor packageVisitor) {
+    public ServerReceiveHandlerImplementation(ServerSendHandler sendHandler, PackageVisitor packageVisitor, SocketSelector socketSelector) {
         executorService = Executors.newCachedThreadPool();
         this.sendHandler = sendHandler;
         this.packageVisitor = packageVisitor;
-        socketSelector = SocketSelectorImplementation.getInstance();
+        this.socketSelector = socketSelector;
     }
 
     @Override
@@ -35,6 +35,7 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
     @Override
     public void onLostConnection(ServerClient client) {
         //Temporary solution
+        //TODO
         System.exit(1);
     }
 

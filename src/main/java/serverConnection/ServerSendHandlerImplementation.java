@@ -7,6 +7,7 @@ import serverConnection.abstraction.ServerSendHandler;
 import serverConnection.abstraction.SocketSelector;
 
 import java.io.IOException;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.logging.Level;
@@ -19,7 +20,9 @@ public class ServerSendHandlerImplementation implements ServerSendHandler {
 
 
     public void send(Packable pack, ServerClient client) throws IOException {
-        ObjectOutputStream outputStream = client.getObjectOutputStream();
+        ObjectOutput outputStream = client.getObjectOutput();
+        if(outputStream == null)
+            throw new IOException("Output stream is null");
         synchronized(outputStream){
             outputStream.writeObject(pack);
         }

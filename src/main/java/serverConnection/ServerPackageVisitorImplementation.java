@@ -1,7 +1,6 @@
 package serverConnection;
 
 import Connection.manager.PackageVisitor;
-import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
 import Connection.protocol.packages.ResponsePackage;
 import Connection.protocol.packages.UUIDHolder;
@@ -28,21 +27,34 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
 
     @Override
     public RespondInformation handleEmptyPack(EmptyPack emptyPack, ServerClient sender){
+        //TODO?
         return null;
     }
 
     @Override
     public RespondInformation handleUserInfoRequestPack(UserInfoRequestPackage userInfoRequestPack, ServerClient sender){
+        //TODO?
         return null;
     }
 
     @Override
     public RespondInformation handleResponseInformation(ResponsePackage responsePackage, ServerClient sender) {
+        //TODO?
         return null;
     }
 
-    public RespondInformation prepareBasicRespond(ServerClient sender, OperationResult result, UUIDHolder UUIDpackage){
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage(UUIDpackage.getUuid())).build();
+    private RespondInformation prepareBasicResponse(ServerClient sender, OperationResult result, UUIDHolder UUIDpackage){
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage(UUIDpackage.getUUID())).build();
+    }
+
+
+    RespondInformation prepareBasicErrorRespond(ServerClient sender, Exception e){
+        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
+                new ResponsePackage.Builder()
+                        .addData(ResponsePackage.Dictionary.ERROR, e)
+                        .setSuccess(false)
+                        .build()
+        ).build();
     }
 
 
@@ -52,14 +64,12 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             result = database.addUser(loginPackage.getUserInfo());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         loginPackage.getUserInfo().setId(result.getId());
         sender.setClientID((long) result.getId());
         socketSelector.setClientID((long) result.getId(), sender);
-        return prepareBasicRespond(sender, result, loginPackage);
+        return prepareBasicResponse(sender, result, loginPackage);
     }
 
     @Override
@@ -68,11 +78,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             result = database.getUsers();
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
-        return prepareBasicRespond(sender, result, getUsersPackage);
+        return prepareBasicResponse(sender, result, getUsersPackage);
     }
 
 
@@ -82,12 +90,10 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             result = database.addTeam(addTeamPackage.getTeamInfo());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         addTeamPackage.getTeamInfo().setId(result.getId());
-        return prepareBasicRespond(sender, result, addTeamPackage);
+        return prepareBasicResponse(sender, result, addTeamPackage);
     }
 
     @Override
@@ -95,9 +101,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             database.addTeamUser(addTeamUserPackage.getTeamUser(), addTeamUserPackage.getTeamID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
@@ -108,11 +112,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             getUsersResult = database.getTeamUsers(getTeamUsersPackage.getTeamID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
-        return prepareBasicRespond(sender, getUsersResult, getTeamUsersPackage);
+        return prepareBasicResponse(sender, getUsersResult, getTeamUsersPackage);
     }
 
     @Override
@@ -121,11 +123,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             getTeamsResult = database.getTeams();
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
-        return prepareBasicRespond(sender, getTeamsResult, getTeamsPackage);
+        return prepareBasicResponse(sender, getTeamsResult, getTeamsPackage);
     }
 
     @Override
@@ -134,11 +134,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             getTeamsResult = database.getUserTeams(getUserTeamsPackage.getUserID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
-        return prepareBasicRespond(sender, getTeamsResult, getUserTeamsPackage);
+        return prepareBasicResponse(sender, getTeamsResult, getUserTeamsPackage);
     }
 
     @Override
@@ -147,12 +145,10 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             result = database.addTask(addTaskPackage.getTaskInfo());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         addTaskPackage.getTaskInfo().setId(result.getId());
-        return prepareBasicRespond(sender, result, addTaskPackage);
+        return prepareBasicResponse(sender, result, addTaskPackage);
     }
 
     @Override
@@ -161,11 +157,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             result = database.getTeamTasks(getTasksPackage.getTeamID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
-        return prepareBasicRespond(sender, result, getTasksPackage);
+        return prepareBasicResponse(sender, result, getTasksPackage);
     }
 
     @Override
@@ -174,11 +168,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             result = database.getUserTasks(getUserTasksPackage.getUserID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
-        return prepareBasicRespond(sender, result, getUserTasksPackage);
+        return prepareBasicResponse(sender, result, getUserTasksPackage);
     }
 
     @Override
@@ -186,9 +178,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             database.addUserTask(updateTaskPackage.getUserID(), updateTaskPackage.getTaskID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder().addData(ResponsePackage.Dictionary.ERROR, e).setSuccess(false).build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
@@ -198,12 +188,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             database.updateTask(updateTaskPackage.getTaskInfo());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder()
-                            .addData(ResponsePackage.Dictionary.ERROR, e)
-                            .setSuccess(false)
-                            .build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
@@ -213,12 +198,7 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         try {
             database.removeUserFromTask(removeUserFromTaskPackage.getUserID(), removeUserFromTaskPackage.getTaskID());
         } catch (DatabaseException e) {
-            return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(),
-                    new ResponsePackage.Builder()
-                            .addData(ResponsePackage.Dictionary.ERROR, e)
-                            .setSuccess(false)
-                            .build()
-            ).build();
+            return prepareBasicErrorRespond(sender, e);
         }
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }

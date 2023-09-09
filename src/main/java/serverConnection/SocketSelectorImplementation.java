@@ -37,7 +37,6 @@ public class SocketSelectorImplementation implements SocketSelector {
     public void setClientID(Long clientID, ServerClient client) {
         unspecifiedClients.remove(client);
         loggedClients.put(clientID, client);
-
     }
 
     @Override
