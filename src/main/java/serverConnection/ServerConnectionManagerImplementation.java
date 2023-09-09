@@ -62,7 +62,7 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
         Logger.getAnonymousLogger().info("New Connection");
 
         ServerClient newClient = new ServerClientImplementation(clientSocket);
-        newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient)); // ??
+        newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient));
         //newClient.startSocketStreamReader();
 
         socketSelector.AddNewClient(newClient);

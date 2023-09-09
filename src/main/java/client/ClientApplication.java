@@ -47,7 +47,10 @@ public class ClientApplication{
 
         database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getRequestHandler());
 
-        ClientInformation.getInstance().waitForLogin();
+        try {
+            IdResult res = database.addUser(ClientInformation.getInstance());
+            ClientInformation.getInstance().setId(res.getId());
+        }catch (Exception ignore){}
 
         System.out.println(ClientInformation.getInstance().getId() + " returing id");
 
@@ -88,6 +91,9 @@ public class ClientApplication{
             System.out.println(result.getTasks().size() + " team 1 tasks");
             for(TaskInfo info : result.getTasks()){
                 System.out.println(info.getInfo() + " " + info.getId() + " " + info.getStatus() + " " + info.getPriority() + " " + info.getDeadline());
+                for (UserInfo userInfo : info.getAssignedUsers()){
+                    System.out.println(userInfo.getUsername() + " " + userInfo.getId());
+                }
             }
         }catch (Exception a){
             a.printStackTrace();
