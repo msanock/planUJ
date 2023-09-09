@@ -17,8 +17,13 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
     SocketSelector socketSelector;
     PackageVisitor packageVisitor;
 
-    public ServerReceiveHandlerImplementation(ServerSendHandler sendHandler, PackageVisitor packageVisitor, SocketSelector socketSelector) {
-        executorService = Executors.newCachedThreadPool();
+    public ServerReceiveHandlerImplementation(
+            ServerSendHandler sendHandler,
+            PackageVisitor packageVisitor,
+            SocketSelector socketSelector,
+            ExecutorService executorService
+    ) {
+        this.executorService = executorService;
         this.sendHandler = sendHandler;
         this.packageVisitor = packageVisitor;
         this.socketSelector = socketSelector;

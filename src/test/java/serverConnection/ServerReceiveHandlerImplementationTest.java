@@ -10,6 +10,7 @@ import serverConnection.abstraction.ServerSendHandler;
 import serverConnection.abstraction.SocketSelector;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +26,8 @@ class ServerReceiveHandlerImplementationTest {
         sendHandler = Mockito.mock(ServerSendHandler.class);
         packageVisitor = Mockito.mock(PackageVisitor.class);
         socketSelector = Mockito.mock(SocketSelector.class);
-        ServerReceiveHandlerImplementation serverReceiveHandlerImplementation = new ServerReceiveHandlerImplementation(sendHandler, packageVisitor, socketSelector);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        ServerReceiveHandlerImplementation serverReceiveHandlerImplementation = new ServerReceiveHandlerImplementation(sendHandler, packageVisitor, socketSelector, executorService);
         Packable packable = Mockito.mock(Packable.class);
         RespondInformation respondInformation = Mockito.mock(RespondInformation.class);
         ServerClient serverClient = Mockito.mock(ServerClient.class);
@@ -34,6 +36,12 @@ class ServerReceiveHandlerImplementationTest {
         //when
         serverReceiveHandlerImplementation.onNewPackage(packable, serverClient);
 
+        try {
+            executorService.shutdown();
+            while(!executorService.awaitTermination(100, java.util.concurrent.TimeUnit.MILLISECONDS));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         //then
         Mockito.verify(packable, Mockito.times(1)).accept(packageVisitor, serverClient);
         Mockito.verify(sendHandler, Mockito.times(1)).sendResponses(respondInformation, socketSelector);

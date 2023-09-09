@@ -14,6 +14,7 @@ import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class ServerConnectionManagerImplementation implements ServerConnectionManger {
@@ -44,7 +45,7 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
         isOnline = true;
         new Thread(() -> {
             try (ServerSocket serverSocket = new ServerSocket(ConnectionSettings.PORT)) {
-                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandlerImplementation(sendHandler, packageVisitor, SocketSelectorImplementation.getInstance()));
+                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandlerImplementation(sendHandler, packageVisitor, SocketSelectorImplementation.getInstance(), Executors.newCachedThreadPool()));
                 while (true) {
                     Logger.getAnonymousLogger().info("Ready for connection");
                     acceptNewConnection(serverSocket);
