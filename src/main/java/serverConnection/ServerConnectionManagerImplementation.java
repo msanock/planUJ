@@ -1,5 +1,6 @@
 package serverConnection;
 
+import Connection.connector.download.MultiSocketStreamReaderFactory;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.packages.UserInfoRequestPackage;
 import clientConnection.ConnectionSettings;
@@ -9,7 +10,10 @@ import serverConnection.abstraction.ServerConnectionManger;
 import serverConnection.abstraction.SocketSelector;
 import serverConnection.abstraction.ServerSendHandler;
 
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -24,33 +28,50 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
     private final PackageVisitor packageVisitor;
     private final SocketSelector socketSelector;
     private boolean isOnline;
+    private final ServerSocketFactory serverSocketFactory;
+    private final MultiSocketStreamReaderFactory multiSocketStreamReaderFactory;
+    private final ServerClientFactory serverClientFactory;
+    private final ObjectOutputFactory objectOutputFactory;
 
 
-    public ServerConnectionManagerImplementation(ServerSendHandler sendHandler, PackageVisitor packageVisitor, SocketSelector socketSelector) {
+    public ServerConnectionManagerImplementation(
+            ServerSendHandler sendHandler,
+            PackageVisitor packageVisitor,
+            SocketSelector socketSelector,
+            ServerSocketFactory serverSocketFactory,
+            MultiSocketStreamReaderFactory multiSocketStreamReaderFactory,
+            ServerClientFactory serverClientFactory,
+            ObjectOutputFactory objectOutputFactory
+            ) {
         isOnline = false;
+        this.serverSocketFactory = serverSocketFactory;
         this.sendHandler = sendHandler;
         this.packageVisitor = packageVisitor;
         this.socketSelector = socketSelector;
+        this.multiSocketStreamReaderFactory = multiSocketStreamReaderFactory;
+        this.serverClientFactory = serverClientFactory;
+        this.objectOutputFactory = objectOutputFactory;
     }
 
 
 
     @Override
     public void restartService() throws ConnectException {
-
+        //TODO
     }
 
     @Override
     public void startService() throws ConnectException {
         isOnline = true;
         new Thread(() -> {
-            try (ServerSocket serverSocket = new ServerSocket(ConnectionSettings.PORT)) {
-                multiSocketStreamReader = new MultiSocketStreamReader(new ServerReceiveHandlerImplementation(sendHandler, packageVisitor, SocketSelectorImplementation.getInstance(), Executors.newCachedThreadPool()));
+            try (ServerSocket serverSocket = serverSocketFactory.createServerSocket(ConnectionSettings.PORT)) {
+                multiSocketStreamReader = multiSocketStreamReaderFactory.createMultiSocketStreamReader(
+                        sendHandler, packageVisitor, SocketSelectorImplementation.getInstance(), Executors.newCachedThreadPool());
                 while (true) {
                     Logger.getAnonymousLogger().info("Ready for connection");
                     acceptNewConnection(serverSocket);
                 }
-            } catch (Exception exception) {
+            } catch (IOException exception) {
                 Logger.getAnonymousLogger().warning("Server exception: " + exception.getMessage());
             } finally {
                 isOnline = false;
@@ -58,13 +79,12 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
         }).start();
     }
 
-    private void acceptNewConnection(ServerSocket serverSocket) throws IOException {
+    void acceptNewConnection(ServerSocket serverSocket) throws IOException {
         Socket clientSocket = serverSocket.accept();
         Logger.getAnonymousLogger().info("New Connection");
 
-        ServerClient newClient = new ServerClientImplementation(clientSocket);
-        newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient));
-        //newClient.startSocketStreamReader();
+        ServerClient newClient = serverClientFactory.createServerClient(clientSocket);
+        newClient.setSocketStreamReader(multiSocketStreamReader.addNewReader(newClient), objectOutputFactory.createObjectOutput(clientSocket));
 
         socketSelector.AddNewClient(newClient);
 
@@ -73,12 +93,14 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
 
     @Override
     public void acceptLogOut() {
+        //TODO
         //should it be here ?
         // probably SocketSelector
     }
 
     @Override
     public void FinishConnection() {
+        //TODO
         // like one above
     }
 }

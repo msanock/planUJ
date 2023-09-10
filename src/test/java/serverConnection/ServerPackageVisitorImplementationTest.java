@@ -2,6 +2,7 @@ package serverConnection;
 
 import Connection.protocol.Packable;
 import Connection.protocol.RespondInformation;
+import Connection.protocol.packages.ResponsePackage;
 import Connection.protocol.packages.UUIDHolder;
 import Connection.protocol.packages.taskOperations.*;
 import Connection.protocol.packages.teamOperations.*;
@@ -305,5 +306,24 @@ class ServerPackageVisitorImplementationTest {
         //then
         assertDoesNotThrow(()->Mockito.verify(database, Mockito.times(1)).removeUserFromTask(1,1));
         compareEmptyRespondInformation(respondInformation);
+    }
+
+    @Test
+    void prepareBasicErrorResponse(){
+        //given
+        ServerPackageVisitorImplementation serverPackageVisitorImplementation = createServerPackageVisitorImplementation();
+        ServerClient sender = Mockito.mock(ServerClient.class);
+        Exception exception = Mockito.mock(Exception.class);
+        Mockito.when(sender.getClientID()).thenReturn(1L);
+
+        //when
+        RespondInformation respondInformation = serverPackageVisitorImplementation.prepareBasicErrorResponse(sender, exception);
+
+        //then
+        Map<Long, Packable> packableMap = respondInformation.getResponses();
+        assertEquals(1, packableMap.size());
+        ResponsePackage packable = (ResponsePackage) packableMap.get(1L);
+        assertFalse(packable.isSuccess());
+        assertEquals(exception, packable.getData(ResponsePackage.Dictionary.ERROR));
     }
 }

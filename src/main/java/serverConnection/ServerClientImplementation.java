@@ -16,14 +16,14 @@ public class ServerClientImplementation implements ServerClient {
     private ServerSocketStreamReader socketStreamReader;
     private Long ClientID;
 
-    public ServerClientImplementation(Socket socket) {
+    ServerClientImplementation(Socket socket) {
         this.socket = socket;
     }
 
     @Override
-    public void setSocketStreamReader(ServerSocketStreamReader socketStreamReader) throws IOException {
+    public void setSocketStreamReader(ServerSocketStreamReader socketStreamReader, ObjectOutputStream objectOutputStream) throws IOException {
         this.socketStreamReader = socketStreamReader;
-        this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        this.objectOutputStream = objectOutputStream;
     }
 
     @Override
@@ -37,7 +37,9 @@ public class ServerClientImplementation implements ServerClient {
     }
 
     @Override
-    public void startSocketStreamReader() {
+    public void startSocketStreamReader() throws NoStreamReaderException {
+        if(socketStreamReader == null)
+            throw new NoStreamReaderException("No socket stream reader set");
         socketStreamReader.start();
     }
 
@@ -47,7 +49,7 @@ public class ServerClientImplementation implements ServerClient {
     }
 
     @Override
-    public ObjectOutput getObjectOutput() {
+    public ObjectOutput getObjectOutput(){
         return objectOutputStream;
     }
 }

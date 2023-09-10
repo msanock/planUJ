@@ -10,7 +10,7 @@ import java.io.IOException;
 public class MultiSocketStreamReader {
     private final ServerReceiveHandler handler;
 
-    public MultiSocketStreamReader(ServerReceiveHandler handler) {
+    MultiSocketStreamReader(ServerReceiveHandler handler) {
 
         this.handler = handler;
 
