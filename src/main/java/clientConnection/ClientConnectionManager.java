@@ -1,14 +1,22 @@
 package clientConnection;
 
+import Connection.ObjectOutputFactory;
+import Connection.SocketFactory;
 import Connection.connector.download.ClientSocketStreamReader;
+import Connection.connector.download.ClientSocketStreamReaderFactory;
+import Connection.connector.download.ObjectInputFactory;
+import Connection.manager.ClientPackageVisitor;
 import Connection.manager.ConnectionManager;
 import Utils.UserInfo;
 import clientConnection.abstraction.ClientRequestHandler;
 
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
 
+import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,21 +31,40 @@ public class ClientConnectionManager implements ConnectionManager {
     private AtomicBoolean isOnline;
     private ClientReceiveHandler receiveHandler;
     private ClientRequestHandler requestHandler;
+    private ObjectInputFactory objectInputFactory;
+    private ObjectOutputFactory objectOutputFactory;
+    private SocketFactory serverSocketFactory;
+    private ClientSocketStreamReaderFactory clientSocketStreamReaderFactory;
+    private ClientPackageVisitor packageVisitor;
 
 
 
 
-    public ClientConnectionManager(ClientSendHandler sendHandler) {
+    public ClientConnectionManager(
+            ClientSendHandler sendHandler,
+            ObjectInputFactory objectInputFactory,
+            ClientReceiveHandler receiveHandler,
+            ClientRequestHandler requestHandler,
+            ObjectOutputFactory objectOutputFactory,
+            SocketFactory socketFactory,
+            ClientSocketStreamReaderFactory clientSocketStreamReaderFactory,
+            ClientPackageVisitor packageVisitor
+            ) {
         isOnline = new AtomicBoolean(false);
         this.sendHandler = sendHandler;
-        receiveHandler = new ClientReceiveHandler(sendHandler);
-        requestHandler = new ClientRequestHandlerImplementation(receiveHandler);
+        this.receiveHandler = receiveHandler;
+        this.requestHandler = requestHandler;
+        this.objectInputFactory = objectInputFactory;
+        this.objectOutputFactory = objectOutputFactory;
+        this.serverSocketFactory = socketFactory;
+        this.clientSocketStreamReaderFactory = clientSocketStreamReaderFactory;
+        this.packageVisitor = packageVisitor;
     }
 
 
     private boolean openNewSocket() {
         try {
-            serverSocket = new Socket(ConnectionSettings.HOST, ConnectionSettings.PORT);
+            serverSocket = serverSocketFactory.createSocket(ConnectionSettings.HOST, ConnectionSettings.PORT);
         } catch (ConnectException e) {
             Logger.getAnonymousLogger().info("Connection problem: " + e.getMessage() + '\n' + e.getStackTrace());
             return false;
@@ -51,7 +78,7 @@ public class ClientConnectionManager implements ConnectionManager {
 
     @Override
     public void restartService() throws ConnectException {
-
+        throw new UnsupportedOperationException();
     }
 
     public boolean isOnline() {
@@ -71,17 +98,14 @@ public class ClientConnectionManager implements ConnectionManager {
             }
             try {
                 TimeUnit.MILLISECONDS.sleep(ConnectionSettings.RECONNECTION_PAUSE);
-            } catch (InterruptedException ignored) {
-            }
+            } catch (InterruptedException ignored) {}
         }
-
         if (!isOnline.get()) {
             throw new ConnectException();
         }
-
         try {
             startReceiver();
-            sendHandler.trySetOutputStream(serverSocket.getOutputStream());
+            sendHandler.trySetOutputStream(objectOutputFactory.createObjectOutput(serverSocket));
         } catch (IOException e) {
                 Logger.getAnonymousLogger().log(Level.SEVERE,"Unable to start : " + e.getMessage() + " " + e.getStackTrace());
         }
@@ -89,10 +113,9 @@ public class ClientConnectionManager implements ConnectionManager {
 
 
 
-    public void startReceiver() throws IOException {
-        socketStreamReader = new ClientSocketStreamReader(serverSocket, receiveHandler);
+    private void startReceiver() throws IOException {
+        socketStreamReader = clientSocketStreamReaderFactory.createClientSocketStreamReader(serverSocket, receiveHandler, objectInputFactory.createObjectInput(serverSocket.getInputStream()), packageVisitor);
         socketStreamReader.start();
-
     }
 
 

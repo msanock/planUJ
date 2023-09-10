@@ -7,6 +7,7 @@ import serverConnection.abstraction.ServerReceiveHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -18,11 +19,17 @@ public class ServerSocketStreamReader extends Thread {
     private final ServerReceiveHandler handler;
 
     private final ServerClient client;
+    private final ObjectInputFactory objectInputFactory;
 
-    public ServerSocketStreamReader(ServerClient client, ServerReceiveHandler handler) throws IOException {
+    public ServerSocketStreamReader(
+            ServerClient client,
+            ServerReceiveHandler handler,
+            ObjectInputFactory objectInputFactory
+            ) throws IOException {
         this.client = client;
         this.stream = client.getInputStream();
         this.handler = handler;
+        this.objectInputFactory = objectInputFactory;
 
         this.setDaemon(true);
     }
@@ -30,10 +37,8 @@ public class ServerSocketStreamReader extends Thread {
 
     @Override
     public void run() {
-        //handler.onNewConnection(socket);
-
         try {
-            ObjectInputStream objectStream = new ObjectInputStream(stream);
+            ObjectInput objectStream = objectInputFactory.createObjectInput(stream);
             while(true) {
                 Packable newPackage = (Packable) objectStream.readObject();
                 if (newPackage == null)

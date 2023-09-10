@@ -7,7 +7,6 @@ import Connection.protocol.ClientPackable;
 import Connection.protocol.Packable;
 import Connection.protocol.packages.ResponsePackage;
 import clientConnection.abstraction.ConnectionReceiver;
-import oracle.ons.Cli;
 
 
 import java.io.IOException;
@@ -23,9 +22,9 @@ public class ClientReceiveHandler {
     private final ClientSendHandler sendHandler;
     private final ExecutorService executorService;
 
-    public ClientReceiveHandler(ClientSendHandler clientSendHandler){
+    public ClientReceiveHandler(ClientSendHandler clientSendHandler, ExecutorService executorService){
         this.sendHandler = clientSendHandler;
-        executorService = Executors.newCachedThreadPool();
+        this.executorService = executorService;
         receiver = new AtomicReference<>(null);
     }
 
@@ -36,10 +35,8 @@ public class ClientReceiveHandler {
         synchronized (this) {
             while (this.receiver.get() != null) {
                 try {
-                    this.wait(); // add timeout
-                } catch (InterruptedException ignore) {
-
-                }
+                    this.wait();
+                } catch (InterruptedException ignore) {}
             }
             this.receiver.set(receiver);
         }
@@ -53,9 +50,13 @@ public class ClientReceiveHandler {
     //@Override
     public void onNewPackage(ClientPackable pack, ClientPackageVisitor packageVisitor){
         Logger.getAnonymousLogger().info("New package received");
-        if (pack instanceof ResponsePackage)
+        if (pack instanceof ResponsePackage) {
+            if(receiver.get() == null){
+                Logger.getAnonymousLogger().severe("Received package without receiver, package " + pack.toString() + " will be ignored");
+                return;
+            }
             receiver.get().update((ResponsePackage) pack);
-        else {
+        }else {
             executorService.submit(() -> {
                 pack.accept(packageVisitor);
             });
@@ -63,7 +64,6 @@ public class ClientReceiveHandler {
     }
 
 
-   // @Override
     public void onLostConnection() {
         Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Lost connection to server");
     }
@@ -72,4 +72,9 @@ public class ClientReceiveHandler {
     public ClientSendHandler getSendHandler() {
         return sendHandler;
     }
+
+    ConnectionReceiver getReceiver() {
+        return receiver.get();
+    }
+
 }

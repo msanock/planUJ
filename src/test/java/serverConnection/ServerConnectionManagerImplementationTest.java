@@ -1,11 +1,10 @@
 package serverConnection;
 
+import Connection.ObjectOutputFactory;
 import Connection.connector.download.MultiSocketStreamReader;
 import Connection.connector.download.MultiSocketStreamReaderFactory;
-import Connection.connector.upload.SendHandler;
 import Connection.manager.PackageVisitor;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import serverConnection.abstraction.ServerClient;
 import serverConnection.abstraction.ServerSendHandler;

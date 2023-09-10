@@ -23,7 +23,9 @@ public class MultiSocketStreamReaderFactory {
                         packageVisitor,
                         socketSelector,
                         executors
-                )
+                ),
+                new ObjectInputFactory(),
+                new ServerSocketStreamReaderFactory()
         );
     }
 }

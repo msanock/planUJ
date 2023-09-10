@@ -8,10 +8,9 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ClientRequestHandlerImplementation implements ClientRequestHandler {
-    ClientSendHandler sendHandler;
-    ClientReceiveHandler receiveHandler;
-
-    AtomicReference<ResponsePackage> response;
+    private final ClientSendHandler sendHandler;
+    private final ClientReceiveHandler receiveHandler;
+    private AtomicReference<ResponsePackage> response;
 
     public ClientRequestHandlerImplementation(ClientReceiveHandler clientReceiveHandler){
         this.sendHandler = clientReceiveHandler.getSendHandler();
@@ -26,22 +25,25 @@ public class ClientRequestHandlerImplementation implements ClientRequestHandler 
 
     @Override
     public ResponsePackage sendAndGetResponse(Packable pack) throws IOException {
+        response = new AtomicReference<>(null);
         receiveHandler.setReceiver(this);
         sendHandler.send(pack);
-        response = new AtomicReference<>(null);
+        int timeoutCount=0;
         synchronized (this){
             long timeTillTimeout = ConnectionSettings.REQUEST_TIMEOUT;
-            while (response.get() == null) {
+            while (getCurrentResponse() == null) {
                 try {
                     this.wait(timeTillTimeout);
-                    // TODO update timeTillTimeout!
-                } catch (InterruptedException ignore) {
-                    //hope that it isn't anything serious
-                }
+                    timeoutCount++;
+                    if(timeoutCount>=ConnectionSettings.TIMEOUT_ITERATIONS){
+                        receiveHandler.deleteReceiver(this);
+                        throw new SendTimeoutException("Request timed out");
+                    }
+                } catch (InterruptedException ignore) {}
             }
         }
         receiveHandler.deleteReceiver(this);
-        return response.get();
+        return getCurrentResponse();
     }
 
     @Override
@@ -55,5 +57,9 @@ public class ClientRequestHandlerImplementation implements ClientRequestHandler 
             response.set(pack);
             this.notify();
         }
+    }
+
+    ResponsePackage getCurrentResponse(){
+        return response.get();
     }
 }

@@ -1,5 +1,5 @@
 package serverConnection;
-
+import Connection.ObjectOutputFactory;
 import Connection.connector.download.MultiSocketStreamReaderFactory;
 import Connection.manager.PackageVisitor;
 import Connection.protocol.packages.UserInfoRequestPackage;
@@ -12,12 +12,9 @@ import serverConnection.abstraction.ServerSendHandler;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 

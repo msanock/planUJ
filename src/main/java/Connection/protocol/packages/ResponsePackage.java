@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public class ResponsePackage extends UUIDHolder implements Packable, ClientPackable {
+public class ResponsePackage extends UUIDHolder implements ClientPackable {
     private boolean success;
     private Map<String, Object> data;
 
