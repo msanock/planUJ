@@ -90,14 +90,14 @@ public class ServerConnectionManagerImplementation implements ServerConnectionMa
 
     @Override
     public void acceptLogOut() {
-        //TODO
+        // TODO
         //should it be here ?
         // probably SocketSelector
     }
 
     @Override
     public void FinishConnection() {
-        //TODO
+        // TODO
         // like one above
     }
 }

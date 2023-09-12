@@ -13,6 +13,16 @@ public class ClientInformation extends UserInfo {
         isLoggedIn = new AtomicBoolean(false);
     }
 
+    public static boolean isCorrectLogin(String login) {
+        // TODO  Rafał skrytykuj, ewentualnie dodaj jakieś factory
+        if (login == null)
+            return false;
+        if (login.isBlank())
+            return false;
+
+        return true;
+    }
+
     private static class Holder{
         private static final ClientInformation INSTANCE = new ClientInformation();
     }
@@ -41,6 +51,7 @@ public class ClientInformation extends UserInfo {
     public boolean isLoggedIn(){
         return isLoggedIn.get();
     }
+
 
     public void waitForLogin(){
         synchronized (lock){

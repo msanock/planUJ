@@ -1,6 +1,6 @@
 package client;
 
-import Connection.protocol.packages.userOperations.GetUsersPackage;
+
 import Presentation.database.DatabaseFactory;
 import Server.database.Database;
 import Utils.OperationResults.GetTasksResult;

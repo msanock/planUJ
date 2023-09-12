@@ -47,7 +47,6 @@ public class ClientReceiveHandler {
         }
     }
 
-    //@Override
     public void onNewPackage(ClientPackable pack, ClientPackageVisitor packageVisitor){
         Logger.getAnonymousLogger().info("New package received");
         if (pack instanceof ResponsePackage) {
