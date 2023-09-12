@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 public class ServerApplication {
 
     public static void main(String[] args) {
-        //TODO: add javafx, but this shit doesnt work
         try {
             start();
         } catch (Exception e) {

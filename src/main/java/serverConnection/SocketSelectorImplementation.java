@@ -53,5 +53,10 @@ public class SocketSelectorImplementation implements SocketSelector {
                 .map(entry -> new Pair<>(entry.getKey(), entry.getValue()));
     }
 
+    @Override
+    public void removeClient(ServerClient client) {
+        loggedClients.remove(client.getClientID());
+    }
+
 
 }

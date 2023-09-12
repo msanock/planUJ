@@ -48,7 +48,7 @@ public class ClientApplication{
             ClientInformation.getInstance().setId(res.getId());
         }catch (Exception ignore){}
 
-        System.out.println(ClientInformation.getInstance().getId() + " returing id");
+        /*System.out.println(ClientInformation.getInstance().getId() + " returing id");
 
         TeamInfo team1 = new TeamInfo("team1", 0, List.of());
 
@@ -131,7 +131,7 @@ public class ClientApplication{
             }
         }catch (Exception a){
             a.printStackTrace();
-        }
+        }*/
     }
 
 

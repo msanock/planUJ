@@ -66,4 +66,5 @@ class ServerSocketStreamReaderTest {
         Mockito.verify(objectInputFactory, Mockito.times(1)).createObjectInput(stream);
         Mockito.verify(handler, Mockito.times(1)).onLostConnection(client);
     }
+
 }

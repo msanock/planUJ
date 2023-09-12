@@ -10,6 +10,7 @@ import serverConnection.abstraction.SocketSelector;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public class ServerReceiveHandlerImplementation implements ServerReceiveHandler {
     ExecutorService executorService;
@@ -39,9 +40,8 @@ public class ServerReceiveHandlerImplementation implements ServerReceiveHandler 
 
     @Override
     public void onLostConnection(ServerClient client) {
-        //Temporary solution
-        //TODO
-        System.exit(1);
+        Logger.getGlobal().info("Lost connection with client: " + client.getClientID());
+        socketSelector.removeClient(client);
     }
 
 }

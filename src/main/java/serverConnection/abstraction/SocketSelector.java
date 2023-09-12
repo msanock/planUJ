@@ -14,4 +14,6 @@ public interface SocketSelector {
 
     Stream<Pair<Long, ServerClient>> getExistingClientsFromId(List<Long> list);
 
+    void removeClient(ServerClient client);
+
 }

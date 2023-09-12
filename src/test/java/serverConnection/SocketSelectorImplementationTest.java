@@ -82,4 +82,38 @@ class SocketSelectorImplementationTest {
         List<Pair<Long, ServerClient>> clients = socketSelectorImplementation.getExistingClientsFromId(List.of(1L, 2L)).toList();
         assertEquals(0, clients.size());
     }
+
+    @Test
+    void removeClient(){
+        //given
+        SocketSelectorImplementation socketSelectorImplementation = SocketSelectorImplementation.getInstance();
+        ServerClient serverClient = Mockito.mock(ServerClient.class);
+        Mockito.when(serverClient.getClientID()).thenReturn(1L);
+
+        //when
+        socketSelectorImplementation.AddNewClient(serverClient);
+        socketSelectorImplementation.setClientID(1L, serverClient);
+        socketSelectorImplementation.removeClient(serverClient);
+
+        //then
+        assertNull(socketSelectorImplementation.getClientFromId(1L));
+        List<Pair<Long, ServerClient>> clients = socketSelectorImplementation.getExistingClientsFromId(List.of(1L, 2L, 3L)).toList();
+        assertEquals(0, clients.size());
+    }
+
+    @Test
+    void removeClientNotInSet(){
+        //given
+        SocketSelectorImplementation socketSelectorImplementation = SocketSelectorImplementation.getInstance();
+        ServerClient serverClient = Mockito.mock(ServerClient.class);
+        Mockito.when(serverClient.getClientID()).thenReturn(1L);
+
+        //when
+        assertDoesNotThrow(()->socketSelectorImplementation.removeClient(serverClient));
+
+        //then
+        assertNull(socketSelectorImplementation.getClientFromId(1L));
+        List<Pair<Long, ServerClient>> clients = socketSelectorImplementation.getExistingClientsFromId(List.of(1L, 2L, 3L)).toList();
+        assertEquals(0, clients.size());
+    }
 }
