@@ -32,9 +32,7 @@ public class DatabaseFactory {
 
 
     public Database getServerDatabase(ClientRequestHandler requestHandler) throws DatabaseFactoryException {
-            return new SecureDatabase(new ServerDatabase(
-                    requestHandler
-            ));
+            return new SecureDatabase(new ServerDatabase(requestHandler));
     }
 
 
