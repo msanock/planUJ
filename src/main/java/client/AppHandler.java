@@ -4,18 +4,15 @@ import Server.sql.DatabaseException;
 import Utils.OperationResults.GetTasksResult;
 import Utils.OperationResults.GetTeamsResult;
 import Utils.OperationResults.IdResult;
+import Utils.TaskInfo;
 import Utils.TeamInfo;
 import Utils.UserInfo;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Logger;
 
 public class AppHandler {
-    MainScreen mainScreen;
+    MainScreenController mainScreen;
 
     static private AppHandler instance;
 
@@ -28,7 +25,7 @@ public class AppHandler {
 
     AppHandler() { }
 
-    static void setMainScreen(MainScreen screen) {
+    static void setMainScreen(MainScreenController screen) {
         instance.mainScreen = screen;
     }
     public void forceLogInView() {
@@ -91,5 +88,9 @@ public class AppHandler {
 
     public void closeTeamsView() {
         mainScreen.closeTeams();
+    }
+
+    public void openEditableTask(TaskInfo taskInfo) {
+        mainScreen.openEditableTask(taskInfo);
     }
 }

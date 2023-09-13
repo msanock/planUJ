@@ -2,121 +2,128 @@ package client;
 
 
 import Utils.TaskInfo;
-import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 
 
 public class TasksView extends VBox {
-    HashMap<TaskInfo, SingleTaskView> tasks;
+    HashMap<TaskInfo, SingleTask> tasks;
     Integer numberOfTasks;
 
     public TasksView() {
-        numberOfTasks = 0;
+        numberOfTasks = 0; //
         tasks = new HashMap<>();
+    }
+
+    public void setTaskEditable(TaskInfo task) {
+        SingleTask oldSingleTask = tasks.get(task);
+        SingleTask editableSingleTask = null;
+        try {
+            editableSingleTask = SingleTaskViewFactory.getInstance().getEditableSingleTask(task);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.getChildren().remove(oldSingleTask.getIndex());
+        this.getChildren().add(oldSingleTask.getIndex(), editableSingleTask.getPane());
     }
 
     public void setTasks(Collection<TaskInfo> tasks) {
         this.tasks.clear();
         this.getChildren().clear();
         for (var task : tasks) {
-            SingleTaskView newSingleTaskView = new SingleTaskView(task);
-            this.tasks.put(task, newSingleTaskView);
-            this.getChildren().add(newSingleTaskView);
+            SingleTask newSingleTask = null;
+            try {
+                newSingleTask = SingleTaskViewFactory.getInstance().getSingleTask(task);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            this.tasks.put(task, newSingleTask);
+            this.getChildren().add(newSingleTask.getPane());
+            newSingleTask.setIndex(this.getChildren().indexOf(newSingleTask.getPane()));
+            VBox.setVgrow(newSingleTask.getPane(), Priority.ALWAYS);
         }
     }
 
     public void addTask(TaskInfo task) {
-        SingleTaskView newSingleTaskView = new SingleTaskView(task);
+        SingleTask newSingleTaskView = null;
+        try {
+            newSingleTaskView = SingleTaskViewFactory.getInstance().getSingleTask(task);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.tasks.put(task, newSingleTaskView);
-        this.getChildren().add(newSingleTaskView);
+        this.getChildren().add(newSingleTaskView.getPane());
+        newSingleTaskView.setIndex(this.getChildren().indexOf(newSingleTaskView.getPane()));
+        VBox.setVgrow(newSingleTaskView.getPane(), Priority.ALWAYS);
     }
 
     public void deleteTask(TaskInfo task) {
-        SingleTaskView which = tasks.remove(task);
-        this.getChildren().remove(which);
+        SingleTask which = tasks.remove(task);
+        this.getChildren().remove(which.getPane());
     }
 
 }
 
-class SingleTaskView extends VBox {
-    // https://www.pixelduke.com/fxskins/
-    TaskInfo task;
-    TaskLabel label;
-    TaskMembers taskMembers;
+class SingleTask{
+    private GridPane pane;
+    private Initializable controller;
+    private Integer index;
 
-    public SingleTaskView(TaskInfo task){
-        super();
-
-        this.setBorder(new Border(new BorderStroke(Color.AZURE, BorderStrokeStyle.SOLID, new CornerRadii(5.), new BorderWidths(4))));
-        this.setPadding(new Insets(50));
-        setOpaqueInsets(new Insets(70));
-        HBox.setHgrow(this, Priority.ALWAYS);
-
-        this.task = task;
-
-        label = new TaskLabel(task.getInfo());
-        this.getChildren().add(label);
-
-        taskMembers = new TaskMembers();
-        this.getChildren().add(taskMembers);
-
+    SingleTask(GridPane pane, Initializable controller){
+        this.pane = pane;
+        this.controller = controller;
     }
 
-    public static void handleEntered(MouseEvent e){
-
+    public GridPane getPane() {
+        return pane;
     }
 
-    public static void handleExited(MouseEvent e){
+    public Initializable getController() {
+        return controller;
+    }
 
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 }
 
-class TaskLabel extends Label{
-    TaskLabel(String label) {
-        //this.setGraphic("jakaś grafika );
-        this.setMinHeight(60);
-        this.setMinWidth(20);
-        this.autosize();
-        this.setText(label);
-        this.setFont(new Font(50)); // TODO set font family, and bold
-        //this.setTextOverrun(OverrunStyle.CLIP);
-        this.setWrapText(false);
-        this.setPadding(new Insets(7));
+class SingleTaskViewFactory {
 
-        this.setTextFill(Color.AQUA);
+    private static SingleTaskViewFactory instance;
+
+    public SingleTaskViewFactory() {
+
+    }
+
+    static SingleTaskViewFactory getInstance() {
+        if (instance == null)
+            instance = new SingleTaskViewFactory();
+        return instance;
+    }
+
+    public SingleTask getSingleTask(TaskInfo task) throws IOException {
+        FXMLLoader loader = new FXMLLoader(TasksView.class.getResource("single-task.fxml"));
+        SingleTaskViewController controller = new SingleTaskViewController();
+        controller.setTask(task);
+        loader.setController(controller);
+        return new SingleTask(loader.load(), controller);
+    }
+
+    public SingleTask getEditableSingleTask(TaskInfo task) throws IOException {
+        FXMLLoader loader = new FXMLLoader(TasksView.class.getResource("editable-single-task.fxml"));
+        SingleEditableTaskViewController controller = new SingleEditableTaskViewController();
+        controller.setTask(task);
+        loader.setController(controller);
+        return new SingleTask(loader.load(), controller);
     }
 }
 
-class TaskMembers extends TilePane {
-    HashMap<String, Button> assignedMembers;
-    TaskMembers() {
-        this.setOrientation(Orientation.HORIZONTAL);
-        this.setHgap(3);
-        this.setVgap(4);
-
-    }
-
-    public void setAssigned(Collection<String> assignedMembers) {
-        this.getChildren().clear();
-        this.getChildren().addAll(assignedMembers.stream().map((assigned) -> new Button(assigned)).toList());
-    }
-
-    public void addAssigned(String name) {
-        Button newButton = new Button(name);
-        this.getChildren().add(newButton);
-        this.assignedMembers.put(name, newButton);
-    }
-
-    public void deleteAssigned(String name) {
-        this.getChildren().remove(assignedMembers.remove(name));
-    }
-}

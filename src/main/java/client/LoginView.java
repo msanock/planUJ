@@ -1,14 +1,7 @@
 package client;
 
-import Server.sql.DatabaseException;
-import Utils.OperationResults.IdResult;
-import Utils.UserInfo;
-import client.ClientInformation;
-import client.MainScreen;
-import client.RealApplication;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.net.URL;

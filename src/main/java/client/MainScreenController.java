@@ -3,7 +3,6 @@ package client;
 import Utils.TaskInfo;
 import Utils.TeamInfo;
 import Utils.TeamUser;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +17,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 
-public class MainScreen implements Initializable {
+public class MainScreenController implements Initializable {
     @FXML
     public HBox pane;
     @FXML
@@ -37,11 +36,11 @@ public class MainScreen implements Initializable {
     public TasksView tasksView;
     public BorderPane logInView;
     public LoginView loginController;
-    static MainScreen instance;
+    static MainScreenController instance;
 
 
 
-    public static MainScreen getInstance() {
+    public static MainScreenController getInstance() {
         return instance;
     }
 
@@ -148,5 +147,9 @@ public class MainScreen implements Initializable {
             main.getChildren().remove(teamsView);
             isTeamsButtonPressed = false;
         }
+    }
+
+    public void openEditableTask(TaskInfo taskInfo) {
+        tasksView.setTaskEditable(taskInfo);
     }
 }

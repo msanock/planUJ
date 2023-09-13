@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import client.MembersView?>
 <?import client.TasksView?>
-<HBox fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.MainScreen" >
+<HBox fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.MainScreenController" >
     <children>
         <VBox style="-fx-background-color: black;">
             <children>
@@ -20,7 +20,7 @@
         <StackPane fx:id="main" HBox.hgrow="ALWAYS" alignment="TOP_LEFT" >
             <HBox HBox.hgrow="ALWAYS">
                 <children>
-                    <ScrollPane HBox.hgrow="ALWAYS" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+                    <ScrollPane HBox.hgrow="ALWAYS" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
                         <content>
                             <TasksView fx:id="tasksView"/>
                         </content>
