@@ -6,41 +6,40 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
-
-application {
-    mainModule = 'client'
-    mainClass = 'client.RealApplication'
-}
-
-javafx {
-    version = '20'
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
-}
+group 'edu'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
-dependencies {
+ext {
+    junitVersion = '5.9.2'
+}
 
-    implementation('org.controlsfx:controlsfx:11.1.2')
-    implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
-        exclude(group: 'org.openjfx')
-    }
-    implementation('net.synedra:validatorfx:0.4.0') {
-        exclude(group: 'org.openjfx')
-    }
-    implementation('org.kordamp.ikonli:ikonli-javafx:12.3.1')
-    implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.+'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.+'
-    implementation 'com.oracle.database.jdbc:ojdbc8:19.6.0.0'
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainModule = 'edu.planuj'
+    mainClass = 'edu.planuj.client.RealAplication'
+}
+
+javafx {
+    version = '17.0.6'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+}
+
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation 'com.oracle.database.jdbc:ucp:19.6.0.0'
     implementation 'org.postgresql:postgresql:42.2.24'
     implementation 'org.mockito:mockito-core:4.+'
-    implementation 'com.pixelduke:FXSkins:1.0.0'
 }
 
 test {
@@ -48,4 +47,17 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+
+jlink {
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'app'
+    }
+}
+
+jlinkZip {
+    group = 'distribution'
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.*?>
+<?import edu.planuj.client.TasksView?>
+<?import edu.planuj.client.MembersView?>
+<HBox fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.MainScreenController" >
+    <children>
+        <VBox style="-fx-background-color: black;">
+            <children>
+                <Button mnemonicParsing="false" text="menu, wybór teamu" fx:id="teamsButton" onAction="#handleTeamsButton"/>
+                <Button mnemonicParsing="false" text="profile" fx:id="logInButton" onAction="#handleLogInButton"/>
+            </children>
+        </VBox>
+        <StackPane fx:id="main" HBox.hgrow="ALWAYS" alignment="TOP_LEFT" >
+            <HBox HBox.hgrow="ALWAYS">
+                <children>
+                    <ScrollPane HBox.hgrow="ALWAYS" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
+                        <content>
+                            <TasksView fx:id="tasksView"/>
+                        </content>
+                    </ScrollPane>
+                    <ScrollPane HBox.hgrow="ALWAYS" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
+                        <content>
+                            <MembersView fx:id="membersView"/>
+                        </content>
+                    </ScrollPane>
+                </children>
+            </HBox>
+        </StackPane>
+    </children>
+</HBox>
