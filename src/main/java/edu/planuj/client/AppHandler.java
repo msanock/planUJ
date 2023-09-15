@@ -6,7 +6,6 @@ import edu.planuj.Utils.OperationResults.GetTeamsResult;
 import edu.planuj.Utils.OperationResults.IdResult;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
-import edu.planuj.Utils.UserInfo;
 
 import java.util.Collections;
 import java.util.logging.Logger;
@@ -40,21 +39,21 @@ public class AppHandler {
 
         ClientInformation client = ClientInformation.getInstance();
         client.setClientName(login);
-        UserInfo newUser = new UserInfo(login, -1);
         IdResult idResult;
         try {
-            idResult = RealApplication.getDatabase().addUser(newUser);
+            idResult = RealApplication.getDatabase().addUser(client);
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
             return;
         }
-        client.setClientInfo(login, idResult.getId());
+        client.logInWithId(idResult.getId());
         Logger.getAnonymousLogger().info("Client set: " + client.getUsername() + " " + client.getId());
 
 
-        // now changes in UI, at this point login succeeded
+        // now changes in UI, at this point login is considered successful
         mainScreen.setTasks(Collections.emptyList());
         mainScreen.setMembers(Collections.emptyList());
+        mainScreen.setTeams(Collections.emptyList());
         mainScreen.setLogInViewExitable(true);
         mainScreen.closeLogInView();
         GetTeamsResult result = null;
@@ -72,8 +71,9 @@ public class AppHandler {
 
     }
 
-    public void openTasksView(TeamInfo team) {
+    public void setTeam(TeamInfo team) {
         GetTasksResult tasksResult = null;
+        mainScreen.setCurrentTeam(team);
         mainScreen.setMembers(team.getUsers());
 
         try {
@@ -86,11 +86,37 @@ public class AppHandler {
         mainScreen.closeTeams();
     }
 
-    public void closeTeamsView() {
-        mainScreen.closeTeams();
+    public boolean updateTask(TaskInfo taskInfo) {
+        try {
+            RealApplication.getDatabase().updateTask(taskInfo);
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            GetTasksResult tasksResult = null;
+            try {
+                TeamInfo team = mainScreen.getCurrentTeam();
+                tasksResult = RealApplication.getDatabase().getTeamTasks(team.getId());
+            } catch (DatabaseException ex) {
+                mainScreen.reportError(ex);
+            }
+            if (tasksResult != null)
+                mainScreen.setTasks(tasksResult.getTasks());
+            return false;
+        }
+        return true;
     }
 
-    public void openEditableTask(TaskInfo taskInfo) {
-        mainScreen.openEditableTask(taskInfo);
+    public boolean addNewTask(TaskInfo taskInfo) {
+        IdResult idResult = null;
+        try {
+            idResult = RealApplication.getDatabase().addTask(taskInfo);
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+        if (idResult != null) {
+            taskInfo.setId(idResult.getId());
+            return true;
+        }
+        return false;
     }
 }

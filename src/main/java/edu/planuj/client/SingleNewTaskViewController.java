@@ -9,11 +9,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
-public class SingleEditableTaskViewController implements Initializable {
+public class SingleNewTaskViewController implements Initializable {
 
-    TaskInfo taskInfo;
+    private TaskInfo taskInfo;
     @FXML
     public GridPane taskBox;
     @FXML
@@ -27,29 +29,33 @@ public class SingleEditableTaskViewController implements Initializable {
     @FXML
     public TilePane users;
     @FXML
-    public Button setButton;
+    public Button addButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        name.setText(taskInfo.getInfo());
         status.getItems().addAll(TaskInfo.Status.values());
-        status.setValue(taskInfo.getStatus());
+        status.setValue(TaskInfo.Status.TODO);
         priority.setEditable(false);
-        priority.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, taskInfo.getPriority()));
-        deadline.setValue(taskInfo.getDeadline().toLocalDate());
+        priority.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 5));
+        deadline.setValue(LocalDate.now());
     }
 
     public void setTask(TaskInfo task) {
         this.taskInfo = task;
     }
-
-    public void handleSetButton(ActionEvent e) {
+    public void handleAddButton(ActionEvent e) {
         taskInfo.setInfo(name.getText());
         taskInfo.setDeadline(deadline.getValue().atStartOfDay());
         taskInfo.setPriority(priority.getValue());
         taskInfo.setStatus(status.getValue());
 
-        if (AppHandler.getInstance().updateTask(taskInfo))
-            MainScreenController.getInstance().changeToNormalTask(taskInfo);
+        //some checks TODO add more and to Editable
+        if (name.getText().isBlank()) {
+            MainScreenController.getInstance().reportError(new Exception("new task with empty name"));
+            return;
+        }
+
+        if (AppHandler.getInstance().addNewTask(taskInfo))
+            MainScreenController.getInstance().acceptNewTask(taskInfo);
     }
 }

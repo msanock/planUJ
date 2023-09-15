@@ -17,16 +17,16 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-      <TextField fx:id="name" promptText="this is a realy long task name and it need to fit nicealy this is a realy long task name and it need to fit nicealy " text="this is a realy long task name and it need to fit nicealy this is a realy long task name and it need to fit nicealy " GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextField>
-        <Button fx:id="setButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleSetButton" text="SET BTN" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+        <TextField fx:id="name" promptText="new Task" text="new Task" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </TextField>
+        <Button fx:id="addButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleAddButton" text="ADD BTN" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
         <TilePane fx:id="users" hgap="10.0" prefColumns="0" prefRows="1" vgap="20.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-      <ChoiceBox fx:id="status" prefWidth="150.0" GridPane.rowIndex="1" />
-      <Spinner fx:id="priority" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <DatePicker fx:id="deadline" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <ChoiceBox fx:id="status" prefWidth="150.0" GridPane.rowIndex="1" />
+        <Spinner fx:id="priority" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <DatePicker fx:id="deadline" GridPane.columnIndex="2" GridPane.rowIndex="1" />
     </children>
     <padding>
         <Insets top="10.0" />

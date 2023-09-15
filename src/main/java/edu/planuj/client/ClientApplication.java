@@ -3,11 +3,20 @@ package edu.planuj.client;
 
 import edu.planuj.Presentation.database.DatabaseFactory;
 import edu.planuj.Server.database.Database;
+import edu.planuj.Utils.OperationResults.GetTasksResult;
+import edu.planuj.Utils.OperationResults.GetTeamsResult;
+import edu.planuj.Utils.OperationResults.GetUsersResult;
 import edu.planuj.Utils.OperationResults.IdResult;
+import edu.planuj.Utils.TaskInfo;
+import edu.planuj.Utils.TeamInfo;
+import edu.planuj.Utils.TeamUser;
+import edu.planuj.Utils.UserInfo;
 import edu.planuj.clientConnection.ClientConnectionFactory;
 import edu.planuj.clientConnection.ClientConnectionManager;
 
 import java.net.ConnectException;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +48,7 @@ public class ClientApplication{
             ClientInformation.getInstance().setId(res.getId());
         }catch (Exception ignore){}
 
-        /*System.out.println(ClientInformation.getInstance().getId() + " returing id");
+        System.out.println(ClientInformation.getInstance().getId() + " returing id");
 
         TeamInfo team1 = new TeamInfo("team1", 0, List.of());
 
@@ -122,10 +131,7 @@ public class ClientApplication{
             }
         }catch (Exception a){
             a.printStackTrace();
-        }*/
+        }
     }
-
-
-
 
 }

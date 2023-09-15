@@ -33,14 +33,14 @@ public class TeamsView extends HBox {
     }
 
     private void onClickOutside(MouseEvent mouseEvent) {
-        AppHandler.getInstance().closeTeamsView();
+        MainScreenController.getInstance().closeTeams();
     }
 
 
-    public void setTeams(Collection<TeamInfo> teams) {
+    public void setTeams(Collection<TeamInfo> newTeams) {
         this.teams.clear();
         teamList.getChildren().clear();
-        for (var team : teams) {
+        for (var team : newTeams) {
             SingleTeamView newTeam = new SingleTeamView(team);
             this.teams.put(team, newTeam);
             teamList.getChildren().add(newTeam);
@@ -91,6 +91,6 @@ class SingleTeamView extends Button {
 
 
     void handleTeamButton(ActionEvent event) {
-        AppHandler.getInstance().openTasksView(team);
+        AppHandler.getInstance().setTeam(team);
     }
 }

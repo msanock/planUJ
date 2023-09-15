@@ -37,7 +37,7 @@ public class MainScreenController implements Initializable {
     public BorderPane logInView;
     public LoginView loginController;
     static MainScreenController instance;
-
+    private TeamInfo teamInfo;
 
 
     public static MainScreenController getInstance() {
@@ -62,6 +62,12 @@ public class MainScreenController implements Initializable {
         loginController = loader.getController();
     }
 
+    public TeamInfo getCurrentTeam() {
+        return teamInfo;
+    }
+    public void setCurrentTeam(TeamInfo teamInfo) {
+        this.teamInfo = teamInfo;
+    }
 
 
     public void setTasks(Collection<TaskInfo> tasks) {
@@ -75,6 +81,7 @@ public class MainScreenController implements Initializable {
     public void setTeams(Collection<TeamInfo> teams) {
         teamsView.setTeams(teams);
     }
+
     public void addTask(TaskInfo task) {
         tasksView.addTask(task);
     }
@@ -150,6 +157,14 @@ public class MainScreenController implements Initializable {
     }
 
     public void openEditableTask(TaskInfo taskInfo) {
-        tasksView.setTaskEditable(taskInfo);
+        tasksView.changeToEditableTask(taskInfo);
+    }
+
+    public void changeToNormalTask(TaskInfo taskInfo) {
+        tasksView.changeToNormalTask(taskInfo);
+    }
+
+    public void acceptNewTask(TaskInfo taskInfo) {
+        tasksView.acceptNewTask(taskInfo);
     }
 }

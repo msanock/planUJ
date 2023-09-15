@@ -35,7 +35,7 @@ public class ClientInformation extends UserInfo {
         super.setName(name);
     }
 
-    public void LogInWithId(int id){
+    public void logInWithId(int id){
         super.setId(id);
         isLoggedIn.set(true);
         synchronized (lock) {
@@ -43,10 +43,10 @@ public class ClientInformation extends UserInfo {
         }
     }
 
-    public void setClientInfo(String name, int id){
-        super.setName(name);
-        super.setId(id);
-    }
+//    public void setClientInfo(String name, int id){
+//        super.setName(name);
+//        super.setId(id);
+//    }
 
     public boolean isLoggedIn(){
         return isLoggedIn.get();
