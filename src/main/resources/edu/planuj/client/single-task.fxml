@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<GridPane fx:id="taskBox" vgap="10.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="100.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="70.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label fx:id="name" lineSpacing="5.0" text="this is a realy long task name and it need to fit nicealy " textAlignment="CENTER" textOverrun="CLIP" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Button fx:id="editButton" onAction="#handleEditButton" graphicTextGap="1.0" mnemonicParsing="false" text="EDIT BTN" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+      <Label fx:id="status" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+      <Label fx:id="priority" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label fx:id="deadline" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <TilePane fx:id="users" hgap="10.0" prefColumns="0" prefRows="1" vgap="20.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+   </children>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
+</GridPane>
