@@ -2,6 +2,7 @@ package edu.planuj.OperationResults;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
+import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.OperationResults.GetTasksResult;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.UserInfo;
@@ -43,13 +44,13 @@ class GetTasksResultTest {
     }
 
     @Test
-    void creatingTaskResult(){
+    void creatingTaskResult() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetTasksResult getTasksResult = new GetTasksResult(rs);
     }
 
     @Test
-    void emptyResultSet() {
+    void emptyResultSet() throws DatabaseException {
         ResultSet rs = Mockito.mock(ResultSet.class);
         try {
             Mockito.when(rs.next()).thenReturn(false);
@@ -61,7 +62,7 @@ class GetTasksResultTest {
     }
 
     @Test
-    void toResponsePackage() {
+    void toResponsePackage() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetTasksResult getTasksResult = new GetTasksResult(rs);
         Packable result = getTasksResult.toResponsePackage(UUID.randomUUID());
@@ -100,7 +101,7 @@ class GetTasksResultTest {
     }
 
     @Test
-    void getTasks() {
+    void getTasks() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetTasksResult getTasksResult = new GetTasksResult(rs);
         assertEquals(2, getTasksResult.getTasks().size());

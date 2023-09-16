@@ -2,7 +2,9 @@ package edu.planuj.serverConnection;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.RespondInformation;
+import edu.planuj.clientConnection.abstraction.NotificationObserver;
 import edu.planuj.serverConnection.ServerSendHandlerImplementation;
+import edu.planuj.serverConnection.abstraction.NotificationPackageVisitor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,6 +12,7 @@ import edu.planuj.serverConnection.abstraction.ServerClient;
 import edu.planuj.serverConnection.abstraction.SocketSelector;
 
 import java.io.ObjectOutput;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -30,7 +33,8 @@ class ServerSendHandlerImplementationTest {
     @Test
     void send() {
         //given
-        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation();
+        NotificationPackageVisitor notificationPackageVisitor = Mockito.mock(NotificationPackageVisitor.class);
+        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation(notificationPackageVisitor);
         ServerClient serverClient = Mockito.mock(ServerClient.class);
         ObjectOutput objectOutputStream = Mockito.mock(ObjectOutput.class);
         Packable packable = Mockito.mock(Packable.class);
@@ -44,7 +48,8 @@ class ServerSendHandlerImplementationTest {
     @Test
     void nullOutputStreamSend(){
         //given
-        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation();
+        NotificationPackageVisitor notificationPackageVisitor = Mockito.mock(NotificationPackageVisitor.class);
+        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation(notificationPackageVisitor);
         ServerClient serverClient = Mockito.mock(ServerClient.class);
         ObjectOutput objectOutputStream = Mockito.mock(ObjectOutput.class);
         Packable packable = Mockito.mock(Packable.class);
@@ -66,7 +71,7 @@ class ServerSendHandlerImplementationTest {
         socketSelector = Mockito.mock(SocketSelector.class);
         packable1 = Mockito.mock(Packable.class);
         packable2 = Mockito.mock(Packable.class);
-        Mockito.when(respondInformation.getResponses()).thenReturn(Map.of(1L, packable1, 2L , packable2));
+        Mockito.when(respondInformation.getResponses()).thenReturn(Map.of(1L, List.of(packable1), 2L , List.of(packable2)));
         serverClient1 = Mockito.mock(ServerClient.class);
         serverClient2 = Mockito.mock(ServerClient.class);
         Mockito.when(socketSelector.getExistingClientsFromId(Mockito.any())).thenReturn(Stream.of(new Pair<>(1L, serverClient1), new Pair<>(2L, serverClient2)));
@@ -79,7 +84,8 @@ class ServerSendHandlerImplementationTest {
     @Test
     void sendResponses() {
         //given
-        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation();
+        NotificationPackageVisitor notificationPackageVisitor = Mockito.mock(NotificationPackageVisitor.class);
+        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation(notificationPackageVisitor);
         prepareForSendResponses();
 
         //when
@@ -95,7 +101,8 @@ class ServerSendHandlerImplementationTest {
     @Test
     void OneThrowsSendResponses(){
         //given
-        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation();
+        NotificationPackageVisitor notificationPackageVisitor = Mockito.mock(NotificationPackageVisitor.class);
+        ServerSendHandlerImplementation serverSendHandlerImplementation = new ServerSendHandlerImplementation(notificationPackageVisitor);
         prepareForSendResponses();
         Mockito.when(serverClient1.getObjectOutput()).thenReturn(null);
 

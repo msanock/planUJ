@@ -2,6 +2,7 @@ package edu.planuj.Utils.OperationResults;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
+import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.UserInfo;
 
@@ -15,7 +16,7 @@ import java.util.logging.Logger;
 public class GetTasksResult extends OperationResult{
     List<TaskInfo> tasks;
     @SuppressWarnings("unchecked")
-    public GetTasksResult(ResultSet resultSet) throws SQLException {
+    public GetTasksResult(ResultSet resultSet) throws DatabaseException{
         super();
         tasks = new ArrayList<>();
         try {
@@ -37,13 +38,17 @@ public class GetTasksResult extends OperationResult{
             this.success = false;
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting tasks: ", e);
-            throw new SQLException(e);
+            throw new DatabaseException(e);
         }
     }
 
 
     @SuppressWarnings("unchecked")
     public GetTasksResult(ResponsePackage responsePackage){
+        this.success = responsePackage.isSuccess();
+        if(!success) {
+            this.exception = new Exception(responsePackage.getData(ResponsePackage.Dictionary.ERROR).toString());
+        }
         Object taskList =  responsePackage.getData(ResponsePackage.Dictionary.TASKS_LIST);
         if(taskList instanceof List) {
             this.tasks = (List<TaskInfo>) taskList;

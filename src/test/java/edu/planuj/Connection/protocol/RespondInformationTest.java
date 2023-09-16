@@ -16,7 +16,7 @@ class RespondInformationTest {
         builder.addRespond(1, emptyPack);
         RespondInformation respondInformation = builder.build();
         assertEquals(1, respondInformation.getResponses().size());
-        assertEquals(emptyPack, respondInformation.getResponses().get(1L));
+        assertEquals(emptyPack, respondInformation.getResponses().get(1L).get(0));
     }
 
     @Test
@@ -26,6 +26,6 @@ class RespondInformationTest {
         builder.addRespond(1, emptyPack);
         RespondInformation respondInformation = builder.build();
         assertEquals(1, respondInformation.getResponses().size());
-        assertEquals(emptyPack, respondInformation.getResponses().get(1L));
+        assertEquals(emptyPack, respondInformation.getResponses().get(1L).get(0));
     }
 }

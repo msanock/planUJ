@@ -4,6 +4,9 @@ import edu.planuj.Connection.manager.PackageVisitor;
 import edu.planuj.Connection.protocol.RespondInformation;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
 import edu.planuj.Connection.protocol.packages.UUIDHolder;
+import edu.planuj.Connection.protocol.packages.notifications.BatchNotificationPackage;
+import edu.planuj.Connection.protocol.packages.notifications.NewTaskNotificationPackage;
+import edu.planuj.Connection.protocol.packages.notifications.NewTeamNotificationPackage;
 import edu.planuj.Connection.protocol.packages.taskOperations.*;
 import edu.planuj.Connection.protocol.packages.teamOperations.*;
 import edu.planuj.Connection.protocol.packages.userOperations.GetUsersPackage;
@@ -12,9 +15,13 @@ import edu.planuj.Connection.protocol.packages.EmptyPack;
 import edu.planuj.Connection.protocol.packages.UserInfoRequestPackage;
 import edu.planuj.Server.database.Database;
 import edu.planuj.Server.sql.DatabaseException;
+import edu.planuj.Server.sql.PsqlEngine;
 import edu.planuj.Utils.OperationResults.*;
 import edu.planuj.serverConnection.abstraction.ServerClient;
 import edu.planuj.serverConnection.abstraction.SocketSelector;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerPackageVisitorImplementation implements PackageVisitor {
     private final Database database;
@@ -71,7 +78,26 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         loginPackage.getUserInfo().setId(result.getId());
         sender.setClientID((long) result.getId());
         socketSelector.setClientID((long) result.getId(), sender);
-        return prepareBasicResponse(sender, result, loginPackage);
+
+        RespondInformation.RespondInformationBuilder builder = new RespondInformation.RespondInformationBuilder();
+        builder.addRespond(sender.getClientID(), result.toResponsePackage(loginPackage.getUUID()));
+        try {
+            BatchNotificationPackage batchNotificationPackage = getNotificationsAtLogin(sender.getClientID());
+            if (!batchNotificationPackage.getNotifications().isEmpty())
+                builder.addRespond(sender.getClientID(), batchNotificationPackage);
+        } catch (DatabaseException e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Exception while adding notifications at login: ", e);
+        }
+        return builder.build();
+    }
+
+    private BatchNotificationPackage getNotificationsAtLogin(long clientID) throws DatabaseException{
+        BatchNotificationPackage batchNotificationPackage = new BatchNotificationPackage();
+        GetTeamsResult getTeamsResult = ((PsqlEngine) database).getUnNotifiedTeamsForUser(clientID);
+        GetTasksResult getTasksResult = ((PsqlEngine) database).getUnNotifiedTasksForUser(clientID);
+        getTeamsResult.getTeams().forEach(teamInfo -> batchNotificationPackage.addNotification(new NewTeamNotificationPackage(teamInfo)));
+        getTasksResult.getTasks().forEach(taskInfo -> batchNotificationPackage.addNotification(new NewTaskNotificationPackage(taskInfo)));
+        return batchNotificationPackage;
     }
 
     @Override
@@ -105,7 +131,21 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         } catch (DatabaseException e) {
             return prepareBasicErrorResponse(sender, e);
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
+        RespondInformation.RespondInformationBuilder builder = new RespondInformation.RespondInformationBuilder();
+        builder.addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build());
+        if(sender.getClientID() != addTeamUserPackage.getTeamUser().getId()) {
+            try {
+                database.getUserTeams(addTeamUserPackage.getTeamUser().getId()).getTeams().forEach(teamInfo -> {
+                    if(teamInfo.getId() == addTeamUserPackage.getTeamID()) {
+                        builder.addRespond(addTeamUserPackage.getTeamUser().getId(),
+                                new NewTeamNotificationPackage(teamInfo));
+                    }
+                });
+            } catch (DatabaseException e) {
+                Logger.getAnonymousLogger().log(Level.SEVERE, "Error while preparing a Notification", e);
+            }
+        }
+        return builder.build();
     }
 
     @Override
@@ -182,7 +222,21 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         } catch (DatabaseException e) {
             return prepareBasicErrorResponse(sender, e);
         }
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
+        RespondInformation.RespondInformationBuilder builder = new RespondInformation.RespondInformationBuilder();
+        builder.addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build());
+        if(sender.getClientID() != updateTaskPackage.getUserID()) {
+            try {
+                database.getUserTasks(updateTaskPackage.getUserID()).getTasks().forEach(taskInfo -> {
+                    if(taskInfo.getId() == updateTaskPackage.getTaskID()) {
+                        builder.addRespond(updateTaskPackage.getUserID(),
+                                new NewTaskNotificationPackage(taskInfo));
+                    }
+                });
+            } catch (DatabaseException e) {
+                Logger.getAnonymousLogger().log(Level.SEVERE, "Error while preparing a Notification", e);
+            }
+        }
+        return builder.build();
     }
 
     @Override

@@ -1,7 +1,7 @@
-package edu.planuj.OperationResults;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
+import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.OperationResults.GetTeamsResult;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
@@ -35,13 +35,13 @@ class GetTeamsResultTest {
     }
 
     @Test
-    void creatingTeamResults(){
+    void creatingTeamResults() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetTeamsResult getTeamsResult = new GetTeamsResult(rs);
     }
 
     @Test
-    void emptyResultSet() {
+    void emptyResultSet() throws DatabaseException {
         ResultSet rs = Mockito.mock(ResultSet.class);
         try {
             Mockito.when(rs.next()).thenReturn(false);
@@ -54,7 +54,7 @@ class GetTeamsResultTest {
 
 
     @Test
-    void toResponsePackage() {
+    void toResponsePackage() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetTeamsResult getTeamsResult = new GetTeamsResult(rs);
         Packable result = getTeamsResult.toResponsePackage(UUID.randomUUID());
@@ -73,7 +73,7 @@ class GetTeamsResultTest {
     }
 
     @Test
-    void getTeams() {
+    void getTeams() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetTeamsResult getTeamsResult = new GetTeamsResult(rs);
         assertEquals(2,getTeamsResult.getTeams().size(), 2);

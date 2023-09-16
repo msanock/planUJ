@@ -2,6 +2,7 @@ package edu.planuj.Utils.OperationResults;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
+import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
 
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
 
 public class GetTeamsResult extends OperationResult{
     List<TeamInfo> teams;
-    public GetTeamsResult(ResultSet resultSet) throws SQLException {
+    public GetTeamsResult(ResultSet resultSet) throws DatabaseException {
         super();
         teams = new ArrayList<>();
         try {
@@ -37,12 +38,16 @@ public class GetTeamsResult extends OperationResult{
             this.success = false;
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting teams: ", e);
-            throw new SQLException(e);
+            throw new DatabaseException(e);
         }
     }
 
     @SuppressWarnings("unchecked")
     public GetTeamsResult(ResponsePackage responsePackage){
+        this.success = responsePackage.isSuccess();
+        if(!success) {
+            this.exception = new Exception(responsePackage.getData(ResponsePackage.Dictionary.ERROR).toString());
+        }
         Object teamList= responsePackage.getData(ResponsePackage.Dictionary.TEAMS_LIST);
         if(teamList instanceof List) {
             this.teams = (List<TeamInfo>) teamList;

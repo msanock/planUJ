@@ -1,22 +1,21 @@
 package edu.planuj.Connection.protocol;
 
+import java.util.List;
 import java.util.Map;
 
 public class RespondInformation {
-    // TODO shouldn't it handle sender response differently just so sendResponses could focus on this response in particular
-    // what?
 
-    private Map<Long, Packable> responses;
+    private Map<Long, List<Packable>> responses;
 
     public RespondInformation(RespondInformationBuilder builder) {
         this.responses = builder.responses;
     }
-    public Map<Long, Packable> getResponses() {
+    public Map<Long, List<Packable>> getResponses() {
         return responses;
     }
 
     public static class RespondInformationBuilder {
-        Map<Long, Packable> responses;
+        Map<Long, List<Packable>> responses;
 
         public RespondInformationBuilder() {
             responses = new java.util.HashMap<>();
@@ -24,7 +23,8 @@ public class RespondInformation {
 
 
         public RespondInformationBuilder addRespond(long clientID, Packable respond) {
-            responses.put(clientID, respond);
+            responses.computeIfAbsent(clientID, k -> new java.util.ArrayList<>());
+            responses.get(clientID).add(respond);
             return this;
         }
 

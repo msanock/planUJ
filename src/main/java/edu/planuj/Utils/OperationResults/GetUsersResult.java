@@ -2,6 +2,7 @@ package edu.planuj.Utils.OperationResults;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
+import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.UserInfo;
 
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 
 public class GetUsersResult extends  OperationResult{
     List<UserInfo> users;
-    public GetUsersResult(ResultSet resultSet) throws SQLException {
+    public GetUsersResult(ResultSet resultSet) throws DatabaseException {
         super();
         this.users = new ArrayList<>();
         try {
@@ -26,12 +27,16 @@ public class GetUsersResult extends  OperationResult{
             this.success = false;
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting users: ", e);
-            throw new SQLException(e);
+            throw new DatabaseException(e);
         }
     }
 
     @SuppressWarnings("unchecked")
     public GetUsersResult(ResponsePackage responsePackage){
+        this.success = responsePackage.isSuccess();
+        if(!success) {
+            this.exception = new Exception(responsePackage.getData(ResponsePackage.Dictionary.ERROR).toString());
+        }
         Object userList =  responsePackage.getData(ResponsePackage.Dictionary.USERS_LIST);
         if(userList instanceof List) {
             this.users = (List<UserInfo>) userList;

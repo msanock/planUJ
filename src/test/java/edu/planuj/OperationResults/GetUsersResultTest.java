@@ -1,5 +1,6 @@
 package edu.planuj.OperationResults;
 
+import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.OperationResults.GetUsersResult;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ class GetUsersResultTest {
         return rs;
     }
     @Test
-    void emptyResultSet() {
+    void emptyResultSet() throws DatabaseException {
         ResultSet rs = Mockito.mock(ResultSet.class);
         try {
             Mockito.when(rs.next()).thenReturn(false);
@@ -35,14 +36,14 @@ class GetUsersResultTest {
     }
 
     @Test
-    void createGetUsersResult() {
+    void createGetUsersResult() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetUsersResult getUsersResult = new GetUsersResult(rs);
     }
 
 
     @Test
-    void toResponsePackage() {
+    void toResponsePackage() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetUsersResult getUsersResult = new GetUsersResult(rs);
         getUsersResult.toResponsePackage(java.util.UUID.randomUUID());
@@ -53,7 +54,7 @@ class GetUsersResultTest {
     }
 
     @Test
-    void getUsers() {
+    void getUsers() throws DatabaseException {
         ResultSet rs = createResultSet();
         GetUsersResult getUsersResult = new GetUsersResult(rs);
         assertEquals("username1",getUsersResult.getUsers().get(0).getUsername());

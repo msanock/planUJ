@@ -9,6 +9,8 @@ import edu.planuj.Connection.protocol.packages.teamOperations.*;
 import edu.planuj.Connection.protocol.packages.userOperations.GetUsersPackage;
 import edu.planuj.Connection.protocol.packages.userOperations.LoginPackage;
 import edu.planuj.Server.database.Database;
+import edu.planuj.Server.sql.DatabaseException;
+import edu.planuj.Server.sql.PsqlEngine;
 import edu.planuj.Utils.OperationResults.*;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
@@ -22,6 +24,7 @@ import edu.planuj.serverConnection.abstraction.SocketSelector;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServerPackageVisitorImplementationTest {
 
-    Database database;
+    PsqlEngine database;
     SocketSelector socketSelector;
     ServerClient sender;
     UUID uuid;
@@ -37,7 +40,7 @@ class ServerPackageVisitorImplementationTest {
 
 
     private ServerPackageVisitorImplementation createServerPackageVisitorImplementation() {
-        database = Mockito.mock(Database.class);
+        database = Mockito.mock(PsqlEngine.class);
         socketSelector = Mockito.mock(SocketSelector.class);
         return new ServerPackageVisitorImplementation(database, socketSelector);
     }
@@ -53,15 +56,15 @@ class ServerPackageVisitorImplementationTest {
 
     private void compareRespondInformation(RespondInformation respondInformation){
         assertNotNull(respondInformation);
-        Map<Long , Packable> responses = respondInformation.getResponses();
+        Map<Long , List<Packable>> responses = respondInformation.getResponses();
         assertEquals(1, responses.size());
-        Packable packable1 = responses.get(1L);
+        Packable packable1 = responses.get(1L).get(0);
         assertEquals(response, packable1);
     }
 
     private void compareEmptyRespondInformation(RespondInformation respondInformation){
         assertNotNull(respondInformation);
-        Map<Long , Packable> responses = respondInformation.getResponses();
+        Map<Long , List<Packable>> responses = respondInformation.getResponses();
         assertEquals(1, responses.size());
         assertNotNull(responses.get(1L));
     }
@@ -82,7 +85,7 @@ class ServerPackageVisitorImplementationTest {
     }
 
     @Test
-    void handleLoginPackage() {
+    void handleLoginPackage() throws DatabaseException {
         //given
         ServerPackageVisitorImplementation serverPackageVisitorImplementation = createServerPackageVisitorImplementation();
         LoginPackage packable = Mockito.mock(LoginPackage.class);
@@ -92,6 +95,13 @@ class ServerPackageVisitorImplementationTest {
         Mockito.when(packable.getUserInfo()).thenReturn(userInfo);
         Mockito.when(idResult.getId()).thenReturn(1);
         prepareStuffForTesting( idResult, packable);
+
+        GetTeamsResult getTeamsResult = Mockito.mock(GetTeamsResult.class);
+        GetTasksResult getTasksResult = Mockito.mock(GetTasksResult.class);
+        Mockito.when(database.getUnNotifiedTeamsForUser(1L)).thenReturn(getTeamsResult);
+        Mockito.when(database.getUnNotifiedTasksForUser(1L)).thenReturn(getTasksResult);
+        Mockito.when(getTeamsResult.getTeams()).thenReturn(List.of());
+        Mockito.when(getTasksResult.getTasks()).thenReturn(List.of());
 
         //when
         RespondInformation respondInformation= serverPackageVisitorImplementation.handleLoginPackage(packable, sender);
@@ -317,9 +327,9 @@ class ServerPackageVisitorImplementationTest {
         RespondInformation respondInformation = serverPackageVisitorImplementation.prepareBasicErrorResponse(sender, exception);
 
         //then
-        Map<Long, Packable> packableMap = respondInformation.getResponses();
+        Map<Long, List<Packable>> packableMap = respondInformation.getResponses();
         assertEquals(1, packableMap.size());
-        ResponsePackage packable = (ResponsePackage) packableMap.get(1L);
+        ResponsePackage packable = (ResponsePackage) packableMap.get(1L).get(0);
         assertFalse(packable.isSuccess());
         assertEquals(exception, packable.getData(ResponsePackage.Dictionary.ERROR));
     }

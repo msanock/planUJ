@@ -4,6 +4,7 @@ import edu.planuj.Connection.ObjectOutputFactory;
 import edu.planuj.Connection.connector.download.MultiSocketStreamReaderFactory;
 import edu.planuj.Presentation.database.DatabaseFactory;
 import edu.planuj.Server.database.Database;
+import edu.planuj.Server.sql.PsqlEngine;
 import edu.planuj.serverConnection.abstraction.ServerConnectionManger;
 import edu.planuj.serverConnection.abstraction.SocketSelector;
 
@@ -28,7 +29,9 @@ public class ServerConnectionFactory {
         SocketSelector socketSelector = SocketSelectorImplementation.getInstance();
         Database database = DatabaseFactory.getInstance().getLocalDatabase();
         return new ServerConnectionManagerImplementation(
-                new ServerSendHandlerImplementation(),
+                new ServerSendHandlerImplementation(
+                        new NotificationPackageVisitorImplementation((PsqlEngine) database)
+                ),
                 new ServerPackageVisitorImplementation(database, socketSelector),
                 socketSelector,
                 new ServerSocketFactory() {

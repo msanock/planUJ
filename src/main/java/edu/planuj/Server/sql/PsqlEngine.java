@@ -8,6 +8,7 @@ import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
 import edu.planuj.Utils.UserInfo;
+import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +23,9 @@ public class PsqlEngine implements Database {
             "DO UPDATE SET name=EXCLUDED.name RETURNING id;";
     private static final String ADD_TEAM_QUERY = "INSERT INTO projektuj.teams (name) VALUES (?) ON CONFLICT (name)\n" +
             "DO UPDATE SET name=EXCLUDED.name RETURNING id;";
-    private static final String ADD_USER_TASK_QUERY = "INSERT INTO projektuj.users_tasks (user_id, task_id) VALUES (?, ?);";
+    private static final String ADD_USER_TASK_QUERY = "INSERT INTO projektuj.users_tasks (user_id, task_id, is_notified) VALUES (?, ?, false);";
     private static final String ADD_TASK_QUERY = "INSERT INTO projektuj.tasks (info, deadline, status, team_id, priority) VALUES (?, ?, ?, ?, ?) RETURNING id;";
-    private static final String ADD_TEAM_MEMBER_QUERY = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position) VALUES (?, ?, ?, ?);";
+    private static final String ADD_TEAM_MEMBER_QUERY = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position, is_notified) VALUES (?, ?, ?, ?, false);";
     private static final String GET_USERS_QUERY = "SELECT * FROM projektuj.users;";
 
     private static final String GET_TEAM_TASKS_QUERY = "SELECT t.*, array_agg(u.name) as \"names\" , array_agg(u.id) as \"ids\" \n" +
@@ -53,6 +54,17 @@ public class PsqlEngine implements Database {
             "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?)";
     private static final String REMOVE_USER_FROM_TASK_QUERY = "DELETE FROM projektuj.users_tasks WHERE user_id = ? AND task_id = ?;";
 
+    private static final String MARK_USER_TEAM_AS_NOTIFIED_QUERY = "UPDATE projektuj.teams_users SET is_notified = true WHERE user_id = ? AND team_id = ?;";
+    private static final String MARK_USER_TASK_AS_NOTIFIED_QUERY = "UPDATE projektuj.users_tasks SET is_notified = true WHERE user_id = ? AND task_id = ?;";
+
+    private static final String GET_UNNOTIFIED_USER_TASKS_QUERY = "SELECT(h.*) FROM (\n" +
+            "SELECT t.*, array_agg(u.name) as \"names\" , array_agg(u.id) as \"ids\"\n" +
+            "FROM projektuj.tasks as t\n" +
+            "JOIN projektuj.users_tasks as ut ON t.id = ut.task_id\n" +
+            "JOIN projektuj.users as u ON ut.user_id = u.id\n" +
+            "WHERE ut.is_notified = false\n" +
+            "GROUP BY t.id, t.team_id, t.info, t.status, t.priority, t.deadline\n" +
+            ") as \"h\" WHERE ? = ANY(h.ids)";
     private static class Holder {
         private static final PsqlEngine INSTANCE = new PsqlEngine();
     }
@@ -281,4 +293,56 @@ public class PsqlEngine implements Database {
             throw new DatabaseException(exception);
         }
     }
+
+
+    public void markUserTaskAsNotified(int user_id, int task_id) throws DatabaseException {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     MARK_USER_TASK_AS_NOTIFIED_QUERY)) {
+            sql.setInt(1, user_id);
+            sql.setInt(2, task_id);
+            sql.executeUpdate();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
+    public void markUserTeamAsNotified(int user_id, int team_id) throws DatabaseException {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     MARK_USER_TEAM_AS_NOTIFIED_QUERY)) {
+            sql.setInt(1, user_id);
+            sql.setInt(2, team_id);
+            sql.executeUpdate();
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
+    public GetTeamsResult getUnNotifiedTeamsForUser(long clientID) throws DatabaseException {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     GET_USER_TEAMS_QUERY + " AND tu.is_notified = false")) {
+            sql.setInt(1, Math.toIntExact(clientID));
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetTeamsResult(rs);
+            }
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
+    public GetTasksResult getUnNotifiedTasksForUser(long clientID) throws DatabaseException {
+        try (Connection connection = getConnection();
+             PreparedStatement sql = connection.prepareStatement(
+                     GET_UNNOTIFIED_USER_TASKS_QUERY)) {
+            sql.setInt(1, Math.toIntExact(clientID));
+            try (ResultSet rs = sql.executeQuery()) {
+                return new GetTasksResult(rs);
+            }
+        } catch (SQLException exception) {
+            throw new DatabaseException(exception);
+        }
+    }
+
 }

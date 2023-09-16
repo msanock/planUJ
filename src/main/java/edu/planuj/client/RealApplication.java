@@ -4,6 +4,7 @@ import edu.planuj.Presentation.database.DatabaseFactory;
 import edu.planuj.Server.database.Database;
 import edu.planuj.clientConnection.ClientConnectionFactory;
 import edu.planuj.clientConnection.ClientConnectionManager;
+import edu.planuj.clientConnection.NotificationObserverImplementation;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,6 +24,11 @@ public class RealApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, DatabaseFactory.DatabaseFactoryException {
+
+        //Notifications
+        LoggingNotificationSubscriber loggingNotificationSubscriber = new LoggingNotificationSubscriber();
+        NotificationObserverImplementation.getInstance().subscribe(loggingNotificationSubscriber);
+
         ClientConnectionManager connectionManager = ClientConnectionFactory.getInstance().getClientConnection();
         database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getRequestHandler());
 

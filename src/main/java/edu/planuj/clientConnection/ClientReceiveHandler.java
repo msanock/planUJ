@@ -42,7 +42,7 @@ public class ClientReceiveHandler {
     }
 
     public void onNewPackage(ClientPackable pack, ClientPackageVisitor packageVisitor){
-        Logger.getAnonymousLogger().info("New package received");
+        Logger.getAnonymousLogger().info("New package received " + pack);
         if (pack instanceof ResponsePackage) {
             if(receiver.get() == null){
                 Logger.getAnonymousLogger().severe("Received package without receiver, package " + pack.toString() + " will be ignored");
