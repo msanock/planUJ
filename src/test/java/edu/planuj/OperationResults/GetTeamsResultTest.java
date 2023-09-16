@@ -1,3 +1,4 @@
+package edu.planuj.OperationResults;
 
 import edu.planuj.Connection.protocol.Packable;
 import edu.planuj.Connection.protocol.packages.ResponsePackage;
