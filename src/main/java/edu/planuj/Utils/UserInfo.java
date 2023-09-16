@@ -1,5 +1,7 @@
 package edu.planuj.Utils;
 
+import java.util.Objects;
+
 public class UserInfo implements java.io.Serializable {
     //  TODO refactor it!
     //   UserInfo should only hold information that is being sent during login, id is kept only on server and isn't a part of a logic imo
@@ -10,6 +12,24 @@ public class UserInfo implements java.io.Serializable {
     public UserInfo(String username, int id){
         this.username = username;
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof UserInfo)) return false;
+
+        UserInfo userInfo = (UserInfo) o;
+
+        if (id != userInfo.id) return false;
+        return Objects.equals(username, userInfo.username);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + id;
+        return result;
     }
 
     public String getUsername(){

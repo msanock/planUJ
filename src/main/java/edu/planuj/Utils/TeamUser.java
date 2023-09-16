@@ -7,6 +7,16 @@ public class TeamUser extends UserInfo implements java.io.Serializable{
         MEMBER
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     private Role role;
     private String position;
 

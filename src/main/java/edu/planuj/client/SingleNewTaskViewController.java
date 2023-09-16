@@ -1,6 +1,7 @@
 package edu.planuj.client;
 
 import edu.planuj.Utils.TaskInfo;
+import edu.planuj.Utils.UserInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,10 +11,12 @@ import javafx.scene.layout.TilePane;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class SingleNewTaskViewController implements Initializable {
+public class SingleNewTaskViewController implements Initializable, UserListController {
 
     private TaskInfo taskInfo;
     @FXML
@@ -31,6 +34,8 @@ public class SingleNewTaskViewController implements Initializable {
     @FXML
     public Button addButton;
 
+    HashMap<UserInfo, Button> assignedUsers;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         status.getItems().addAll(TaskInfo.Status.values());
@@ -38,24 +43,50 @@ public class SingleNewTaskViewController implements Initializable {
         priority.setEditable(false);
         priority.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 5));
         deadline.setValue(LocalDate.now());
+
+        assignedUsers = new HashMap<>();
+        for (UserInfo user : taskInfo.getAssignedUsers()) {
+            Button newButton = new Button(user.getUsername());
+            assignedUsers.put(user, newButton);
+            users.getChildren().add(newButton);
+        }
+        MainScreenController.getInstance().membersView.markMembers(taskInfo.getAssignedUsers(), this);
     }
 
     public void setTask(TaskInfo task) {
         this.taskInfo = task;
     }
     public void handleAddButton(ActionEvent e) {
-        taskInfo.setInfo(name.getText());
-        taskInfo.setDeadline(deadline.getValue().atStartOfDay());
-        taskInfo.setPriority(priority.getValue());
-        taskInfo.setStatus(status.getValue());
-
         //some checks TODO add more and to Editable
         if (name.getText().isBlank()) {
             MainScreenController.getInstance().reportError(new Exception("new task with empty name"));
             return;
         }
 
+        taskInfo.setInfo(name.getText());
+        taskInfo.setDeadline(deadline.getValue().atStartOfDay());
+        taskInfo.setPriority(priority.getValue());
+        taskInfo.setStatus(status.getValue());
+        taskInfo.setAssignedUsers(assignedUsers.keySet().stream().toList());
+
         if (AppHandler.getInstance().addNewTask(taskInfo))
             MainScreenController.getInstance().acceptNewTask(taskInfo);
+
+    }
+
+    @Override
+    public void addUser(UserInfo user) {
+        Button newUser = new Button(user.getUsername());
+        users.getChildren().add(newUser);
+        assignedUsers.put(user, newUser);
+    }
+    @Override
+    public void deleteUser(UserInfo user) {
+        users.getChildren().remove(assignedUsers.remove(user));
+    }
+
+    @Override
+    public void cancel() {
+        MainScreenController.getInstance().cancelTaskCreation(taskInfo);
     }
 }

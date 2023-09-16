@@ -130,6 +130,12 @@ public class TasksView extends VBox {
 
         newTaskExists = false;
     }
+
+    public void cancelTaskCreation(TaskInfo taskInfo) {
+        this.getChildren().remove(1);
+
+        newTaskExists = false;
+    }
 }
 
 class SingleTask{

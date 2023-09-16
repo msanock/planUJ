@@ -30,7 +30,5 @@ public class LoginView implements Initializable {
         String login = textField.getText().trim();
 
         AppHandler.getInstance().tryNewLogIn(login);
-
-
     }
 }

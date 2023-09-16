@@ -3,6 +3,7 @@ package edu.planuj.client;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
+import edu.planuj.Utils.UserInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -162,9 +163,16 @@ public class MainScreenController implements Initializable {
 
     public void changeToNormalTask(TaskInfo taskInfo) {
         tasksView.changeToNormalTask(taskInfo);
+        membersView.unmarkAll();
     }
 
     public void acceptNewTask(TaskInfo taskInfo) {
         tasksView.acceptNewTask(taskInfo);
+        membersView.unmarkAll();
+    }
+
+    public void cancelTaskCreation(TaskInfo taskInfo) {
+        tasksView.cancelTaskCreation(taskInfo);
+        membersView.unmarkAll();
     }
 }
