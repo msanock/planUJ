@@ -46,7 +46,11 @@ public class PsqlEngine implements Database {
             "JOIN projektuj.users as \"u\" ON tu.user_id = u.id";
     private static final String GET_TEAM_USERS_QUERY = "SELECT * FROM projektuj.users WHERE id IN (SELECT user_id FROM projektuj.teams_users WHERE team_id = ?);";
     private static final String UPDATE_TASK_QUERY = "UPDATE projektuj.tasks SET info = ?, deadline = ?, status = ?, priority = ? WHERE id = ?;";
-    private static final String GET_USER_TEAMS_QUERY = "SELECT * FROM projektuj.teams WHERE id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?);";
+    private static final String GET_USER_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name\n" +
+            "FROM projektuj.teams as \"t\"\n" +
+            "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id\n" +
+            "JOIN projektuj.users as \"u\" ON tu.user_id = u.id\n" +
+            "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?)";
     private static final String REMOVE_USER_FROM_TASK_QUERY = "DELETE FROM projektuj.users_tasks WHERE user_id = ? AND task_id = ?;";
 
     private static class Holder {

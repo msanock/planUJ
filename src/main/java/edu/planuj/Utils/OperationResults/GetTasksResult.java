@@ -6,6 +6,7 @@ import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.UserInfo;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
 public class GetTasksResult extends OperationResult{
     List<TaskInfo> tasks;
     @SuppressWarnings("unchecked")
-    public GetTasksResult(ResultSet resultSet) {
+    public GetTasksResult(ResultSet resultSet) throws SQLException {
         super();
         tasks = new ArrayList<>();
         try {
@@ -36,6 +37,7 @@ public class GetTasksResult extends OperationResult{
             this.success = false;
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting tasks: ", e);
+            throw new SQLException(e);
         }
     }
 

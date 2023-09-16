@@ -5,6 +5,7 @@ import edu.planuj.Connection.protocol.packages.ResponsePackage;
 import edu.planuj.Utils.UserInfo;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
 
 public class GetUsersResult extends  OperationResult{
     List<UserInfo> users;
-    public GetUsersResult(ResultSet resultSet) {
+    public GetUsersResult(ResultSet resultSet) throws SQLException {
         super();
         this.users = new ArrayList<>();
         try {
@@ -25,6 +26,7 @@ public class GetUsersResult extends  OperationResult{
             this.success = false;
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting users: ", e);
+            throw new SQLException(e);
         }
     }
 

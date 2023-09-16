@@ -44,7 +44,9 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
     }
 
     private RespondInformation prepareBasicResponse(ServerClient sender, OperationResult result, UUIDHolder UUIDpackage){
-        return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), result.toResponsePackage(UUIDpackage.getUUID())).build();
+        return (new RespondInformation.RespondInformationBuilder())
+                .addRespond(sender.getClientID(), result.toResponsePackage(UUIDpackage.getUUID()))
+                .build();
     }
 
 

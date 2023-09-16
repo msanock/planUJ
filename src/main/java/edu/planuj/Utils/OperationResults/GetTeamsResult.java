@@ -6,6 +6,7 @@ import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 
 public class GetTeamsResult extends OperationResult{
     List<TeamInfo> teams;
-    public GetTeamsResult(ResultSet resultSet){
+    public GetTeamsResult(ResultSet resultSet) throws SQLException {
         super();
         teams = new ArrayList<>();
         try {
@@ -36,6 +37,7 @@ public class GetTeamsResult extends OperationResult{
             this.success = false;
             this.exception = e;
             Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Exception while getting teams: ", e);
+            throw new SQLException(e);
         }
     }
 
