@@ -64,4 +64,33 @@ class ServerClientImplementationTest {
         //when & then
         assertThrows( NoStreamReaderException.class,serverClientImplementation::startSocketStreamReader);
     }
+
+    @Test
+    void setGetID(){
+        //given
+        prepareForTesting();
+        ServerClientImplementation serverClientImplementation = new ServerClientImplementation(socket);
+        Long id = 1L;
+
+        //when
+        serverClientImplementation.setClientID(id);
+        Long res = serverClientImplementation.getClientID();
+
+        //then
+        assertEquals(id, res);
+    }
+
+    @Test
+    void getObjectOutput() throws IOException {
+        //given
+        prepareForTesting();
+        ServerClientImplementation serverClientImplementation = new ServerClientImplementation(socket);
+
+        //when
+        serverClientImplementation.setSocketStreamReader(socketStreamReader, objectOutputStream);
+        ObjectOutputStream res = (ObjectOutputStream) serverClientImplementation.getObjectOutput();
+
+        //then
+        assertEquals(objectOutputStream, res);
+    }
 }

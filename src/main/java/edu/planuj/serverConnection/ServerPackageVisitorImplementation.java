@@ -34,23 +34,20 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
 
     @Override
     public RespondInformation handleEmptyPack(EmptyPack emptyPack, ServerClient sender){
-        //TODO?
         return null;
     }
 
     @Override
     public RespondInformation handleUserInfoRequestPack(UserInfoRequestPackage userInfoRequestPack, ServerClient sender){
-        //TODO?
         return null;
     }
 
     @Override
     public RespondInformation handleResponseInformation(ResponsePackage responsePackage, ServerClient sender) {
-        //TODO?
         return null;
     }
 
-    private RespondInformation prepareBasicResponse(ServerClient sender, OperationResult result, UUIDHolder UUIDpackage){
+    RespondInformation prepareBasicResponse(ServerClient sender, OperationResult result, UUIDHolder UUIDpackage){
         return (new RespondInformation.RespondInformationBuilder())
                 .addRespond(sender.getClientID(), result.toResponsePackage(UUIDpackage.getUUID()))
                 .build();
@@ -258,4 +255,6 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
         }
         return (new RespondInformation.RespondInformationBuilder()).addRespond(sender.getClientID(), new ResponsePackage.Builder().setSuccess(true).build()).build();
     }
+
+
 }

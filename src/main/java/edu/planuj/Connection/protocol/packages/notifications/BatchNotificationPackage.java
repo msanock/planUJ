@@ -37,7 +37,7 @@ public class BatchNotificationPackage implements NotificationPackage, ClientPack
     @Override
     public void accept(ClientPackageVisitor v) {
         for (NotificationPackage notification : notifications) {
-            if (notification instanceof ClientPackable)
+            if (notification != null)
                 ((ClientPackable) notification).accept(v);
         }
     }

@@ -62,8 +62,17 @@ class ServerConnectionManagerImplementationTest {
     }
 
     @Test
-    void restartService() {
-        //TODO
+    void restartService() throws IOException {
+        //given
+        prepareForTesting();
+        ServerConnectionManagerImplementation serverConnectionManagerImplementation =
+                Mockito.spy(new ServerConnectionManagerImplementation(
+                        sendHandler, packageVisitor, socketSelector, serverSocketFactory, multiSocketStreamReaderFactory, serverClientFactory, objectOutputFactory));
+
+        //when
+        assertDoesNotThrow(serverConnectionManagerImplementation::restartService);
+
+        //then
     }
 
     @Test
@@ -91,12 +100,54 @@ class ServerConnectionManagerImplementationTest {
     }
 
     @Test
-    void acceptLogOut() {
-        //TODO
+    void startServiceWithException() throws IOException {
+        //given
+        prepareForTesting();
+        ServerConnectionManagerImplementation serverConnectionManagerImplementation =
+                Mockito.spy(new ServerConnectionManagerImplementation(
+                        sendHandler, packageVisitor, socketSelector, serverSocketFactory, multiSocketStreamReaderFactory, serverClientFactory, objectOutputFactory));
+        Mockito.doThrow(ioException).when(serverSocket).accept();
+
+        //when
+        assertDoesNotThrow(serverConnectionManagerImplementation::startService);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ignore) {}
+
+        //then
+        assertDoesNotThrow(()->Mockito.verify(serverConnectionManagerImplementation, Mockito.times(1)).acceptNewConnection(serverSocket));
+        assertDoesNotThrow(()->Mockito.verify(sendHandler, Mockito.times(0)).send(Mockito.any(), eq(serverClient)));
+        Mockito.verify(socketSelector, Mockito.times(0)).AddNewClient(serverClient);
+        try {
+            Mockito.verify(serverSocket, Mockito.times(1)).accept();
+        } catch (IOException ignore) {}
     }
 
     @Test
-    void finishConnection() {
-        //TODO
+    void acceptLogOut() throws IOException {
+        //given
+        prepareForTesting();
+        ServerConnectionManagerImplementation serverConnectionManagerImplementation =
+                Mockito.spy(new ServerConnectionManagerImplementation(
+                        sendHandler, packageVisitor, socketSelector, serverSocketFactory, multiSocketStreamReaderFactory, serverClientFactory, objectOutputFactory));
+
+        //when
+        assertDoesNotThrow(serverConnectionManagerImplementation::acceptLogOut);
+
+        //then
+    }
+
+    @Test
+    void finishConnection() throws IOException {
+        //given
+        prepareForTesting();
+        ServerConnectionManagerImplementation serverConnectionManagerImplementation =
+                Mockito.spy(new ServerConnectionManagerImplementation(
+                        sendHandler, packageVisitor, socketSelector, serverSocketFactory, multiSocketStreamReaderFactory, serverClientFactory, objectOutputFactory));
+
+        //when
+        assertDoesNotThrow(serverConnectionManagerImplementation::FinishConnection);
+
+        //then
     }
 }
