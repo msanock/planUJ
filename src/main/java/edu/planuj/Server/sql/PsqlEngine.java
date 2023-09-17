@@ -41,7 +41,8 @@ public class PsqlEngine implements Database {
     private static final String GET_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name " +
             "FROM projektuj.teams as \"t\" " +
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id " +
-            "JOIN projektuj.users as \"u\" ON tu.user_id = u.id";
+            "JOIN projektuj.users as \"u\" ON tu.user_id = u.id " +
+            "ORDER BY \"tid\";";
     private static final String GET_TEAM_USERS_QUERY = "SELECT * \n" +
             "FROM projektuj.teams_users as tu\n" +
             "JOIN projektuj.users as u ON tu.user_id = u.id\n" +
@@ -51,7 +52,8 @@ public class PsqlEngine implements Database {
             "FROM projektuj.teams as \"t\"\n" +
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id\n" +
             "JOIN projektuj.users as \"u\" ON tu.user_id = u.id\n" +
-            "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?)";
+            "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?) " +
+            "ORDER BY t.id;";
     private static final String REMOVE_USER_FROM_TASK_QUERY = "DELETE FROM projektuj.users_tasks WHERE user_id = ? AND task_id = ?;";
 
     private static final String MARK_USER_TEAM_AS_NOTIFIED_QUERY = "UPDATE projektuj.teams_users SET is_notified = true WHERE user_id = ? AND team_id = ?;";
