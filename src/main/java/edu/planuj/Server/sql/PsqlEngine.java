@@ -195,8 +195,8 @@ public class PsqlEngine implements Database {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
                      ADD_TEAM_MEMBER_QUERY)) {
-            sql.setInt(1, teamUser.getId());
-            sql.setInt(2, team_id);
+            sql.setInt(1, team_id);
+            sql.setInt(2, teamUser.getId());
             sql.setString(3, teamUser.getRole().name());
             sql.setString(4, teamUser.getPosition());
             sql.executeUpdate();
