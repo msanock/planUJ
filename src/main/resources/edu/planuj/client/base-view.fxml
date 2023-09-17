@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
+<?import java.net.URL?>
 <HBox fx:id="pane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="800" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.MainScreenController">
     <children>
         <VBox alignment="TOP_CENTER" minWidth="80" style="-fx-background-color: black;" HBox.hgrow="NEVER">
@@ -45,7 +46,7 @@
             </HBox>
         </StackPane>
     </children>
-    <!--    <stylesheets>-->
-    <!--        <URL value="@base-view.css" />-->
-    <!--    </stylesheets>-->
+        <stylesheets>
+            <URL value="@base-view.css" />
+        </stylesheets>
 </HBox>
