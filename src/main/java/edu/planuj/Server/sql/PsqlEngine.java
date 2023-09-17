@@ -30,8 +30,8 @@ public class PsqlEngine implements Database {
 
     private static final String GET_TEAM_TASKS_QUERY = "SELECT t.*, array_agg(u.name) as \"names\" , array_agg(u.id) as \"ids\" \n" +
             "FROM projektuj.tasks as t\n" +
-            "JOIN projektuj.users_tasks as ut ON t.id = ut.task_id\n" +
-            "JOIN projektuj.users as u ON ut.user_id = u.id\n" +
+            "LEFT JOIN projektuj.users_tasks as ut ON t.id = ut.task_id\n" +
+            "LEFT JOIN projektuj.users as u ON ut.user_id = u.id\n" +
             "WHERE t.team_id = ?\n" +
             "GROUP BY t.id, t.team_id, t.info, t.status, t.priority, t.deadline;";
     private static final String GET_USER_TASKS_QUERY = "SELECT(h.*) FROM (\n" +

@@ -24,8 +24,10 @@ public class GetTasksResult extends OperationResult{
                 Integer[] userIds = (Integer[]) resultSet.getArray("ids").getArray();
                 String[] userNames = (String[]) resultSet.getArray("names").getArray();
                 List<UserInfo> users = new ArrayList<>();
-                for (int i = 0; i < userIds.length; i++) {
-                    users.add(new UserInfo(userNames[i], userIds[i]));
+                if (userIds[0] != null && userNames[0] != null){
+                    for (int i = 0; i < userIds.length; i++) {
+                        users.add(new UserInfo(userNames[i], userIds[i]));
+                    }
                 }
 
                 TaskInfo taskInfo = new TaskInfo(resultSet.getInt("id"), resultSet.getInt("team_id"),
