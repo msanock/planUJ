@@ -6,6 +6,7 @@ import edu.planuj.Utils.OperationResults.GetTeamsResult;
 import edu.planuj.Utils.OperationResults.IdResult;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
+import edu.planuj.Utils.UserInfo;
 
 import java.util.Collections;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class AppHandler {
         client.setClientName(login);
         IdResult idResult;
         try {
-            idResult = RealApplication.getDatabase().addUser(client);
+            idResult = RealApplication.getDatabase().addUser(new UserInfo(client.getUsername(), 0));
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
             return;

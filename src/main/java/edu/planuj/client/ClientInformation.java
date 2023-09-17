@@ -2,9 +2,10 @@ package edu.planuj.client;
 
 import edu.planuj.Utils.UserInfo;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ClientInformation extends UserInfo {
+public class ClientInformation extends UserInfo implements Serializable{
 
     private static final Object lock = new Object();
     private AtomicBoolean isLoggedIn;
@@ -14,10 +15,7 @@ public class ClientInformation extends UserInfo {
     }
 
     public static boolean isCorrectLogin(String login) {
-        // TODO  Rafał skrytykuj, ewentualnie dodaj jakieś factory
-        if (login == null)
-            return false;
-        if (login.isBlank())
+        if (login == null || login.isBlank())
             return false;
 
         return true;
@@ -40,28 +38,6 @@ public class ClientInformation extends UserInfo {
         isLoggedIn.set(true);
         synchronized (lock) {
             lock.notifyAll();
-        }
-    }
-
-//    public void setClientInfo(String name, int id){
-//        super.setName(name);
-//        super.setId(id);
-//    }
-
-    public boolean isLoggedIn(){
-        return isLoggedIn.get();
-    }
-
-
-    public void waitForLogin(){
-        synchronized (lock){
-            while(!isLoggedIn.get()){
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 }
