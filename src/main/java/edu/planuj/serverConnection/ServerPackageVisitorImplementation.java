@@ -147,13 +147,13 @@ public class ServerPackageVisitorImplementation implements PackageVisitor {
 
     @Override
     public RespondInformation handleGetTeamUsersPackage(GetTeamUsersPackage getTeamUsersPackage, ServerClient sender) {
-        GetUsersResult getUsersResult = null;
+        GetTeamUserResult GetTeamUserResult = null;
         try {
-            getUsersResult = database.getTeamUsers(getTeamUsersPackage.getTeamID());
+            GetTeamUserResult = database.getTeamUsers(getTeamUsersPackage.getTeamID());
         } catch (DatabaseException e) {
             return prepareBasicErrorResponse(sender, e);
         }
-        return prepareBasicResponse(sender, getUsersResult, getTeamUsersPackage);
+        return prepareBasicResponse(sender, GetTeamUserResult, getTeamUsersPackage);
     }
 
     @Override

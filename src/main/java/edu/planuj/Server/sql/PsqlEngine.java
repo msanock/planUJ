@@ -1,9 +1,6 @@
 package edu.planuj.Server.sql;
 import edu.planuj.Server.database.Database;
-import edu.planuj.Utils.OperationResults.GetTasksResult;
-import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.GetUsersResult;
-import edu.planuj.Utils.OperationResults.IdResult;
+import edu.planuj.Utils.OperationResults.*;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
@@ -45,7 +42,10 @@ public class PsqlEngine implements Database {
             "FROM projektuj.teams as \"t\" " +
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id " +
             "JOIN projektuj.users as \"u\" ON tu.user_id = u.id";
-    private static final String GET_TEAM_USERS_QUERY = "SELECT * FROM projektuj.users WHERE id IN (SELECT user_id FROM projektuj.teams_users WHERE team_id = ?);";
+    private static final String GET_TEAM_USERS_QUERY = "SELECT * \n" +
+            "FROM projektuj.teams_users as tu\n" +
+            "JOIN projektuj.users as u ON tu.user_id = u.id\n" +
+            "WHERE team_id = ?;";
     private static final String UPDATE_TASK_QUERY = "UPDATE projektuj.tasks SET info = ?, deadline = ?, status = ?, priority = ? WHERE id = ?;";
     private static final String GET_USER_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name\n" +
             "FROM projektuj.teams as \"t\"\n" +
@@ -219,13 +219,13 @@ public class PsqlEngine implements Database {
     }
 
     @Override
-    public GetUsersResult getTeamUsers(int team_id) throws DatabaseException {
+    public GetTeamUserResult getTeamUsers(int team_id) throws DatabaseException {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
                      GET_TEAM_USERS_QUERY)) {
             sql.setInt(1, team_id);
             try (ResultSet rs = sql.executeQuery()) {
-                return new GetUsersResult(rs);
+                return new GetTeamUserResult(rs);
             }
         } catch (SQLException exception) {
             throw new DatabaseException(exception);

@@ -78,5 +78,6 @@ public class ResponsePackage extends UUIDHolder implements ClientPackable {
         public static final String TEAMS_LIST = "teams";
         public static final String TASKS_LIST = "tasks";
         public static final String ERROR = "error";
+        public static final String TEAM_USERS_LIST = "teamUsers";
     }
 }

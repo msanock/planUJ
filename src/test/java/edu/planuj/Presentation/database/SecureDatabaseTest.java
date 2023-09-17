@@ -2,10 +2,7 @@ package edu.planuj.Presentation.database;
 
 import edu.planuj.Server.database.Database;
 import edu.planuj.Server.sql.DatabaseException;
-import edu.planuj.Utils.OperationResults.GetTasksResult;
-import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.GetUsersResult;
-import edu.planuj.Utils.OperationResults.IdResult;
+import edu.planuj.Utils.OperationResults.*;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
 import edu.planuj.Presentation.database.SecureDatabase;
@@ -147,11 +144,11 @@ class SecureDatabaseTest {
         //given
         prepareForTesting();
         SecureDatabase secureDatabase = new SecureDatabase(delegate);
-        GetUsersResult getUsersResult = Mockito.mock(GetUsersResult.class);
+        GetTeamUserResult getUsersResult = Mockito.mock(GetTeamUserResult.class);
         Mockito.when(delegate.getTeamUsers(0)).thenReturn(getUsersResult);
 
         //when
-        GetUsersResult actual = secureDatabase.getTeamUsers(0);
+        GetTeamUserResult actual = secureDatabase.getTeamUsers(0);
 
         //then
         assertDoesNotThrow(() -> Mockito.verify(delegate).getTeamUsers(0));
