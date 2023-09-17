@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,9 +27,12 @@ public class LoginView implements Initializable {
     }
 
 
-    public void handleLogInButton(ActionEvent actionEvent) {
+    public void handleLogInButton(ActionEvent actionEvent) throws IOException {
         String login = textField.getText().trim();
 
-        AppHandler.getInstance().tryNewLogIn(login);
+        if(!AppHandler.getInstance().tryNewLogIn(login)) {
+            //TODO: report something is wrong;
+
+        }
     }
 }

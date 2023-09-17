@@ -8,12 +8,14 @@ import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.UserInfo;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.logging.Logger;
 
 public class AppHandler {
-    MainScreenController mainScreen;
+    MainScreen mainScreen;
 
+    private TeamInfo currentTeam;
     static private AppHandler instance;
 
     public static AppHandler getInstance() {
@@ -25,18 +27,22 @@ public class AppHandler {
 
     AppHandler() { }
 
-    static void setMainScreen(MainScreenController screen) {
+    static void setMainScreen(MainScreen screen) {
         instance.mainScreen = screen;
     }
+
     public void forceLogInView() {
-            mainScreen.setLogInViewExitable(false);
-            mainScreen.showLogInView();
+        try {
+            RealApplication.setScene("login-view.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void tryNewLogIn(String login) {
+    public boolean tryNewLogIn(String login) throws IOException {
         // TODO shouldn't this ClientInformation setting be in a different class
         if (!ClientInformation.isCorrectLogin(login))
-            return;
+            return false;
 
         ClientInformation client = ClientInformation.getInstance();
         client.setClientName(login);
@@ -44,19 +50,21 @@ public class AppHandler {
         try {
             idResult = RealApplication.getDatabase().addUser(new UserInfo(client.getUsername(), 0));
         } catch (DatabaseException e) {
-            mainScreen.reportError(e);
-            return;
+            return false;
         }
         client.logInWithId(idResult.getId());
         Logger.getAnonymousLogger().info("Client set: " + client.getUsername() + " " + client.getId());
 
 
         // now changes in UI, at this point login is considered successful
+
+        RealApplication.setScene("base-view.fxml");
+        mainScreen = MainScreen.getInstance();
+
+
         mainScreen.setTasks(Collections.emptyList());
         mainScreen.setMembers(Collections.emptyList());
         mainScreen.setTeams(Collections.emptyList());
-        mainScreen.setLogInViewExitable(true);
-        mainScreen.closeLogInView();
         GetTeamsResult result = null;
         try {
             result = RealApplication.getDatabase().getTeams();
@@ -69,12 +77,13 @@ public class AppHandler {
 
         mainScreen.showTeams();
 
-
+        return true;
     }
 
     public void setTeam(TeamInfo team) {
         GetTasksResult tasksResult = null;
-        mainScreen.setCurrentTeam(team);
+
+        currentTeam = team;
         mainScreen.setMembers(team.getUsers());
 
         try {
@@ -94,7 +103,7 @@ public class AppHandler {
             mainScreen.reportError(e);
             GetTasksResult tasksResult = null;
             try {
-                TeamInfo team = mainScreen.getCurrentTeam();
+                TeamInfo team = currentTeam;
                 tasksResult = RealApplication.getDatabase().getTeamTasks(team.getId());
             } catch (DatabaseException ex) {
                 mainScreen.reportError(ex);
@@ -119,5 +128,10 @@ public class AppHandler {
             return true;
         }
         return false;
+    }
+
+
+    public TeamInfo getCurrentTeam() {
+        return currentTeam;
     }
 }

@@ -5,12 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import edu.planuj.client.TasksView?>
 <?import edu.planuj.client.MembersView?>
-<HBox fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.MainScreenController" >
+<HBox fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.MainScreen" >
     <children>
         <VBox style="-fx-background-color: black;">
             <children>
                 <Button mnemonicParsing="false" text="menu, wybór teamu" fx:id="teamsButton" onAction="#handleTeamsButton"/>
-                <Button mnemonicParsing="false" text="profile" fx:id="logInButton" onAction="#handleLogInButton"/>
             </children>
         </VBox>
         <StackPane fx:id="main" HBox.hgrow="ALWAYS" alignment="TOP_LEFT" >
