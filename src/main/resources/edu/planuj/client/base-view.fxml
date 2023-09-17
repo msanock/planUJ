@@ -11,7 +11,7 @@
     <children>
         <VBox alignment="TOP_CENTER" minWidth="80" style="-fx-background-color: black;" HBox.hgrow="NEVER">
             <children>
-                <Button fx:id="logInButton" contentDisplay="TOP" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleLogInButton" text="PROFILE" textAlignment="CENTER" textFill="#db5151" VBox.vgrow="NEVER">
+                <Button fx:id="logInButton" contentDisplay="TOP" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleLogInButton" text="PROFILE" textAlignment="CENTER" textFill="darkcyan" VBox.vgrow="NEVER">
                     <graphic>
                         <FontIcon iconColor="darkcyan" iconLiteral="bi-person-circle" iconSize="40" />
                     </graphic>
@@ -19,7 +19,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </Button>
-                <Button fx:id="teamsButton" contentDisplay="TOP" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleTeamsButton" text="TEAMS" textAlignment="CENTER" textFill="#db5151" VBox.vgrow="NEVER">
+                <Button fx:id="teamsButton" contentDisplay="TOP" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleTeamsButton" text="TEAMS" textAlignment="CENTER" textFill="darkcyan" VBox.vgrow="NEVER">
                     <graphic>
                         <FontIcon iconColor="darkcyan" iconLiteral="bi-card-list" iconSize="40" />
                     </graphic>

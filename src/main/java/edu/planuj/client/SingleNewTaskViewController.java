@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class SingleNewTaskViewController implements Initializable, UserListController {
+public class SingleNewTaskViewController implements Initializable{
 
     private TaskInfo taskInfo;
     @FXML
@@ -50,7 +50,6 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
             assignedUsers.put(user, newButton);
             users.getChildren().add(newButton);
         }
-        MainScreenController.getInstance().membersView.markMembers(taskInfo.getAssignedUsers(), this);
     }
 
     public void setTask(TaskInfo task) {
@@ -72,21 +71,5 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
         if (AppHandler.getInstance().addNewTask(taskInfo))
             MainScreenController.getInstance().acceptNewTask(taskInfo);
 
-    }
-
-    @Override
-    public void addUser(UserInfo user) {
-        Button newUser = new Button(user.getUsername());
-        users.getChildren().add(newUser);
-        assignedUsers.put(user, newUser);
-    }
-    @Override
-    public void deleteUser(UserInfo user) {
-        users.getChildren().remove(assignedUsers.remove(user));
-    }
-
-    @Override
-    public void cancel() {
-        MainScreenController.getInstance().cancelTaskCreation(taskInfo);
     }
 }

@@ -44,7 +44,9 @@ public class PsqlEngine implements Database {
     private static final String GET_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name " +
             "FROM projektuj.teams as \"t\" " +
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id " +
-            "JOIN projektuj.users as \"u\" ON tu.user_id = u.id";
+            "JOIN projektuj.users as \"u\" ON tu.user_id = u.id" +
+            "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?) " +
+            "ORDER BY t.id;";
     private static final String GET_TEAM_USERS_QUERY = "SELECT * FROM projektuj.users WHERE id IN (SELECT user_id FROM projektuj.teams_users WHERE team_id = ?);";
     private static final String UPDATE_TASK_QUERY = "UPDATE projektuj.tasks SET info = ?, deadline = ?, status = ?, priority = ? WHERE id = ?;";
     private static final String GET_USER_TEAMS_QUERY = "SELECT t.id as \"tid\", t.name as \"tname\", tu.user_id, tu.team_id, tu.role , tu.position, u.id, u.name\n" +
@@ -195,8 +197,8 @@ public class PsqlEngine implements Database {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
                      ADD_TEAM_MEMBER_QUERY)) {
-            sql.setInt(1, teamUser.getId());
-            sql.setInt(2, team_id);
+            sql.setInt(1, team_id);
+            sql.setInt(2, teamUser.getId());
             sql.setString(3, teamUser.getRole().name());
             sql.setString(4, teamUser.getPosition());
             sql.executeUpdate();

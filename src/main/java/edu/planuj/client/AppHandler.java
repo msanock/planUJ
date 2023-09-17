@@ -66,7 +66,7 @@ public class AppHandler {
         }
 
         if (result != null)
-            mainScreen.setTeams(result.getTeams()); // TODO is nullpointer possible?
+            mainScreen.setTeams(result.getTeams()); // TODO is null possible?
 
         mainScreen.showTeams();
 
@@ -157,5 +157,27 @@ public class AppHandler {
 
         if (teamUsers != null)
             mainScreen.membersView.setMembers(teamUsers.getUsers());
+    }
+
+    public boolean AddUserToTask(UserInfo user, TaskInfo taskInfo) {
+        try {
+            RealApplication.getDatabase().addUserTask(user.getId(), taskInfo.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean removeUserFromTask(UserInfo user, TaskInfo taskInfo) {
+        try {
+            RealApplication.getDatabase().removeUserFromTask(user.getId(), taskInfo.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+
+        return true;
     }
 }
