@@ -273,7 +273,7 @@ class ServerPackageVisitorImplementationTest {
     void handleGetTeamUsersPackage() {
         ServerPackageVisitorImplementation serverPackageVisitorImplementation = createServerPackageVisitorImplementation();
         GetTeamUsersPackage packable = Mockito.mock(GetTeamUsersPackage.class);
-        GetUsersResult result = Mockito.mock(GetUsersResult.class);
+        GetTeamUserResult result = Mockito.mock(GetTeamUserResult.class);
         prepareStuffForTesting( result, packable);
         Mockito.when(packable.getTeamID()).thenReturn(1);
         assertDoesNotThrow(()->Mockito.when(database.getTeamUsers(1)).thenReturn(result));
