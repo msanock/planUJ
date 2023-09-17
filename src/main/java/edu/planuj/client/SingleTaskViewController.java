@@ -74,7 +74,7 @@ public class SingleTaskViewController implements Initializable {
     }
 
     public void handleEditButton(ActionEvent e) {
-        MainScreenController.getInstance().openEditableTask(taskInfo);
+        MainScreen.getInstance().openEditableTask(taskInfo);
 
     }
 }

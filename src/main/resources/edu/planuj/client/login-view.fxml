@@ -1,70 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.LoginView">
-    <center>
-        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <children>
-                <VBox alignment="TOP_RIGHT" VBox.vgrow="ALWAYS">
-                    <children>
-                        <Button mnemonicParsing="false">
-                            <font>
-                                <Font size="11.0" />
-                            </font>
-                        </Button>
-                    </children>
-                </VBox>
-                <Label alignment="CENTER" cache="true" contentDisplay="CENTER" graphicTextGap="60.0" minHeight="0.0" minWidth="0.0" text="Settings" textAlignment="CENTER">
-                    <font>
-                        <Font size="65.0" />
-                    </font>
-                    <padding>
-                        <Insets bottom="40.0" />
-                    </padding>
-                </Label>
-                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                    <children>
-                        <Label text="login">
-                            <font>
-                                <Font size="26.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="textField" prefHeight="200.0" prefWidth="200.0" />
-                    </children>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </HBox>
-                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </HBox>
-                <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Button prefHeight="87.0" prefWidth="241.0"  text="Log in" onAction="#handleLogInButton">
-                        </Button>
-                    </children>
-                </HBox>
-            </children>
-            <opaqueInsets>
-                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-            </opaqueInsets>
-        </VBox>
-    </center>
-    <top>
-        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-    </top>
-    <left>
-        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-    </left>
-    <right>
-        <Pane prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
-    </right>
-    <bottom>
-        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-    </bottom>
-</BorderPane>
+<?import javafx.scene.text.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.LoginView">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <Label alignment="CENTER" text="projektUJ" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+        <font>
+            <Font size="65.0" />
+        </font>
+    </Label>
+    <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        <TextField fx:id="textField" >
+            <VBox.margin>
+                <Insets bottom="20.0" />
+            </VBox.margin>
+        </TextField>
+
+        <Button mnemonicParsing="false" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Login" onAction="#handleLogInButton">
+            <VBox.margin>
+                <Insets top="20.0" />
+            </VBox.margin>
+        </Button>
+    </VBox>
+</GridPane>

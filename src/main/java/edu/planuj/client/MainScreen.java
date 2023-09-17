@@ -3,22 +3,20 @@ package edu.planuj.client;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
-import edu.planuj.Utils.UserInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collection;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-
-public class MainScreenController implements Initializable {
+public class MainScreen {
     @FXML
     public HBox pane;
     @FXML
@@ -27,51 +25,29 @@ public class MainScreenController implements Initializable {
     public Button teamsButton;
     private boolean isTeamsButtonPressed;
     @FXML
-    public Button logInButton;
-    private boolean isLogInButtonPressed;
-    @FXML
     public TeamsView teamsView;
     @FXML
     public MembersView membersView;
     @FXML
     public TasksView tasksView;
-    public BorderPane logInView;
-    public LoginView loginController;
-    static MainScreenController instance;
-    private TeamInfo teamInfo;
+    static MainScreen instance;
 
 
-    public static MainScreenController getInstance() {
+    public static MainScreen getInstance() {
+        if(instance==null)
+            instance = new MainScreen();
         return instance;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public MainScreen(){
         AppHandler.setMainScreen(this);
 
         instance = this;
-        HBox.setHgrow(main, Priority.ALWAYS);
         teamsView = new TeamsView();
         isTeamsButtonPressed = false;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
-
-        try {
-            logInView = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        loginController = loader.getController();
     }
 
-    public TeamInfo getCurrentTeam() {
-        return teamInfo;
-    }
-    public void setCurrentTeam(TeamInfo teamInfo) {
-        this.teamInfo = teamInfo;
-    }
-
-
-    public void setTasks(Collection<TaskInfo> tasks) {
+    public void setTasks(Collection <TaskInfo> tasks) {
         tasksView.setTasks(tasks);
     }
 
@@ -111,36 +87,8 @@ public class MainScreenController implements Initializable {
             main.getChildren().add(teamsView);
         }
     }
-
-    public void handleLogInButton(ActionEvent actionEvent) {
-        if (isLogInButtonPressed) {
-           closeLogInView();
-        }
-        else {
-            showLogInView();
-        }
-    }
-
     public void reportError(Exception e) {
         Logger.getAnonymousLogger().info("Error: " + e.getMessage());
-    }
-
-    public void setLogInViewExitable(boolean flag) {
-        loginController.setExitable(flag);
-    }
-
-    public void showLogInView() {
-        if (!main.getChildren().contains(logInView)) {
-            main.getChildren().add(logInView);
-            isLogInButtonPressed = true;
-        }
-    }
-
-    public void closeLogInView() {
-        if (main.getChildren().contains(logInView) && loginController.getExitable()) {
-            main.getChildren().remove(logInView);
-            isLogInButtonPressed = false;
-        }
     }
 
     public void showTeams() {

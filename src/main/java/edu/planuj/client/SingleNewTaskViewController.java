@@ -50,7 +50,7 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
             assignedUsers.put(user, newButton);
             users.getChildren().add(newButton);
         }
-        MainScreenController.getInstance().membersView.markMembers(taskInfo.getAssignedUsers(), this);
+        MainScreen.getInstance().membersView.markMembers(taskInfo.getAssignedUsers(), this);
     }
 
     public void setTask(TaskInfo task) {
@@ -59,7 +59,7 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
     public void handleAddButton(ActionEvent e) {
         //some checks TODO add more and to Editable
         if (name.getText().isBlank()) {
-            MainScreenController.getInstance().reportError(new Exception("new task with empty name"));
+            MainScreen.getInstance().reportError(new Exception("new task with empty name"));
             return;
         }
 
@@ -70,7 +70,7 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
         taskInfo.setAssignedUsers(assignedUsers.keySet().stream().toList());
 
         if (AppHandler.getInstance().addNewTask(taskInfo))
-            MainScreenController.getInstance().acceptNewTask(taskInfo);
+            MainScreen.getInstance().acceptNewTask(taskInfo);
 
     }
 
@@ -87,6 +87,6 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
 
     @Override
     public void cancel() {
-        MainScreenController.getInstance().cancelTaskCreation(taskInfo);
+        MainScreen.getInstance().cancelTaskCreation(taskInfo);
     }
 }

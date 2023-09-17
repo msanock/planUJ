@@ -33,7 +33,7 @@ public class TeamsView extends HBox {
     }
 
     private void onClickOutside(MouseEvent mouseEvent) {
-        MainScreenController.getInstance().closeTeams();
+        MainScreen.getInstance().closeTeams();
     }
 
 
