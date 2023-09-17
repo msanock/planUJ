@@ -6,6 +6,7 @@ import edu.planuj.clientConnection.ClientConnectionFactory;
 import edu.planuj.clientConnection.ClientConnectionManager;
 import edu.planuj.clientConnection.NotificationObserverImplementation;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -33,7 +34,10 @@ public class RealApplication extends Application {
         database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getRequestHandler());
 
         FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource("base-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setResizable(true);
+        stage.setMinHeight(400);
+        stage.setMinWidth(600);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

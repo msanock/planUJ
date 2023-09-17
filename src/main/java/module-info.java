@@ -3,6 +3,8 @@ module planuj {
     requires javafx.fxml;
     requires java.logging;
     requires java.sql;
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.javafx;
 
 
     exports edu.planuj.client;

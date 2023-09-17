@@ -3,11 +3,12 @@ package edu.planuj.client;
 import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.OperationResults.GetTasksResult;
 import edu.planuj.Utils.OperationResults.GetTeamsResult;
+import edu.planuj.Utils.OperationResults.GetUsersResult;
 import edu.planuj.Utils.OperationResults.IdResult;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.UserInfo;
-
+import edu.planuj.Utils.TeamUser;
 import java.util.Collections;
 import java.util.logging.Logger;
 
@@ -29,8 +30,8 @@ public class AppHandler {
         instance.mainScreen = screen;
     }
     public void forceLogInView() {
-            mainScreen.setLogInViewExitable(false);
-            mainScreen.showLogInView();
+        mainScreen.setLogInViewExitable(false);
+        mainScreen.showLogInView();
     }
 
     public void tryNewLogIn(String login) {
@@ -59,7 +60,7 @@ public class AppHandler {
         mainScreen.closeLogInView();
         GetTeamsResult result = null;
         try {
-            result = RealApplication.getDatabase().getTeams();
+            result = RealApplication.getDatabase().getUserTeams(client.getId());
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
         }
@@ -119,5 +120,42 @@ public class AppHandler {
             return true;
         }
         return false;
+    }
+
+    public boolean addNewTeam(TeamInfo teamInfo) {
+        IdResult idResult = null;
+        try {
+            idResult  = RealApplication.getDatabase().addTeam(teamInfo);
+            teamInfo.setId(idResult.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+
+            return false;
+        }
+        return idResult != null;
+    }
+
+    public boolean AddUserToTeam(TeamUser teamUser) {
+        try {
+            RealApplication.getDatabase().addTeamUser(teamUser, mainScreen.getCurrentTeam().getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    public void updateTeamUsers() {
+        GetUsersResult teamUsers = null;
+        try {
+            teamUsers = RealApplication.getDatabase().getTeamUsers(mainScreen.getCurrentTeam().getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return;
+        }
+
+        if (teamUsers != null)
+            mainScreen.membersView.setMembers(teamUsers.getUsers());
     }
 }
