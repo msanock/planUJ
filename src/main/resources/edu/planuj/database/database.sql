@@ -10,21 +10,22 @@ CREATE  TABLE IF NOT EXISTS projektuj.users (
 	CONSTRAINT pk_users PRIMARY KEY ( id )
  );
 
-CREATE  TABLE IF NOT EXISTS projektuj.teams_users (
-	user_id              integer  NOT NULL  ,
-	team_id              integer  NOT NULL  ,
-	"role"               varchar    ,
-	"position"           varchar    ,
-	is_notified          boolean    ,
-	CONSTRAINT unq_teams_users_team_id UNIQUE ( team_id , user_id),
-	CONSTRAINT fk_teams_users_users FOREIGN KEY ( user_id ) REFERENCES projektuj.users( id )   
- );
-
 CREATE  TABLE IF NOT EXISTS projektuj.teams (
 	id                   serial  NOT NULL  ,
 	name                 varchar  NOT NULL  UNIQUE,
 	CONSTRAINT pk_teams PRIMARY KEY ( id )
  );
+
+ CREATE  TABLE IF NOT EXISTS projektuj.teams_users (
+ 	user_id              integer  NOT NULL  ,
+ 	team_id              integer  NOT NULL  ,
+ 	"role"               varchar    ,
+ 	"position"           varchar    ,
+ 	is_notified          boolean    ,
+ 	CONSTRAINT unq_teams_users_team_id UNIQUE ( team_id , user_id),
+ 	CONSTRAINT fk_teams_users_users FOREIGN KEY ( user_id ) REFERENCES projektuj.users( id ),
+ 	CONSTRAINT fk_teams_users_teams FOREIGN KEY ( team_id ) REFERENCES projektuj.teams( id )
+  );
 
 CREATE  TABLE IF NOT EXISTS projektuj.tasks (
 	id                   serial    ,

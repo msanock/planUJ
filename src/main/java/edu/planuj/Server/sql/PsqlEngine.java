@@ -65,6 +65,12 @@ public class PsqlEngine implements Database {
             "WHERE ut.is_notified = false\n" +
             "GROUP BY t.id, t.team_id, t.info, t.status, t.priority, t.deadline\n" +
             ") as \"h\" WHERE ? = ANY(h.ids)";
+
+    private static final String START_TRANSACTION_QUERY = "BEGIN TRANSACTION;";
+    private static final String COMMIT_TRANSACTION_QUERY = "COMMIT TRANSACTION;";
+    private static final String ADD_TEAM_MEMBER_FROM_NAME = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position, is_notified) " +
+            "VALUES ((SELECT t.id FROM projektuj.teams as t WHERE t.name = ?), ?, ?, ?, false);";
+    private static final String GET_TEAM_FROM_NAME = "SELECT t.id FROM projektuj.teams as t WHERE t.name = ?;";
     private static class Holder {
         private static final PsqlEngine INSTANCE = new PsqlEngine();
     }
@@ -155,10 +161,26 @@ public class PsqlEngine implements Database {
 
     @Override
     public IdResult addTeam(TeamInfo teamInfo) throws DatabaseException {
+        StringBuilder query = new StringBuilder(START_TRANSACTION_QUERY);
+        query.append(ADD_TEAM_QUERY);
+        for (TeamUser teamUser : teamInfo.getUsers()) {
+            query.append(ADD_TEAM_MEMBER_FROM_NAME);
+        }
+        query.append(COMMIT_TRANSACTION_QUERY);
+        String queryStr = query.toString();
         try (Connection connection = getConnection();
-             PreparedStatement sql = connection.prepareStatement(ADD_TEAM_QUERY)) {
+             PreparedStatement sql = connection.prepareStatement(queryStr);
+             PreparedStatement sql2 = connection.prepareStatement(GET_TEAM_FROM_NAME)) {
             sql.setString(1, teamInfo.getName());
-            try (ResultSet rs = sql.executeQuery()) {
+            for (int i = 0; i < teamInfo.getUsers().size(); i++) {
+                sql.setString(2 + i * 4, teamInfo.getName());
+                sql.setInt(3 + i * 4, teamInfo.getUsers().get(i).getId());
+                sql.setString(4 + i * 4, teamInfo.getUsers().get(i).getRole().name());
+                sql.setString(5 + i * 4, teamInfo.getUsers().get(i).getPosition());
+            }
+            sql.execute();
+            sql2.setString(1, teamInfo.getName());
+            try (ResultSet rs = sql2.executeQuery()) {
                 rs.next();
                 teamInfo.setId(rs.getInt("id"));
                 return new IdResult(teamInfo.getId());
