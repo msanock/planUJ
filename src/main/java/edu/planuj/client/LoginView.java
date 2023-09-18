@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static edu.planuj.client.RealApplication.setScene;
+
 public class LoginView implements Initializable {
 
 
@@ -33,6 +35,9 @@ public class LoginView implements Initializable {
         if(!AppHandler.getInstance().tryNewLogIn(login)) {
             //TODO: report something is wrong;
             MainScreenController.getInstance().reportError(new Exception("Login Failed"));
+        } else {
+            setScene("base-view.fxml");
+            AppHandler.getInstance().loggedUserUI();
         }
     }
 }

@@ -39,15 +39,10 @@ public class MainScreenController implements Initializable {
     private TeamInfo teamInfo;
 
     public static MainScreenController getInstance() {
+        if(instance == null)
+            return new MainScreenController();
         return instance;
     }
-    // TO DO
-
-//    public static MainScreen getInstance() {
-//        if(instance==null)
-//            instance = new MainScreen();
-//        return instance;
-//    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,13 +63,6 @@ public class MainScreenController implements Initializable {
     }
 
 
-//    public MainScreen(){
-//        AppHandler.setMainScreen(this);
-//
-//        instance = this;
-//        teamsView = new TeamsView();
-//        isTeamsButtonPressed = false;
-//    }
 
     public void setTasks(Collection<TaskInfo> tasks) {
         tasksView.setTasks(tasks);
