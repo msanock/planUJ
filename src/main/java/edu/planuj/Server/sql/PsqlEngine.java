@@ -43,8 +43,6 @@ public class PsqlEngine implements Database {
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id " +
             "JOIN projektuj.users as \"u\" ON tu.user_id = u.id " +
             "ORDER BY \"tid\";";
-            //"WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?) " +
-            //"ORDER BY t.id;";
     private static final String GET_TEAM_USERS_QUERY = "SELECT * \n" +
             "FROM projektuj.teams_users as tu\n" +
             "JOIN projektuj.users as u ON tu.user_id = u.id\n" +
@@ -267,7 +265,7 @@ public class PsqlEngine implements Database {
     public GetTasksResult getTeamTasks(int team_id) throws DatabaseException {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
-                 GET_TEAM_TASKS_QUERY)) {
+                     GET_TEAM_TASKS_QUERY)) {
             sql.setInt(1, team_id);
             try (ResultSet rs = sql.executeQuery()) {
                 return new GetTasksResult(rs);
