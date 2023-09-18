@@ -5,7 +5,6 @@ import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
 import edu.planuj.Utils.UserInfo;
-import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,10 +95,10 @@ public class PsqlEngine implements Database {
 
     private void createDatabase() throws DatabaseException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream("edu/planuj/database/database.sql");
+
 
         String createQuery;
-        try {
+        try(InputStream is = classloader.getResourceAsStream("database.sql")) {
             createQuery = new String(Objects.requireNonNull(is).readAllBytes());
         } catch (IOException | NullPointerException e) {
             throw new DatabaseException(e);
