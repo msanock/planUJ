@@ -19,6 +19,7 @@ public class MembersView extends VBox {
     HashMap<UserInfo, SingleMemberView> members;
 
     AddNewMemberSection addNewMemberSection;
+    boolean clickable;
 
 
     class SingleMemberView extends Button {
@@ -61,6 +62,14 @@ public class MembersView extends VBox {
             this.setTextFill(Color.RED);
         }
 
+        public void setNotClickable(){
+            this.setDisable(true);
+        }
+
+        public void setClickable(){
+            this.setDisable(false);
+        }
+
         public void unmark() {
             this.setTextFill(Color.AQUA);
         }
@@ -71,9 +80,8 @@ public class MembersView extends VBox {
         members = new HashMap<>();
         observer = null;
         addNewMemberSection = new AddNewMemberSection();
+        clickable = false;
     }
-
-
 
 
     public void setMembers(Collection<? extends UserInfo> members) {
@@ -85,7 +93,7 @@ public class MembersView extends VBox {
             this.members.put(member, newMember);
             this.getChildren().add(newMember);
         }
-
+        unmarkAll();
     }
 
     public void addMember(TeamUser member) {
@@ -97,6 +105,8 @@ public class MembersView extends VBox {
     }
 
     public void markMembers(Collection<? extends UserInfo> toMark, UserListController controller) {
+        members.values().forEach(SingleMemberView::setClickable);
+        clickable = true;
         if (observer != null)
             observer.cancel();
 
@@ -105,10 +115,19 @@ public class MembersView extends VBox {
 
         toMark.forEach((m) -> members.get(m).markIncluded());
     }
+    public void action(Collection<? extends UserInfo> toMark, UserListController controller, boolean isClicked){
+        if(!isClicked){
+            unmarkAll();
+        }else{
+            markMembers(toMark, controller);
+        }
+    }
 
     public void unmarkAll() {
         members.values().forEach(SingleMemberView::unmark);
+        members.values().forEach(SingleMemberView::setNotClickable);
         observer = null;
+        clickable = false;
     }
 
     public void deleteMember(String member) {

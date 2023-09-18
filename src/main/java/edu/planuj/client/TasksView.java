@@ -19,7 +19,7 @@ public class TasksView extends VBox {
     HashMap<TaskInfo, SingleTask> tasks;
     Integer numberOfTasks;
 
-    boolean newTaskExists;
+    public static boolean newTaskExists;
 
     Button newTaskButton; //add new upper section, not just button
 

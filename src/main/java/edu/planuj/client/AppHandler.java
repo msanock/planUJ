@@ -81,6 +81,8 @@ public class AppHandler {
         try {
             mainScreen.setMembers(RealApplication.getDatabase().getTeamUsers(currentTeam.getId()).getTeamUsers());
         }catch(Exception e){}
+        TasksView.newTaskExists =false;
+        mainScreen.membersView.unmarkAll();
 
         try {
             tasksResult = RealApplication.getDatabase().getTeamTasks(team.getId());
