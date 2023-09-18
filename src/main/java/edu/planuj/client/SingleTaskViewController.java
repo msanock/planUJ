@@ -124,12 +124,7 @@ public class SingleTaskViewController implements Initializable, UserListControll
     }
 
     public void handleEditAssignedButton(ActionEvent e) {
-        if (isEditAssignedButtonClicked) {
-            isEditAssignedButtonClicked = false;
-            MainScreenController.getInstance().membersView.unmarkAll();
-        } else {
-            MainScreenController.getInstance().membersView.markMembers(taskInfo.getAssignedUsers(), this);
-            isEditAssignedButtonClicked = true;
-        }
+        isEditAssignedButtonClicked = ! isEditAssignedButtonClicked;
+        MainScreenController.getInstance().membersView.action(taskInfo.getAssignedUsers(), this, isEditAssignedButtonClicked);
     }
 }

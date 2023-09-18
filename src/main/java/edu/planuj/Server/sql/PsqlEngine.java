@@ -5,7 +5,6 @@ import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
 import edu.planuj.Utils.UserInfo;
-import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +17,7 @@ public class PsqlEngine implements Database {
     private final String url = "jdbc:postgresql://localhost:5432/ProjektUJ";
     private static final String ADD_USER_QUERY = "INSERT INTO projektuj.users (name) VALUES (?) ON CONFLICT (name)\n" +
             "DO UPDATE SET name=EXCLUDED.name RETURNING id;";
-    private static final String ADD_TEAM_QUERY = "INSERT INTO projektuj.teams (name) VALUES (?) ON CONFLICT (name)\n" +
-            "DO UPDATE SET name=EXCLUDED.name RETURNING id;";
+    private static final String ADD_TEAM_QUERY = "INSERT INTO projektuj.teams (name) VALUES (?);";
     private static final String ADD_USER_TASK_QUERY = "INSERT INTO projektuj.users_tasks (user_id, task_id, is_notified) VALUES (?, ?, false);";
     private static final String ADD_TASK_QUERY = "INSERT INTO projektuj.tasks (info, deadline, status, team_id, priority) VALUES (?, ?, ?, ?, ?) RETURNING id;";
     private static final String ADD_TEAM_MEMBER_QUERY = "INSERT INTO projektuj.teams_users (team_id, user_id, role, position, is_notified) VALUES (?, ?, ?, ?, false);";
@@ -52,8 +50,7 @@ public class PsqlEngine implements Database {
             "FROM projektuj.teams as \"t\"\n" +
             "JOIN projektuj.teams_users as \"tu\" ON t.id = tu.team_id\n" +
             "JOIN projektuj.users as \"u\" ON tu.user_id = u.id\n" +
-            "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?) " +
-            "ORDER BY t.id;";
+            "WHERE t.id IN (SELECT team_id FROM projektuj.teams_users WHERE user_id = ?) ";
     private static final String REMOVE_USER_FROM_TASK_QUERY = "DELETE FROM projektuj.users_tasks WHERE user_id = ? AND task_id = ?;";
 
     private static final String MARK_USER_TEAM_AS_NOTIFIED_QUERY = "UPDATE projektuj.teams_users SET is_notified = true WHERE user_id = ? AND team_id = ?;";
@@ -98,10 +95,10 @@ public class PsqlEngine implements Database {
 
     private void createDatabase() throws DatabaseException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream("edu/planuj/database/database.sql");
+
 
         String createQuery;
-        try {
+        try(InputStream is = classloader.getResourceAsStream("database.sql")) {
             createQuery = new String(Objects.requireNonNull(is).readAllBytes());
         } catch (IOException | NullPointerException e) {
             throw new DatabaseException(e);
@@ -238,7 +235,8 @@ public class PsqlEngine implements Database {
     public GetTeamsResult getUserTeams(int user_id) throws DatabaseException {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
-                     GET_USER_TEAMS_QUERY)) {
+                     GET_USER_TEAMS_QUERY + " ORDER BY t.id ;"
+             )) {
             sql.setInt(1, user_id);
             try (ResultSet rs = sql.executeQuery()) {
                 return new GetTeamsResult(rs);
@@ -346,7 +344,7 @@ public class PsqlEngine implements Database {
     public GetTeamsResult getUnNotifiedTeamsForUser(long clientID) throws DatabaseException {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
-                     GET_USER_TEAMS_QUERY + " AND tu.is_notified = false")) {
+                     GET_USER_TEAMS_QUERY + " AND tu.is_notified = false ORDER BY t.id ;")) {
             sql.setInt(1, Math.toIntExact(clientID));
             try (ResultSet rs = sql.executeQuery()) {
                 return new GetTeamsResult(rs);

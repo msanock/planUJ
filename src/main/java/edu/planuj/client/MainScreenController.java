@@ -43,13 +43,6 @@ public class MainScreenController implements Initializable {
     public static MainScreenController getInstance() {
         return instance;
     }
-    // TO DO
-
-//    public static MainScreen getInstance() {
-//        if(instance==null)
-//            instance = new MainScreen();
-//        return instance;
-//    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

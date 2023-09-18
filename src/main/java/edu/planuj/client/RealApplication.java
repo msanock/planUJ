@@ -42,7 +42,7 @@ public class RealApplication extends Application {
         stage.setMinWidth(800);
         stage.setTitle("projektUJ");
 
-        setScene("base-view.fxml");
+        setScene("login-view.fxml");
 
         try {
             connectionManager.startService();
@@ -56,17 +56,21 @@ public class RealApplication extends Application {
     public static void retryConnection(){
         try {
             connectionManager.startService();
-            setScene("base-view.fxml");
+            setScene("login-view.fxml");
         }catch (Exception ignored){
 
         }
     }
 
-    public static void setScene(String viewName) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource(viewName));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setScene(scene);
-        stage.show();
+    public static void setScene(String viewName) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource(viewName));
+            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            stage.setScene(scene);
+            stage.show();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws Exception {

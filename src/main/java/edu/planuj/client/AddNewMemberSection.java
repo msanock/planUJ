@@ -17,64 +17,37 @@ import java.util.List;
 
 public class AddNewMemberSection extends VBox {
     Button addButton;
-    Button discardButton;
-    SearchableComboBox<UserInfo> users;
-
-    HBox buttons;
-
-    boolean isButtonClicked;
-
+    SearchableComboBox<UserInfo> usersList;
 
     AddNewMemberSection() {
-        buttons = new HBox(5.0);
         addButton = new Button("ADD NEW TEAM MEMBER");
-        discardButton = new Button("CANCEL");
-        buttons.alignmentProperty().set(Pos.CENTER);
-        VBox.setVgrow(buttons, Priority.ALWAYS);
-
 
         addButton.setGraphic(new FontIcon("bi-plus:20:BLUE"));
-        discardButton.setGraphic(new FontIcon("bi-dash:20:RED"));
-        isButtonClicked = false;
         fillWidthProperty().set(false);
 
-        users = new SearchableComboBox<>();
-        users.setPromptText("user");
+        usersList = new SearchableComboBox<>();
+        usersList.setPromptText("user");
 
-        buttons.getChildren().add(addButton);
-        this.getChildren().add(buttons);
+        Collection<UserInfo> listOfUsers =  AppHandler.getInstance().getUsers();
+        usersList.getItems().clear();
+        usersList.getItems().addAll(listOfUsers);
+
+        this.getChildren().add(usersList);
+        this.getChildren().add(addButton);
 
         addButton.setOnAction(event -> {
-            if (isButtonClicked) {
-                //add new task
-                UserInfo chosen = users.getValue();
+            UserInfo chosen = usersList.getValue();
 
-                if (chosen == null)
-                    return;
+            if (chosen == null)
+                return;
 
-                TeamUser newMember = new TeamUser(chosen, TeamUser.Role.MEMBER, "");
+            TeamUser newMember = new TeamUser(chosen, TeamUser.Role.MEMBER, "");
 
-                if (!AppHandler.getInstance().AddUserToTeam(newMember))
-                    return;
-
-
-                AppHandler.getInstance().updateTeamUsers();
-                isButtonClicked = false;
-                this.getChildren().remove(users);
-                buttons.getChildren().remove(discardButton);
-            } else {
-                Collection<UserInfo> listOfUsers =  AppHandler.getInstance().getUsers();
-                users.getItems().addAll(listOfUsers);
-                this.getChildren().add(0, users);
-                isButtonClicked = true;
-                buttons.getChildren().add(0, discardButton);
+            if (! AppHandler.getInstance().AddUserToTeam(newMember)) {
+                return;
             }
-        });
 
-        discardButton.setOnAction((event) -> {
-            isButtonClicked = false;
-            this.getChildren().remove(users);
-            buttons.getChildren().remove(discardButton);
+            AppHandler.getInstance().updateTeamUsers();
         });
     }
 
