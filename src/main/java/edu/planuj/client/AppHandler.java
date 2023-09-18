@@ -1,13 +1,8 @@
 package edu.planuj.client;
 
 import edu.planuj.Server.sql.DatabaseException;
-import edu.planuj.Utils.OperationResults.GetTasksResult;
-import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.IdResult;
-import edu.planuj.Utils.TaskInfo;
-import edu.planuj.Utils.TeamInfo;
-import edu.planuj.Utils.UserInfo;
-import edu.planuj.Utils.TeamUser;
+import edu.planuj.Utils.*;
+import edu.planuj.Utils.OperationResults.*;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -147,7 +142,7 @@ public class AppHandler {
 
     public boolean AddUserToTeam(TeamUser teamUser) {
         try {
-            RealApplication.getDatabase().addTeamUser(teamUser, mainScreen.getCurrentTeam().getId());
+            RealApplication.getDatabase().addTeamUser(teamUser, currentTeam.getId());
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
             return false;
@@ -157,16 +152,16 @@ public class AppHandler {
     }
 
     public void updateTeamUsers() {
-        GetUsersResult teamUsers = null;
+        GetTeamUserResult teamUsers = null;
         try {
-            teamUsers = RealApplication.getDatabase().getTeamUsers(mainScreen.getCurrentTeam().getId());
+            teamUsers = RealApplication.getDatabase().getTeamUsers(currentTeam.getId());
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
             return;
         }
 
         if (teamUsers != null)
-            mainScreen.membersView.setMembers(teamUsers.getUsers());
+            mainScreen.membersView.setMembers(teamUsers.getTeamUsers());
     }
 
     public boolean AddUserToTask(UserInfo user, TaskInfo taskInfo) {

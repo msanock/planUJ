@@ -32,7 +32,7 @@ public class LoginView implements Initializable {
 
         if(!AppHandler.getInstance().tryNewLogIn(login)) {
             //TODO: report something is wrong;
-
+            MainScreenController.getInstance().reportError(new Exception("Login Failed"));
         }
     }
 }

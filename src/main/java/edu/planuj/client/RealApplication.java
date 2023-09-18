@@ -37,16 +37,12 @@ public class RealApplication extends Application {
         connectionManager = ClientConnectionFactory.getInstance().getClientConnection();
         database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getRequestHandler());
 
-        FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource("base-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
         stage.setResizable(true);
         stage.setMinHeight(400);
-        stage.setMinWidth(600);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+        stage.setMinWidth(800);
+        stage.setTitle("projektUJ");
 
-
+        setScene("base-view.fxml");
 
         try {
             connectionManager.startService();
@@ -60,7 +56,7 @@ public class RealApplication extends Application {
     public static void retryConnection(){
         try {
             connectionManager.startService();
-            setScene("login-view.fxml");
+            setScene("base-view.fxml");
         }catch (Exception ignored){
 
         }
@@ -70,7 +66,6 @@ public class RealApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource(viewName));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setTitle("projektUJ");
         stage.setScene(scene);
         stage.show();
     }

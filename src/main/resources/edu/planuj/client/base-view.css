@@ -8,8 +8,15 @@
     -fx-effect: dropshadow(gaussian, #000000, 20, 0.75, 1.0, 0.0);
 }
 
-#taskView {
-    -fx-background-color: BEBFC5;
+#tasksView {
+    -fx-background-color: #BEBFC5;
+}
+
+#loginPane {
+    -fx-background-color: #BEBFC5;
+    -fx-background-radius: 25.0;
+    -fx-effect: dropshadow(gaussian, #000000, 20, 0.75, 1.0, 0.0);
+    -fx-padding: 8;
 }
 
 

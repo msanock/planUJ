@@ -6,17 +6,17 @@ import edu.planuj.Utils.TeamUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-public class MainScreen {
+public class MainScreenController implements Initializable {
     @FXML
     public HBox pane;
     @FXML
@@ -25,29 +25,58 @@ public class MainScreen {
     public Button teamsButton;
     private boolean isTeamsButtonPressed;
     @FXML
+    public Button logInButton;
+    private boolean isLogInButtonPressed;
+    @FXML
     public TeamsView teamsView;
     @FXML
     public MembersView membersView;
     @FXML
     public TasksView tasksView;
-    static MainScreen instance;
+    public AnchorPane logInView;
+    public LoginView loginController;
+    static MainScreenController instance;
+    private TeamInfo teamInfo;
 
-
-    public static MainScreen getInstance() {
-        if(instance==null)
-            instance = new MainScreen();
+    public static MainScreenController getInstance() {
         return instance;
     }
+    // TO DO
 
-    public MainScreen(){
+//    public static MainScreen getInstance() {
+//        if(instance==null)
+//            instance = new MainScreen();
+//        return instance;
+//    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         AppHandler.setMainScreen(this);
 
         instance = this;
+        HBox.setHgrow(main, Priority.ALWAYS);
         teamsView = new TeamsView();
         isTeamsButtonPressed = false;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+
+        try {
+            logInView = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        loginController = loader.getController();
     }
 
-    public void setTasks(Collection <TaskInfo> tasks) {
+
+//    public MainScreen(){
+//        AppHandler.setMainScreen(this);
+//
+//        instance = this;
+//        teamsView = new TeamsView();
+//        isTeamsButtonPressed = false;
+//    }
+
+    public void setTasks(Collection<TaskInfo> tasks) {
         tasksView.setTasks(tasks);
     }
 
@@ -63,7 +92,7 @@ public class MainScreen {
         tasksView.addTask(task);
     }
     public void addUserToTask(TaskInfo task, String user) {
-
+        //TODO ??
     }
 
     public void addMember(TeamUser name) {
@@ -82,11 +111,37 @@ public class MainScreen {
             // operations on button
 
             // operations on pane
-
             isTeamsButtonPressed = true;
             main.getChildren().add(teamsView);
         }
     }
+
+    public void handleLogInButton(ActionEvent actionEvent) {
+        if (isLogInButtonPressed) {
+            closeLogInView();
+        }
+        else {
+            showLogInView();
+        }
+    }
+    public void setLogInViewExitable(boolean flag) {
+        loginController.setExitable(flag);
+    }
+
+    public void showLogInView() {
+        if (!main.getChildren().contains(logInView)) {
+            main.getChildren().add(logInView);
+            isLogInButtonPressed = true;
+        }
+    }
+
+    public void closeLogInView() {
+        if (main.getChildren().contains(logInView) && loginController.getExitable()) {
+            main.getChildren().remove(logInView);
+            isLogInButtonPressed = false;
+        }
+    }
+
     public void reportError(Exception e) {
         Logger.getAnonymousLogger().info("Error: " + e.getMessage());
     }
@@ -111,7 +166,7 @@ public class MainScreen {
 
     public void changeToNormalTask(TaskInfo taskInfo) {
         tasksView.changeToNormalTask(taskInfo);
-        membersView.unmarkAll();
+        membersView.unmarkAll(); //TODO no unmark!
     }
 
     public void acceptNewTask(TaskInfo taskInfo) {
@@ -123,4 +178,5 @@ public class MainScreen {
         tasksView.cancelTaskCreation(taskInfo);
         membersView.unmarkAll();
     }
+
 }

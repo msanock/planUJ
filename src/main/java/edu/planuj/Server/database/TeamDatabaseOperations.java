@@ -3,7 +3,6 @@ package edu.planuj.Server.database;
 import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.OperationResults.GetTeamUserResult;
 import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.GetUsersResult;
 import edu.planuj.Utils.OperationResults.IdResult;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
