@@ -57,7 +57,6 @@ public class AppHandler {
         // now changes in UI, at this point login is considered successful
         RealApplication.setScene("base-view.fxml");
         mainScreen = MainScreenController.getInstance();
-        mainScreen.setTasks(Collections.emptyList());
         mainScreen.setMembers(Collections.emptyList());
         mainScreen.setTeams(Collections.emptyList());
         mainScreen.setLogInViewExitable(true);
@@ -79,7 +78,9 @@ public class AppHandler {
         GetTasksResult tasksResult = null;
 
         currentTeam = team;
-        mainScreen.setMembers(team.getUsers());
+        try {
+            mainScreen.setMembers(RealApplication.getDatabase().getTeamUsers(currentTeam.getId()).getTeamUsers());
+        }catch(Exception e){}
 
         try {
             tasksResult = RealApplication.getDatabase().getTeamTasks(team.getId());
@@ -88,6 +89,8 @@ public class AppHandler {
         }
         if (tasksResult != null)
             mainScreen.setTasks(tasksResult.getTasks());
+        else
+            mainScreen.setTasks(Collections.emptyList());
         mainScreen.closeTeams();
     }
 

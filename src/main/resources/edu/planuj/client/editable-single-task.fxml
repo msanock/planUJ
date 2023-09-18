@@ -22,7 +22,7 @@
             <Font size="20.0" />
          </font>
       </TextField>
-        <Button fx:id="setButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleSetButton" text="SET BTN" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+        <Button fx:id="setButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleSetButton" text="Save" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
         <TilePane fx:id="users" hgap="10.0" prefColumns="0" prefRows="1" vgap="20.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
       <ChoiceBox fx:id="status" prefWidth="150.0" GridPane.rowIndex="1" />
       <Spinner fx:id="priority" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
