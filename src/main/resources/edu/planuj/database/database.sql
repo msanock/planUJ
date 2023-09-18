@@ -12,7 +12,7 @@ CREATE  TABLE IF NOT EXISTS projektuj.users (
 
 CREATE  TABLE IF NOT EXISTS projektuj.teams (
 	id                   serial  NOT NULL  ,
-	name                 varchar  NOT NULL  UNIQUE,
+	name                 varchar  NOT NULL ,
 	CONSTRAINT pk_teams PRIMARY KEY ( id )
  );
 

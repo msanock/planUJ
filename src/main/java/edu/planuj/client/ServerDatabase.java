@@ -15,6 +15,7 @@ import edu.planuj.Utils.UserInfo;
 import edu.planuj.clientConnection.abstraction.ClientRequestHandler;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 // what a dull name, truly hideous
 public class ServerDatabase implements Database {
@@ -33,20 +34,19 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-        if(response.isSuccess()){
-            return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
-        }else{
-            throw new DatabaseException((Exception)response.getData(ResponsePackage.Dictionary.ERROR));
-        }
+        throwExceptionIfNotSuccess(response);
+        return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
     }
 
     @Override
     public void addUserTask(int user_id, int task_id) throws DatabaseException {
+        ResponsePackage response;
         try {
-            requestHandler.sendAndGetResponse(new AddUserTaskPackage(user_id, task_id));
+            response = requestHandler.sendAndGetResponse(new AddUserTaskPackage(user_id, task_id));
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
+        throwExceptionIfNotSuccess(response);
     }
 
     @Override
@@ -57,6 +57,7 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
+        throwExceptionIfNotSuccess(response);
         return new GetTasksResult(response);
     }
 
@@ -68,17 +69,19 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
+        throwExceptionIfNotSuccess(response);
         return new GetTasksResult(response);
     }
 
     @Override
     public void updateTask(TaskInfo taskInfo) throws DatabaseException {
+        ResponsePackage response;
         try {
-            requestHandler.sendAndGetResponse(new UpdateTaskPackage(taskInfo));
+            response = requestHandler.sendAndGetResponse(new UpdateTaskPackage(taskInfo));
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
+        throwExceptionIfNotSuccess(response);
     }
 
     @Override
@@ -89,16 +92,19 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
+        throwExceptionIfNotSuccess(response);
         return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
     }
 
     @Override
     public void addTeamUser(TeamUser teamUser, int team_id) throws DatabaseException {
+        ResponsePackage response;
         try {
-            requestHandler.sendAndGetResponse(new AddTeamUserPackage(teamUser, team_id));
+            response = requestHandler.sendAndGetResponse(new AddTeamUserPackage(teamUser, team_id));
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
+        throwExceptionIfNotSuccess(response);
     }
 
     @Override
@@ -109,7 +115,7 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
+        throwExceptionIfNotSuccess(response);
         return new GetTeamsResult(response);
     }
 
@@ -121,7 +127,7 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
+        throwExceptionIfNotSuccess(response);
         return new GetTeamUserResult(response);
     }
 
@@ -133,7 +139,7 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
+        throwExceptionIfNotSuccess(response);
         return new GetTeamsResult(response);
     }
 
@@ -145,7 +151,7 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
+        throwExceptionIfNotSuccess(response);
         return new IdResult((Integer) response.getData(ResponsePackage.Dictionary.ID));
     }
 
@@ -157,16 +163,26 @@ public class ServerDatabase implements Database {
         } catch (IOException e) {
             throw new DatabaseException(e);
         }
-
+        throwExceptionIfNotSuccess(response);
         return new GetUsersResult(response);
     }
 
     @Override
     public void removeUserFromTask(int user_id, int task_id) throws DatabaseException {
+        ResponsePackage response;
         try {
-            requestHandler.sendAndGetResponse(new RemoveUserFromTaskPackage(user_id, task_id));
+             response = requestHandler.sendAndGetResponse(new RemoveUserFromTaskPackage(user_id, task_id));
         } catch (IOException e) {
             throw new DatabaseException(e);
+        }
+        throwExceptionIfNotSuccess(response);
+    }
+
+    private void throwExceptionIfNotSuccess(ResponsePackage response) throws DatabaseException {
+        if(response == null){
+            throw new DatabaseException(new DatabaseException(new SQLException("Response is null")));
+        }else if(!response.isSuccess()){
+            throw new DatabaseException((Exception)response.getData(ResponsePackage.Dictionary.ERROR));
         }
     }
 }
