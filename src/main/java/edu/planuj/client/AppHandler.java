@@ -14,6 +14,7 @@ public class AppHandler {
 
     private TeamInfo currentTeam;
     static private AppHandler instance;
+    private ClientInformation client;
 
     public static AppHandler getInstance() {
         if (instance == null)
@@ -22,36 +23,40 @@ public class AppHandler {
         return instance;
     }
 
-    AppHandler() { }
+    AppHandler() {
+        mainScreen = MainScreenController.getInstance();
+    }
 
     static void setMainScreen(MainScreenController screen) {
         instance.mainScreen = screen;
     }
 
     public void forceLogInView() {
-        mainScreen.setLogInViewExitable(false);
-        mainScreen.showLogInView();
+        RealApplication.setScene("login-view.fxml");
     }
 
-    public boolean tryNewLogIn(String login) throws IOException {
+    public boolean tryNewLogIn(String login) {
         // TODO shouldn't this ClientInformation setting be in a different class
         if (!ClientInformation.isCorrectLogin(login))
             return false;
 
-        ClientInformation client = ClientInformation.getInstance();
+        client = ClientInformation.getInstance();
         client.setClientName(login);
         IdResult idResult;
         try {
             idResult = RealApplication.getDatabase().addUser(new UserInfo(client.getUsername(), 0));
         } catch (DatabaseException e) {
-            mainScreen.reportError(e);
             return false;
         }
         client.logInWithId(idResult.getId());
         Logger.getAnonymousLogger().info("Client set: " + client.getUsername() + " " + client.getId());
 
-
+        return true;
+    }
+    public void loggedUserUI() throws IOException{
         // now changes in UI, at this point login is considered successful
+        RealApplication.setScene("base-view.fxml");
+        mainScreen = MainScreenController.getInstance();
         mainScreen.setTasks(Collections.emptyList());
         mainScreen.setMembers(Collections.emptyList());
         mainScreen.setTeams(Collections.emptyList());
@@ -61,15 +66,13 @@ public class AppHandler {
         try {
             result = RealApplication.getDatabase().getUserTeams(client.getId());
         } catch (DatabaseException e) {
-            mainScreen.reportError(e);
+            e.printStackTrace();
         }
 
         if (result != null)
             mainScreen.setTeams(result.getTeams()); // TODO is null possible?
 
         mainScreen.showTeams();
-
-        return true;
     }
 
     public void setTeam(TeamInfo team) {
@@ -142,7 +145,10 @@ public class AppHandler {
 
     public boolean AddUserToTeam(TeamUser teamUser) {
         try {
-            RealApplication.getDatabase().addTeamUser(teamUser, currentTeam.getId());
+            if(currentTeam!=null)
+                RealApplication.getDatabase().addTeamUser(teamUser, currentTeam.getId());
+            else
+                return false;
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
             return false;
