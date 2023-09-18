@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.time.Duration;
@@ -73,6 +74,8 @@ public class SingleTaskViewController implements Initializable, UserListControll
         UserInfo userInfo;
         UserButton(UserInfo userInfo) {
             super(userInfo.getUsername());
+            this.getStyleClass().add("assigned-user-button");
+            this.setGraphic(new FontIcon("bi-person:30"));
             this.userInfo = userInfo;
         }
 
@@ -105,9 +108,9 @@ public class SingleTaskViewController implements Initializable, UserListControll
     public void initialize(URL location, ResourceBundle resources) {
         assignedUsers = new HashMap<>();
         name.setText(taskInfo.getInfo());
-        status.setText("STATUS: \n" + taskInfo.getStatus().name());
-        priority.setText("PRIORITY: " + taskInfo.getPriority());
-        deadline.setText("DEADLINE: \n" + format(taskInfo.getDeadline()));
+        status.setText(taskInfo.getStatus().name());
+        priority.setText(String.valueOf(taskInfo.getPriority()));
+        deadline.setText(format(taskInfo.getDeadline()));
         isEditAssignedButtonClicked = false;
         for (var user : taskInfo.getAssignedUsers()){
             UserButton button = new UserButton(user);

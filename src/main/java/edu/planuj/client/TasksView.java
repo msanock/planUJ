@@ -28,6 +28,8 @@ public class TasksView extends VBox {
         numberOfTasks = 0; //
         tasks = new HashMap<>();
         newTaskButton = new Button("ADD NEW TASK");
+        //this.getStylesheets().add("base-view.css");
+        this.getStyleClass().add("tasksView");
         newTaskButton.setOnAction( (event) -> {
             if (!newTaskExists) {
                 SingleTask newSingleTaskView = null;

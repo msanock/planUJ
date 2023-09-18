@@ -63,7 +63,6 @@ public class RealApplication extends Application {
     }
 
     public static void setScene(String viewName) throws IOException {
-
         FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource(viewName));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setScene(scene);

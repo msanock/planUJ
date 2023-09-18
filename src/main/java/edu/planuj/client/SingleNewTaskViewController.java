@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -36,6 +37,20 @@ public class SingleNewTaskViewController implements Initializable{
 
     HashMap<UserInfo, Button> assignedUsers;
 
+    class UserButton extends Button {
+        UserInfo userInfo;
+        UserButton(UserInfo userInfo) {
+            super(userInfo.getUsername());
+            this.getStyleClass().add("assigned-user-button");
+            this.setGraphic(new FontIcon("bi-person:30"));
+            this.userInfo = userInfo;
+        }
+
+        public UserInfo getUserInfo() {
+            return userInfo;
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         status.getItems().addAll(TaskInfo.Status.values());
@@ -46,7 +61,7 @@ public class SingleNewTaskViewController implements Initializable{
 
         assignedUsers = new HashMap<>();
         for (UserInfo user : taskInfo.getAssignedUsers()) {
-            Button newButton = new Button(user.getUsername());
+            Button newButton = new UserButton(user);
             assignedUsers.put(user, newButton);
             users.getChildren().add(newButton);
         }

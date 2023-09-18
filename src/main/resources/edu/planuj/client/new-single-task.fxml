@@ -1,34 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<GridPane fx:id="taskBox" vgap="10.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<GridPane fx:id="taskBox" styleClass="single-task" vgap="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints minHeight="100.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="70.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <TextField fx:id="name" promptText="new Task" text="new Task" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+        <TextField fx:id="name" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
             <font>
                 <Font size="20.0" />
             </font>
         </TextField>
-        <Button fx:id="addButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleAddButton" text="ADD BTN" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+        <Button fx:id="addButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleAddButton" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+            <graphic>
+                <FontIcon iconColor="darkcyan" iconLiteral="bi-pencil-fill" iconSize="30" />
+            </graphic>
+        </Button>
         <TilePane fx:id="users" hgap="10.0" prefColumns="0" prefRows="1" vgap="20.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-        <ChoiceBox fx:id="status" prefWidth="150.0" GridPane.rowIndex="1" />
-        <Spinner fx:id="priority" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <DatePicker fx:id="deadline" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <VBox alignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Label>
+                <graphic>
+                    <FontIcon iconColor="darkcyan" iconLiteral="bi-hammer" iconSize="40" />
+                </graphic>
+            </Label>
+
+            <ChoiceBox fx:id="status" prefWidth="150.0" />
+        </VBox>
+        <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Label>
+                <graphic>
+                    <FontIcon iconColor="darkcyan" iconLiteral="bi-reception-4" iconSize="40" />
+                </graphic>
+            </Label>
+
+            <Spinner fx:id="priority" editable="true" />
+        </VBox>
+        <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Label>
+                <graphic>
+                    <FontIcon iconColor="darkcyan" iconLiteral="bi-calendar2-event" iconSize="40" />
+                </graphic>
+            </Label>
+
+            <DatePicker fx:id="deadline" />
+        </VBox>
+
     </children>
     <padding>
-        <Insets top="10.0" />
+        <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
     </padding>
 </GridPane>

@@ -22,6 +22,8 @@ public class MainScreenController implements Initializable {
     @FXML
     public StackPane main;
     @FXML
+    public HBox base;
+    @FXML
     public Button teamsButton;
     private boolean isTeamsButtonPressed;
     @FXML
@@ -67,14 +69,6 @@ public class MainScreenController implements Initializable {
         loginController = loader.getController();
     }
 
-
-//    public MainScreen(){
-//        AppHandler.setMainScreen(this);
-//
-//        instance = this;
-//        teamsView = new TeamsView();
-//        isTeamsButtonPressed = false;
-//    }
 
     public void setTasks(Collection<TaskInfo> tasks) {
         tasksView.setTasks(tasks);

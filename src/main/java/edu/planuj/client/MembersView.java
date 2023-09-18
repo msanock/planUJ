@@ -76,7 +76,7 @@ public class MembersView extends VBox {
 
 
 
-    public void setMembers(Collection<? extends UserInfo> members) {
+    public void setMembers(Collection<TeamUser> members) {
         this.members.clear();
         this.getChildren().clear();
         this.getChildren().add(addNewMemberSection);
@@ -114,7 +114,6 @@ public class MembersView extends VBox {
     public void deleteMember(String member) {
         this.getChildren().remove(members.remove(member));
     }
-
 
 }
 
