@@ -3,6 +3,7 @@ package edu.planuj.client;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.clientConnection.abstraction.NotificationSubscriber;
+import org.controlsfx.control.NotificationPane;
 
 import java.util.logging.Logger;
 

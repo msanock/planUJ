@@ -5,6 +5,7 @@ module edu.planuj {
     requires java.sql;
     requires org.kordamp.ikonli.core;
     requires org.kordamp.ikonli.javafx;
+    requires org.controlsfx.controls;
 
 
     exports edu.planuj.client;

@@ -9,6 +9,8 @@ import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.UserInfo;
 import edu.planuj.Utils.TeamUser;
+
+import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Logger;
 
@@ -179,5 +181,13 @@ public class AppHandler {
         }
 
         return true;
+    }
+
+    public Collection<UserInfo> getUsers() {
+        try {
+            return RealApplication.getDatabase().getUsers().getUsers();
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

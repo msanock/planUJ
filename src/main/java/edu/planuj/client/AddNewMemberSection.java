@@ -9,14 +9,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.SearchableComboBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.util.Collection;
 import java.util.List;
 
 public class AddNewMemberSection extends VBox {
     Button addButton;
     Button discardButton;
-    TextField teamName;
+    SearchableComboBox<UserInfo> users;
 
     HBox buttons;
 
@@ -36,8 +38,8 @@ public class AddNewMemberSection extends VBox {
         isButtonClicked = false;
         fillWidthProperty().set(false);
 
-        teamName = new TextField();
-        teamName.setPromptText("New Member Name");
+        users = new SearchableComboBox<>();
+        users.setPromptText("user");
 
         buttons.getChildren().add(addButton);
         this.getChildren().add(buttons);
@@ -45,17 +47,12 @@ public class AddNewMemberSection extends VBox {
         addButton.setOnAction(event -> {
             if (isButtonClicked) {
                 //add new task
+                UserInfo chosen = users.getValue();
 
-                int id = 0;
-                try {
-                    id = Integer.parseInt(teamName.getText());
-                } catch (NumberFormatException e) {
-                    return;
-                }
-                if (id < 0)
+                if (chosen == null)
                     return;
 
-                TeamUser newMember = new TeamUser("", id, TeamUser.Role.MEMBER, "");
+                TeamUser newMember = new TeamUser(chosen, TeamUser.Role.MEMBER, "");
 
                 if (!AppHandler.getInstance().AddUserToTeam(newMember))
                     return;
@@ -63,10 +60,12 @@ public class AddNewMemberSection extends VBox {
 
                 AppHandler.getInstance().updateTeamUsers();
                 isButtonClicked = false;
-                this.getChildren().remove(teamName);
+                this.getChildren().remove(users);
                 buttons.getChildren().remove(discardButton);
             } else {
-                this.getChildren().add(0, teamName);
+                Collection<UserInfo> listOfUsers =  AppHandler.getInstance().getUsers();
+                users.getItems().addAll(listOfUsers);
+                this.getChildren().add(0, users);
                 isButtonClicked = true;
                 buttons.getChildren().add(0, discardButton);
             }
@@ -74,7 +73,7 @@ public class AddNewMemberSection extends VBox {
 
         discardButton.setOnAction((event) -> {
             isButtonClicked = false;
-            this.getChildren().remove(teamName);
+            this.getChildren().remove(users);
             buttons.getChildren().remove(discardButton);
         });
     }

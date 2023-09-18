@@ -29,6 +29,11 @@ public class UserInfo implements java.io.Serializable {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
+
     public String getUsername(){
         return username;
     }

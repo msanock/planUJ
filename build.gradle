@@ -41,6 +41,8 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.2.24'
     implementation 'org.mockito:mockito-core:4.+'
     implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation('org.controlsfx:controlsfx:11.1.2')
+    //implementation group: 'org.controlsfx', name: 'controlsfx', version: '8.0.5'
     implementation 'org.kordamp.ikonli:ikonli-bootstrapicons-pack:12.3.1'
 }
 
