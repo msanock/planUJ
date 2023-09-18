@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class SingleNewTaskViewController implements Initializable, UserListController {
+public class SingleNewTaskViewController implements Initializable{
 
     private TaskInfo taskInfo;
     @FXML
@@ -50,7 +50,6 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
             assignedUsers.put(user, newButton);
             users.getChildren().add(newButton);
         }
-        MainScreen.getInstance().membersView.markMembers(taskInfo.getAssignedUsers(), this);
     }
 
     public void setTask(TaskInfo task) {
@@ -59,7 +58,7 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
     public void handleAddButton(ActionEvent e) {
         //some checks TODO add more and to Editable
         if (name.getText().isBlank()) {
-            MainScreen.getInstance().reportError(new Exception("new task with empty name"));
+            MainScreenController.getInstance().reportError(new Exception("new task with empty name"));
             return;
         }
 
@@ -70,23 +69,7 @@ public class SingleNewTaskViewController implements Initializable, UserListContr
         taskInfo.setAssignedUsers(assignedUsers.keySet().stream().toList());
 
         if (AppHandler.getInstance().addNewTask(taskInfo))
-            MainScreen.getInstance().acceptNewTask(taskInfo);
+            MainScreenController.getInstance().acceptNewTask(taskInfo);
 
-    }
-
-    @Override
-    public void addUser(UserInfo user) {
-        Button newUser = new Button(user.getUsername());
-        users.getChildren().add(newUser);
-        assignedUsers.put(user, newUser);
-    }
-    @Override
-    public void deleteUser(UserInfo user) {
-        users.getChildren().remove(assignedUsers.remove(user));
-    }
-
-    @Override
-    public void cancel() {
-        MainScreen.getInstance().cancelTaskCreation(taskInfo);
     }
 }

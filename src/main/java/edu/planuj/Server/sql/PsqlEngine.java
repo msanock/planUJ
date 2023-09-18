@@ -265,7 +265,7 @@ public class PsqlEngine implements Database {
     public GetTasksResult getTeamTasks(int team_id) throws DatabaseException {
         try (Connection connection = getConnection();
              PreparedStatement sql = connection.prepareStatement(
-                 GET_TEAM_TASKS_QUERY)) {
+                     GET_TEAM_TASKS_QUERY)) {
             sql.setInt(1, team_id);
             try (ResultSet rs = sql.executeQuery()) {
                 return new GetTasksResult(rs);

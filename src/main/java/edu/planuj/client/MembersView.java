@@ -18,9 +18,11 @@ public class MembersView extends VBox {
 
     HashMap<UserInfo, SingleMemberView> members;
 
+    AddNewMemberSection addNewMemberSection;
+
 
     class SingleMemberView extends Button {
-        TeamUser member;
+        UserInfo member;
         boolean isIncluded;
 
         EventHandler<ActionEvent> handleOnAction = (event -> {
@@ -35,7 +37,7 @@ public class MembersView extends VBox {
             }
         });
 
-        SingleMemberView(TeamUser member) {
+        SingleMemberView(UserInfo member) {
             this.member = member;
             //this.setGraphic("jakaś grafika );
             this.setMinHeight(60);
@@ -68,14 +70,16 @@ public class MembersView extends VBox {
     public MembersView() {
         members = new HashMap<>();
         observer = null;
+        addNewMemberSection = new AddNewMemberSection();
     }
 
 
 
 
-    public void setMembers(Collection<TeamUser> members) {
+    public void setMembers(Collection<? extends UserInfo> members) {
         this.members.clear();
         this.getChildren().clear();
+        this.getChildren().add(addNewMemberSection);
         for (var member : members) {
             SingleMemberView newMember = new SingleMemberView(member);
             this.members.put(member, newMember);
@@ -92,7 +96,7 @@ public class MembersView extends VBox {
         }
     }
 
-    public void markMembers(Collection<UserInfo> toMark, UserListController controller) {
+    public void markMembers(Collection<? extends UserInfo> toMark, UserListController controller) {
         if (observer != null)
             observer.cancel();
 

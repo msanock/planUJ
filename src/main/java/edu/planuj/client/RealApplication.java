@@ -6,6 +6,7 @@ import edu.planuj.clientConnection.ClientConnectionFactory;
 import edu.planuj.clientConnection.ClientConnectionManager;
 import edu.planuj.clientConnection.NotificationObserverImplementation;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -36,18 +37,26 @@ public class RealApplication extends Application {
         connectionManager = ClientConnectionFactory.getInstance().getClientConnection();
         database = DatabaseFactory.getInstance().getServerDatabase(connectionManager.getRequestHandler());
 
+        stage.setResizable(true);
+        stage.setMinHeight(400);
+        stage.setMinWidth(800);
+        stage.setTitle("projektUJ");
+
+        setScene("base-view.fxml");
+
         try {
             connectionManager.startService();
-            setScene("login-view.fxml");
         } catch (ConnectException e) {
             setScene("retry-connection.fxml");
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Exception while connecting to server: ", e);
+            //throw new RuntimeException(e);
         }
     }
 
     public static void retryConnection(){
         try {
             connectionManager.startService();
-            setScene("login-view.fxml");
+            setScene("base-view.fxml");
         }catch (Exception ignored){
 
         }
@@ -57,7 +66,6 @@ public class RealApplication extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(RealApplication.class.getResource(viewName));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setTitle("projektUJ");
         stage.setScene(scene);
         stage.show();
     }

@@ -16,12 +16,14 @@ public class TeamsView extends HBox {
     HashMap<TeamInfo, SingleTeamView> teams;
     VBox teamList;
 
+
+
     public TeamsView() {
 
         teams = new HashMap<>();
         //this.setBackground(new Background(new BackgroundFill(Color.BLACK,new CornerRadii(10), new Insets(0))));
-
         teamList = new TeamList();
+        teamList.getChildren().add(new AddNewTeamSection());
         Pane rest = new AnchorPane();
         HBox.setHgrow(rest, Priority.ALWAYS);
         rest.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -29,17 +31,18 @@ public class TeamsView extends HBox {
         this.getChildren().add(teamList);
         this.getChildren().add(rest);
         rest.setOnMouseClicked(this::onClickOutside);
-
     }
 
     private void onClickOutside(MouseEvent mouseEvent) {
-        MainScreen.getInstance().closeTeams();
+        MainScreenController.getInstance().closeTeams();
     }
 
 
     public void setTeams(Collection<TeamInfo> newTeams) {
         this.teams.clear();
         teamList.getChildren().clear();
+        teamList.getChildren().add(new AddNewTeamSection());
+
         for (var team : newTeams) {
             SingleTeamView newTeam = new SingleTeamView(team);
             this.teams.put(team, newTeam);
@@ -63,8 +66,8 @@ public class TeamsView extends HBox {
 class TeamList extends VBox {
     TeamList() {
         this.setFillWidth(true);
-        this.prefWidth(500);
-        this.minWidth(400);
+        this.prefWidth(1000);
+        this.minWidth(1000);
         this.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY)));
 
     }

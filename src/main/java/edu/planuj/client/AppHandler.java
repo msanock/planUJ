@@ -1,19 +1,16 @@
 package edu.planuj.client;
 
 import edu.planuj.Server.sql.DatabaseException;
-import edu.planuj.Utils.OperationResults.GetTasksResult;
-import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.IdResult;
-import edu.planuj.Utils.TaskInfo;
-import edu.planuj.Utils.TeamInfo;
-import edu.planuj.Utils.UserInfo;
+import edu.planuj.Utils.*;
+import edu.planuj.Utils.OperationResults.*;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Logger;
 
 public class AppHandler {
-    MainScreen mainScreen;
+    MainScreenController mainScreen;
 
     private TeamInfo currentTeam;
     static private AppHandler instance;
@@ -27,16 +24,13 @@ public class AppHandler {
 
     AppHandler() { }
 
-    static void setMainScreen(MainScreen screen) {
+    static void setMainScreen(MainScreenController screen) {
         instance.mainScreen = screen;
     }
 
     public void forceLogInView() {
-        try {
-            RealApplication.setScene("login-view.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mainScreen.setLogInViewExitable(false);
+        mainScreen.showLogInView();
     }
 
     public boolean tryNewLogIn(String login) throws IOException {
@@ -50,6 +44,7 @@ public class AppHandler {
         try {
             idResult = RealApplication.getDatabase().addUser(new UserInfo(client.getUsername(), 0));
         } catch (DatabaseException e) {
+            mainScreen.reportError(e);
             return false;
         }
         client.logInWithId(idResult.getId());
@@ -57,23 +52,20 @@ public class AppHandler {
 
 
         // now changes in UI, at this point login is considered successful
-
-        RealApplication.setScene("base-view.fxml");
-        mainScreen = MainScreen.getInstance();
-
-
         mainScreen.setTasks(Collections.emptyList());
         mainScreen.setMembers(Collections.emptyList());
         mainScreen.setTeams(Collections.emptyList());
+        mainScreen.setLogInViewExitable(true);
+        mainScreen.closeLogInView();
         GetTeamsResult result = null;
         try {
-            result = RealApplication.getDatabase().getTeams();
+            result = RealApplication.getDatabase().getUserTeams(client.getId());
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
         }
 
         if (result != null)
-            mainScreen.setTeams(result.getTeams()); // TODO is nullpointer possible?
+            mainScreen.setTeams(result.getTeams()); // TODO is null possible?
 
         mainScreen.showTeams();
 
@@ -133,5 +125,72 @@ public class AppHandler {
 
     public TeamInfo getCurrentTeam() {
         return currentTeam;
+    }
+
+    public boolean addNewTeam(TeamInfo teamInfo) {
+        IdResult idResult = null;
+        try {
+            idResult  = RealApplication.getDatabase().addTeam(teamInfo);
+            teamInfo.setId(idResult.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+
+            return false;
+        }
+        return idResult != null;
+    }
+
+    public boolean AddUserToTeam(TeamUser teamUser) {
+        try {
+            RealApplication.getDatabase().addTeamUser(teamUser, currentTeam.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    public void updateTeamUsers() {
+        GetTeamUserResult teamUsers = null;
+        try {
+            teamUsers = RealApplication.getDatabase().getTeamUsers(currentTeam.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return;
+        }
+
+        if (teamUsers != null)
+            mainScreen.membersView.setMembers(teamUsers.getTeamUsers());
+    }
+
+    public boolean AddUserToTask(UserInfo user, TaskInfo taskInfo) {
+        try {
+            RealApplication.getDatabase().addUserTask(user.getId(), taskInfo.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean removeUserFromTask(UserInfo user, TaskInfo taskInfo) {
+        try {
+            RealApplication.getDatabase().removeUserFromTask(user.getId(), taskInfo.getId());
+        } catch (DatabaseException e) {
+            mainScreen.reportError(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    public Collection<UserInfo> getUsers() {
+        try {
+            return RealApplication.getDatabase().getUsers().getUsers();
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

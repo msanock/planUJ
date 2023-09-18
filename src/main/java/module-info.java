@@ -1,8 +1,11 @@
-module edu.planuj.client {
+module edu.planuj {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.logging;
     requires java.sql;
+    requires org.kordamp.ikonli.core;
+    requires org.kordamp.ikonli.javafx;
+    requires org.controlsfx.controls;
 
 
     exports edu.planuj.client;

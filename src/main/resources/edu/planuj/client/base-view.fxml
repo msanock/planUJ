@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
+<?import edu.planuj.client.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import edu.planuj.client.TasksView?>
-<?import edu.planuj.client.MembersView?>
-<HBox fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.MainScreen" >
-    <children>
-        <VBox style="-fx-background-color: black;">
-            <children>
-                <Button mnemonicParsing="false" text="menu, wybór teamu" fx:id="teamsButton" onAction="#handleTeamsButton"/>
-            </children>
-        </VBox>
-        <StackPane fx:id="main" HBox.hgrow="ALWAYS" alignment="TOP_LEFT" >
-            <HBox HBox.hgrow="ALWAYS">
-                <children>
-                    <ScrollPane HBox.hgrow="ALWAYS" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="ALWAYS">
-                        <content>
-                            <TasksView fx:id="tasksView"/>
-                        </content>
-                    </ScrollPane>
-                    <ScrollPane HBox.hgrow="ALWAYS" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER">
-                        <content>
-                            <MembersView fx:id="membersView"/>
-                        </content>
-                    </ScrollPane>
-                </children>
-            </HBox>
-        </StackPane>
-    </children>
-</HBox>
+<?import org.kordamp.ikonli.javafx.*?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.planuj.client.MainScreenController">
+   <children>
+      <HBox fx:id="pane" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400" minWidth="800" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <children>
+              <VBox alignment="TOP_CENTER" minWidth="80" style="-fx-background-color: black;" HBox.hgrow="NEVER">
+                  <children>
+                      <Button fx:id="logInButton" contentDisplay="TOP" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleLogInButton" text="PROFILE" textAlignment="CENTER" textFill="darkcyan" VBox.vgrow="NEVER">
+                          <graphic>
+                              <FontIcon iconColor="darkcyan" iconLiteral="bi-person-circle" iconSize="40" />
+                          </graphic>
+                          <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="teamsButton" contentDisplay="TOP" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleTeamsButton" text="TEAMS" textAlignment="CENTER" textFill="darkcyan" VBox.vgrow="NEVER">
+                          <graphic>
+                              <FontIcon iconColor="darkcyan" iconLiteral="bi-card-list" iconSize="40" />
+                          </graphic>
+                          <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                          </VBox.margin>
+                      </Button>
+                  </children>
+              </VBox>
+              <StackPane fx:id="main" alignment="TOP_LEFT" minHeight="100.0" minWidth="400.0" HBox.hgrow="ALWAYS">
+                  <HBox HBox.hgrow="ALWAYS">
+                      <children>
+                          <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minWidth="100" prefWidth="200" vbarPolicy="ALWAYS" HBox.hgrow="ALWAYS">
+                              <content>
+                                  <TasksView fx:id="tasksView" />
+                              </content>
+                          </ScrollPane>
+                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minWidth="150" HBox.hgrow="SOMETIMES">
+                              <content>
+                                  <MembersView fx:id="membersView" />
+                              </content>
+                          </ScrollPane>
+                      </children>
+                  </HBox>
+              </StackPane>
+          </children>
+              <stylesheets>
+                  <URL value="@base-view.css" />
+              </stylesheets>
+      </HBox>
+   </children>
+</AnchorPane>
