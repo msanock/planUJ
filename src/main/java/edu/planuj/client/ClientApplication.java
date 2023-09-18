@@ -96,11 +96,11 @@ public class ClientApplication{
         }
 
         try{
-            GetUsersResult result= database.getTeamUsers(1);
+            /*GetUsersResult result= database.getTeamUsers(1);
             System.out.println(result.getUsers().size() + " team 1 users");
             for (UserInfo info : result.getUsers()){
                 System.out.println(info.getUsername() + " " + info.getId());
-            }
+            }*/
         }catch (Exception a){
             a.printStackTrace();
         }

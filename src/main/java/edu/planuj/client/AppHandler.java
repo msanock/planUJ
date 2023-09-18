@@ -3,13 +3,13 @@ package edu.planuj.client;
 import edu.planuj.Server.sql.DatabaseException;
 import edu.planuj.Utils.OperationResults.GetTasksResult;
 import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.GetUsersResult;
 import edu.planuj.Utils.OperationResults.IdResult;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.UserInfo;
 import edu.planuj.Utils.TeamUser;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Logger;
@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class AppHandler {
     MainScreenController mainScreen;
 
+    private TeamInfo currentTeam;
     static private AppHandler instance;
 
     public static AppHandler getInstance() {
@@ -31,15 +32,16 @@ public class AppHandler {
     static void setMainScreen(MainScreenController screen) {
         instance.mainScreen = screen;
     }
+
     public void forceLogInView() {
         mainScreen.setLogInViewExitable(false);
         mainScreen.showLogInView();
     }
 
-    public void tryNewLogIn(String login) {
+    public boolean tryNewLogIn(String login) throws IOException {
         // TODO shouldn't this ClientInformation setting be in a different class
         if (!ClientInformation.isCorrectLogin(login))
-            return;
+            return false;
 
         ClientInformation client = ClientInformation.getInstance();
         client.setClientName(login);
@@ -48,7 +50,7 @@ public class AppHandler {
             idResult = RealApplication.getDatabase().addUser(new UserInfo(client.getUsername(), 0));
         } catch (DatabaseException e) {
             mainScreen.reportError(e);
-            return;
+            return false;
         }
         client.logInWithId(idResult.getId());
         Logger.getAnonymousLogger().info("Client set: " + client.getUsername() + " " + client.getId());
@@ -72,12 +74,13 @@ public class AppHandler {
 
         mainScreen.showTeams();
 
-
+        return true;
     }
 
     public void setTeam(TeamInfo team) {
         GetTasksResult tasksResult = null;
-        mainScreen.setCurrentTeam(team);
+
+        currentTeam = team;
         mainScreen.setMembers(team.getUsers());
 
         try {
@@ -97,7 +100,7 @@ public class AppHandler {
             mainScreen.reportError(e);
             GetTasksResult tasksResult = null;
             try {
-                TeamInfo team = mainScreen.getCurrentTeam();
+                TeamInfo team = currentTeam;
                 tasksResult = RealApplication.getDatabase().getTeamTasks(team.getId());
             } catch (DatabaseException ex) {
                 mainScreen.reportError(ex);
@@ -122,6 +125,11 @@ public class AppHandler {
             return true;
         }
         return false;
+    }
+
+
+    public TeamInfo getCurrentTeam() {
+        return currentTeam;
     }
 
     public boolean addNewTeam(TeamInfo teamInfo) {

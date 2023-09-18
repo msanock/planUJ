@@ -31,7 +31,7 @@ public class TasksView extends VBox {
         newTaskButton.setOnAction( (event) -> {
             if (!newTaskExists) {
                 SingleTask newSingleTaskView = null;
-                TaskInfo task = new TaskInfo(-1, MainScreenController.getInstance().getCurrentTeam().getId(), "New Task", TaskInfo.Status.TODO, 5, LocalDateTime.now(), Collections.emptyList());
+                TaskInfo task = new TaskInfo(-1, AppHandler.getInstance().getCurrentTeam().getId(), "New Task", TaskInfo.Status.TODO, 5, LocalDateTime.now(), Collections.emptyList());
                 try {
                     newSingleTaskView = SingleTaskViewFactory.getInstance().getNewSingleTask(task);
                 } catch (IOException e) {

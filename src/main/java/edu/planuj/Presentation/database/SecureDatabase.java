@@ -2,10 +2,7 @@ package edu.planuj.Presentation.database;
 
 import edu.planuj.Server.database.Database;
 import edu.planuj.Server.sql.DatabaseException;
-import edu.planuj.Utils.OperationResults.GetTasksResult;
-import edu.planuj.Utils.OperationResults.GetTeamsResult;
-import edu.planuj.Utils.OperationResults.GetUsersResult;
-import edu.planuj.Utils.OperationResults.IdResult;
+import edu.planuj.Utils.OperationResults.*;
 import edu.planuj.Utils.TaskInfo;
 import edu.planuj.Utils.TeamInfo;
 import edu.planuj.Utils.TeamUser;
@@ -60,7 +57,7 @@ public class SecureDatabase implements Database {
     }
 
     @Override
-    public GetUsersResult getTeamUsers(int team_id) throws DatabaseException {
+    public GetTeamUserResult getTeamUsers(int team_id) throws DatabaseException {
         return delegate.getTeamUsers(team_id);
     }
 
