@@ -22,6 +22,8 @@ public class MainScreenController implements Initializable {
     @FXML
     public StackPane main;
     @FXML
+    public HBox base;
+    @FXML
     public Button teamsButton;
     private boolean isTeamsButtonPressed;
     @FXML
@@ -39,8 +41,6 @@ public class MainScreenController implements Initializable {
     private TeamInfo teamInfo;
 
     public static MainScreenController getInstance() {
-        if(instance == null)
-            return new MainScreenController();
         return instance;
     }
 
@@ -61,7 +61,6 @@ public class MainScreenController implements Initializable {
         }
         loginController = loader.getController();
     }
-
 
 
     public void setTasks(Collection<TaskInfo> tasks) {

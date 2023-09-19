@@ -26,6 +26,8 @@ public class TeamsView extends HBox {
         teamList.getChildren().add(new AddNewTeamSection());
         Pane rest = new AnchorPane();
         HBox.setHgrow(rest, Priority.ALWAYS);
+
+        rest.prefWidth(2000);
         rest.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         //this.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         this.getChildren().add(teamList);
@@ -66,10 +68,10 @@ public class TeamsView extends HBox {
 class TeamList extends VBox {
     TeamList() {
         this.setFillWidth(true);
-        this.prefWidth(1000);
-        this.minWidth(1000);
+        HBox.setHgrow(this, Priority.NEVER);
+        this.setMaxWidth(500);
+        this.setPrefWidth(300);
         this.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY)));
-
     }
 }
 
@@ -85,9 +87,10 @@ class SingleTeamView extends Button {
         this.setText(team.getName());
         this.setFont(new Font(50)); // TODO set font family, and bold
         //this.setTextOverrun(OverrunStyle.CLIP);
-        this.setWrapText(false);
+        this.setWrapText(true);
         this.setPadding(new Insets(7));
         this.setOnAction(this::handleTeamButton);
+        this.getStyleClass().add("team-button");
 
         this.setTextFill(Color.AQUA);
     }

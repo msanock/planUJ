@@ -33,16 +33,16 @@
                   </children>
               </VBox>
               <StackPane fx:id="main" alignment="TOP_LEFT" minHeight="100.0" minWidth="400.0" HBox.hgrow="ALWAYS">
-                  <HBox HBox.hgrow="ALWAYS">
+                  <HBox fx:id="base" HBox.hgrow="ALWAYS" >
                       <children>
                           <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minWidth="100" prefWidth="200" vbarPolicy="ALWAYS" HBox.hgrow="ALWAYS">
                               <content>
                                   <TasksView fx:id="tasksView" />
                               </content>
                           </ScrollPane>
-                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minWidth="150" HBox.hgrow="SOMETIMES">
+                          <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minWidth="150" maxWidth="200" HBox.hgrow="SOMETIMES">
                               <content>
-                                  <MembersView fx:id="membersView" />
+                                  <MembersView fx:id="membersView"/>
                               </content>
                           </ScrollPane>
                       </children>

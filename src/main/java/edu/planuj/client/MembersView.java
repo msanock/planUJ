@@ -6,9 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,35 +45,35 @@ public class MembersView extends VBox {
             //this.setGraphic("jakaś grafika );
             this.setMinHeight(60);
             this.setMinWidth(20);
-            this.autosize();
+            this.setGraphic(new FontIcon("bi-person:30:darkcyan"));
             this.setText(member.getUsername());
-            this.setFont(new Font(50)); // TODO set font family, and bold
-            //this.setTextOverrun(OverrunStyle.CLIP);
-            this.setWrapText(false);
-            this.setPadding(new Insets(7));
+            this.getStyleClass().add("member-button");
+            this.setWrapText(true);
+            //this.setPadding(new Insets(7));
             this.setOnAction(handleOnAction);
-            this.setTextFill(Color.AQUA);
+            this.setTextFill(Color.DARKCYAN);
         }
         public void markExcluded() {
             isIncluded = false;
-            this.setTextFill(Color.GREEN);
+            this.setGraphic(new FontIcon("bi-person-plus-fill:30:green"));
         }
 
         public void markIncluded() {
             isIncluded = true;
-            this.setTextFill(Color.RED);
+            this.setGraphic(new FontIcon("bi-person-dash-fill:30:red"));
         }
 
         public void setNotClickable(){
-            this.setDisable(true);
+            this.setOnAction(null);
         }
 
         public void setClickable(){
-            this.setDisable(false);
+            this.setOnAction(handleOnAction);
         }
 
         public void unmark() {
-            this.setTextFill(Color.AQUA);
+            this.setGraphic(new FontIcon("bi-person:30:darkcyan"));
+            //this.setTextFill(Color.DARKCYAN);
         }
     }
 
@@ -84,7 +86,9 @@ public class MembersView extends VBox {
     }
 
 
-    public void setMembers(Collection<? extends UserInfo> members) {
+
+
+    public void setMembers(Collection<TeamUser> members) {
         this.members.clear();
         this.getChildren().clear();
         this.getChildren().add(addNewMemberSection);

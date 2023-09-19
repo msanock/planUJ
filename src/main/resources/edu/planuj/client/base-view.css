@@ -3,13 +3,10 @@
     -fx-background-color: #BEBFC5;
 }
 
-#mainMenuPane{
-    -fx-background-color: transparent;
-    -fx-effect: dropshadow(gaussian, #000000, 20, 0.75, 1.0, 0.0);
-}
 
-#tasksView {
-    -fx-background-color: #BEBFC5;
+
+#base {
+    -fx-background-color: #000000;
 }
 
 #loginPane {
@@ -19,13 +16,63 @@
     -fx-padding: 8;
 }
 
+#name {
+    -fx-font-size: 52;
+    -fx-font-family: 'Arial Black';
+}
+
+.text-field {
+    -fx-background-color: #BEBFC5;
+    -fx-border-color: #000000;
+}
+
+.single-task {
+    -fx-background-color: #BEBFC5;
+    -fx-background-radius: 10;
+    -fx-border-color: black;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-padding: 3;
+}
+
+.assigned-user-button {
+    -fx-font-size: 24;
+    -fx-font-family: 'Arial';
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-border-radius: 5
+}
+.team-button {
+    -fx-font-size: 36;
+    -fx-font-family: 'Arial Black';
+}
+
+.task-info-label {
+    -fx-font-size: 16;
+    -fx-font-family: 'Arial Black';
+}
+
+.member-button {
+    -fx-font-size: 22;
+    -fx-font-family: 'Arial';
+    -fx-text-fill: darkcyan;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-background-color: #BEBFC5;
+    -fx-background-radius: 5;
+}
 
 .button {
     -fx-border-style: none;
     -fx-background-color: transparent;
 }
 
-
+.scroll-pane {
+    -fx-background-color: #BEBFC5;
+}
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track{
     -fx-background-color : #000000;
@@ -65,7 +112,7 @@
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color :#D4AF37;
+    -fx-background-color : #BEBFC5;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }

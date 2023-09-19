@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
 import java.util.Collection;
@@ -38,6 +39,8 @@ public class SingleEditableTaskViewController implements Initializable {
         UserInfo userInfo;
         UserButton(UserInfo userInfo) {
             super(userInfo.getUsername());
+            this.getStyleClass().add("assigned-user-button");
+            this.setGraphic(new FontIcon("bi-person:30"));
             this.userInfo = userInfo;
         }
 
