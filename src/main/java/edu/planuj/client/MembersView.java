@@ -45,7 +45,6 @@ public class MembersView extends VBox {
             //this.setGraphic("jakaś grafika );
             this.setMinHeight(60);
             this.setMinWidth(20);
-            this.autosize();
             this.setGraphic(new FontIcon("bi-person:30:darkcyan"));
             this.setText(member.getUsername());
             this.getStyleClass().add("member-button");

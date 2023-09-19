@@ -40,9 +40,9 @@
                                   <TasksView fx:id="tasksView" />
                               </content>
                           </ScrollPane>
-                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minWidth="150" maxWidth="200" HBox.hgrow="SOMETIMES">
+                          <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minWidth="150" maxWidth="200" HBox.hgrow="SOMETIMES">
                               <content>
-                                  <MembersView fx:id="membersView" />
+                                  <MembersView fx:id="membersView"/>
                               </content>
                           </ScrollPane>
                       </children>

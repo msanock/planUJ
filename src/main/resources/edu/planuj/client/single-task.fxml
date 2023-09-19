@@ -54,12 +54,13 @@
        </VBox>
       <TilePane fx:id="users" hgap="10.0" prefColumns="0" prefRows="1" vgap="20.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
          <children>
-            <Button fx:id="editAssigned" mnemonicParsing="false" onAction="#handleEditAssignedButton">
+            <Button fx:id="editAssigned" mnemonicParsing="false" onAction="#handleEditAssignedButton" >
                 <graphic>
                     <FontIcon iconColor="darkcyan" iconLiteral="bi-people" iconSize="50" />
                 </graphic>
             </Button>
-         </children></TilePane>
+         </children>
+      </TilePane>
    </children>
    <padding>
       <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
