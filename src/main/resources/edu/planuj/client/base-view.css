@@ -43,6 +43,22 @@
     -fx-border-color: black;
     -fx-border-radius: 5
 }
+.team-button {
+    -fx-font-size: 48;
+    -fx-font-family: 'Arial Black';
+}
+
+.member-button {
+    -fx-font-size: 50;
+    -fx-font-family: 'Arial';
+    -fx-text-fill: darkcyan;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-border-radius: 5;
+    -fx-background-color: #BEBFC5;
+    -fx-background-radius: 5;
+}
 
 .button {
     -fx-border-style: none;
@@ -91,7 +107,7 @@
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color :#D4AF37;
+    -fx-background-color : #BEBFC5;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }

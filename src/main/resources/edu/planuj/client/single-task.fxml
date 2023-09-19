@@ -19,9 +19,6 @@
   </rowConstraints>
    <children>
       <Label fx:id="name" lineSpacing="5.0" text="this is a realy long task name and it need to fit nicealy " textAlignment="CENTER" textOverrun="CLIP" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
-<!--         <font>-->
-<!--            <Font size="20.0" />-->
-<!--         </font>-->
       </Label>
       <Button fx:id="editButton" graphicTextGap="1.0" mnemonicParsing="false" onAction="#handleEditButton" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
           <graphic>
@@ -59,7 +56,7 @@
          <children>
             <Button fx:id="editAssigned" mnemonicParsing="false" onAction="#handleEditAssignedButton">
                 <graphic>
-                    <FontIcon iconColor="darkcyan" iconLiteral="bi-people" iconSize="30" />
+                    <FontIcon iconColor="darkcyan" iconLiteral="bi-people" iconSize="50" />
                 </graphic>
             </Button>
          </children></TilePane>

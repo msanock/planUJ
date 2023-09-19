@@ -85,22 +85,6 @@ public class SingleTaskViewController implements Initializable, UserListControll
     }
 
     private String format(LocalDateTime deadline) {
-//        if (deadline.isAfter(LocalDateTime.now())) {
-//            if(deadline.isBefore(LocalDateTime.now().plusDays(7))) {
-//                Duration duration = Duration.between(deadline, LocalDateTime.now());
-//                long days = duration.toDaysPart();
-//                duration = duration.minusDays(days);
-//                long hours = duration.toHours();
-//                duration = duration.minusHours(hours);
-//                long minutes = duration.toMinutes();
-//
-//                StringBuilder stringBuilder = new StringBuilder();
-//                if (days > 0) stringBuilder.append(days).append((days == 1) ? " day" : " days");
-//                if (hours > 0) stringBuilder.append(hours).append((days == 1) ? " hour" : " hours");
-//                if (minutes > 0) stringBuilder.append(minutes).append((minutes == 1) ? " minute" : "minutes");
-//                return stringBuilder.toString();
-//            }
-//        }
         return deadline.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM));
     }
 

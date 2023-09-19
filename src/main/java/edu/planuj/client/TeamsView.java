@@ -69,7 +69,6 @@ class TeamList extends VBox {
         this.prefWidth(1000);
         this.minWidth(1000);
         this.setBackground(new Background(new BackgroundFill(Color.GREY, CornerRadii.EMPTY, Insets.EMPTY)));
-
     }
 }
 
@@ -88,6 +87,7 @@ class SingleTeamView extends Button {
         this.setWrapText(false);
         this.setPadding(new Insets(7));
         this.setOnAction(this::handleTeamButton);
+        this.getStyleClass().add("team-button");
 
         this.setTextFill(Color.AQUA);
     }
