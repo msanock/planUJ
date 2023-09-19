@@ -46,10 +46,9 @@ public class MembersView extends VBox {
             this.setMinHeight(60);
             this.setMinWidth(20);
             this.autosize();
-            this.setGraphic(new FontIcon("bi-person:40:darkcyan"));
+            this.setGraphic(new FontIcon("bi-person:30:darkcyan"));
             this.setText(member.getUsername());
             this.getStyleClass().add("member-button");
-            this.setTextOverrun(OverrunStyle.CLIP);
             this.setWrapText(true);
             //this.setPadding(new Insets(7));
             this.setOnAction(handleOnAction);
@@ -57,12 +56,12 @@ public class MembersView extends VBox {
         }
         public void markExcluded() {
             isIncluded = false;
-            this.setGraphic(new FontIcon("bi-person-plus-fill:40:green"));
+            this.setGraphic(new FontIcon("bi-person-plus-fill:30:green"));
         }
 
         public void markIncluded() {
             isIncluded = true;
-            this.setGraphic(new FontIcon("bi-person-dash-fill:40:red"));
+            this.setGraphic(new FontIcon("bi-person-dash-fill:30:red"));
         }
 
         public void setNotClickable(){
@@ -74,7 +73,7 @@ public class MembersView extends VBox {
         }
 
         public void unmark() {
-            this.setGraphic(new FontIcon("bi-person:40:darkcyan"));
+            this.setGraphic(new FontIcon("bi-person:30:darkcyan"));
             //this.setTextFill(Color.DARKCYAN);
         }
     }

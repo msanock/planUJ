@@ -7,9 +7,9 @@
 
 <GridPane fx:id="taskBox" styleClass="single-task" vgap="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
-    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="100.0" vgrow="SOMETIMES" />
@@ -32,7 +32,7 @@
                   </graphic>
            </Label>
 
-           <Label fx:id="status" />
+           <Label styleClass="task-info-label" fx:id="status" />
        </VBox>
        <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
            <Label>
@@ -41,7 +41,7 @@
                </graphic>
            </Label>
 
-           <Label fx:id="priority" />
+           <Label styleClass="task-info-label" fx:id="priority" />
        </VBox>
        <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
            <Label>
@@ -50,7 +50,7 @@
                </graphic>
            </Label>
 
-           <Label fx:id="deadline" />
+           <Label styleClass="task-info-label" fx:id="deadline" />
        </VBox>
       <TilePane fx:id="users" hgap="10.0" prefColumns="0" prefRows="1" vgap="20.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
          <children>

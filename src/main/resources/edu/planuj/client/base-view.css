@@ -48,8 +48,13 @@
     -fx-font-family: 'Arial Black';
 }
 
+.task-info-label {
+    -fx-font-size: 16;
+    -fx-font-family: 'Arial Black';
+}
+
 .member-button {
-    -fx-font-size: 50;
+    -fx-font-size: 22;
     -fx-font-family: 'Arial';
     -fx-text-fill: darkcyan;
     -fx-border-style: solid;
