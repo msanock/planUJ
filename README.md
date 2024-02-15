@@ -1,6 +1,6 @@
-# ProjektUJ
+# PlantUJ
 
-ProjektUJ is an app that can help you with organising your team,
+PlanUJ is an app that can help you with organising your team,
 managing different tasks and many more!
 
 ## Technologies

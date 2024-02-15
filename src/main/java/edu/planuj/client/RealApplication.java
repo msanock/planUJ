@@ -40,7 +40,7 @@ public class RealApplication extends Application {
         stage.setResizable(true);
         stage.setMinHeight(400);
         stage.setMinWidth(800);
-        stage.setTitle("projektUJ");
+        stage.setTitle("planUJ");
 
         setScene("login-view.fxml");
 
