@@ -1,7 +1,7 @@
 package edu.planuj.clientConnection;
 
 public class ConnectionSettings {
-    public static String HOST = "13.79.168.193";
+    public static String HOST = "localhost";
     public static Integer PORT = 1111;
     public static long RECONNECTION_PAUSE = 1500;
 
