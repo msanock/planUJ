@@ -14,7 +14,7 @@ managing different tasks and many more!
 ## How to run
 by default application and server runs locally.
 
-to change that, you need to overwrite field `HOST` in `edu/planuj/clientConnection/ConnectionSettings.java` to the IP address of designated server.
+In order to change that, field `HOST` in `edu/planuj/clientConnection/ConnectionSettings.java` needs to be set to the IP address of designated server.
 
 to run server:
 ```
